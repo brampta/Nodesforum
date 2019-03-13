@@ -1,21 +1,21 @@
 <?php
 
 //chose a name for the forum
-$_nodesforum_forum_name='Happy Forum'; //the name of your forum
+$_nodesforum_forum_name='NodesForum Development install'; //the name of your forum
 $_nodesforum_forum_name_at_or_at_the='at the'; //should we say at *forum name* or at the *forum name* (to and to the will be assumed accordingly)
-$_nodesforum_forum_description='[center][size=130]Welcome to the [color=red][b]Happy Forum[/b][/color].[/size][/center]'; //the description of your root folder. will appear on the first page of the forum
+$_nodesforum_forum_description='[center][size=130]Welcome to the [color=red][b]Development install[/b][/color] of the Nodesform.[/size][/center]'; //the description of your root folder. will appear on the first page of the forum
 
 
 //------------DATABASE CONNECTION
 $_nodesforum_db_servername='localhost'; //host for database connection
-$_nodesforum_db_username='database_username'; //username for database connection
-$_nodesforum_db_password='database_password'; //password for database connection
-$_nodesforum_db_name='database_name'; //name of database to use
-$_nodesforum_db_table_name_modifier='mynodesforum1'; //the value of this variable (a string) will be added at the beginning of every table name used by the forum (only including the tables that have been created by the forum itself). with this variable you can for example run multiple nodesforum forums on 1 same database by setting a different unique string on this variable for each forum. This will be also useful if you want to update your forum version by allowing you to install and try the new version of the forum without affecting or even stopping your old version from running. since the value that you set on this variable will become part of all your table names, avoid any non standard characters.
+$_nodesforum_db_username='nodesman'; //username for database connection
+$_nodesforum_db_password='8*8420jfdeIU'; //password for database connection
+$_nodesforum_db_name='nodesforum'; //name of database to use
+$_nodesforum_db_table_name_modifier='test10'; //the value of this variable (a string) will be added at the beginning of every table name used by the forum (only including the tables that have been created by the forum itself). with this variable you can for example run multiple nodesforum forums on 1 same database by setting a different unique string on this variable for each forum. This will be also useful if you want to update your forum version by allowing you to install and try the new version of the forum without affecting or even stopping your old version from running. since the value that you set on this variable will become part of all your table names, avoid any non standard characters.
 
 
 //--------------PATH TO nodesforum CODE
-$_nodesforum_code_path='nodesforum/'; //the relative path to access the nodesforum script folder from the page where the forum is included (not needed if you do not use the forum as a php include())
+$_nodesforum_code_path='test_nodesforum/'; //the relative path to access the nodesforum script folder from the page where the forum is included (not needed if you do not use the forum as a php include())
 
 
 //--------------SERVER SETTINGS
@@ -31,9 +31,9 @@ $_nodesforum_image_verification_on_registration='yes'; //will ask for image veri
 $_nodesforum_image_verification_on_forgotten_pass='yes'; //will ask for image verification when user has password resent to his email. requires the gd php extension
 $_nodesforum_image_verification_on_resend_validation_mail='yes'; //will ask for image verification when user has validation email resent. requires the gd php extension
 $_nodesforum_validate_email='yes'; //if yes user will have to validate email when registering if no email validation will be skipped
-$_nodesforum_validate_email_address_from='admin@mydomain.com'; //validation emails sent from your server will be from this address
-$_nodesforum_validate_resend_password_from='admin@mydomain.com'; //password reset request links sent from your server will be from this address
-$_nodesforum_instance_asolute_URL='http://mydomain.com/forum'; //emails sent by your server need to contain links that link back to the forum. this must be set to the URL of the root of the forum. the URL after which we can add a ? and then some variables
+$_nodesforum_validate_email_address_from='admin@home.nodesforum.com'; //validation emails sent from your server will be from this address
+$_nodesforum_validate_resend_password_from='admin@home.nodesforum.com'; //password reset request links sent from your server will be from this address
+$_nodesforum_instance_asolute_URL='http://home.nodesforum.com/test'; //emails sent by your server need to contain links that link back to the forum. this must be set to the URL of the root of the forum. the URL after which we can add a ? and then some variables
 
 
 //-----------EXTERNAL USER SYSTEM SETTINGS (only needed if $_nodesforum_use_external_user_system=='yes')
@@ -45,14 +45,14 @@ $_nodesforum_external_user_system_user_uniqueID_rowname=''; //name of the column
 $_nodesforum_external_user_system_publicname_rowname=''; //name of the column in which you store the users name or public name in your users table
 $_nodesforum_external_user_system_show_registration_time='yes'; //does your users table contain a column where the registration time of the user is recorded (in unix timestamp format)
 $_nodesforum_external_user_system_registration_time_rowname=''; //if yes what is the name of the column where the registration time of the user is recorded
-$_nodesforum_external_user_system_userpage_link='/userpage?u='; //how should we build the links to the user pages on your main site (will take the value in this variable and will append the user uniqueID to it to build the link to the userpage)
+$_nodesforum_external_user_system_userpage_link=''; //how should we build the links to the user pages on your main site (will take the value in this variable and will append the user uniqueID to it to build the link to the userpage)
 
 $_nodesforum_show_login_logout_bar='yes'; //yes or no. should we show the login/logout bar (is automatically shown if you use the user system of the forum, but optional if you use the user system of your website)
 $_nodesforum_external_user_system_loginusername_session_name=''; //what is the name of the php session variable in which you keep the username or email that the user logged in with to be able to say "logged in as..."
-$_nodesforum_external_user_system_login_link='/login'; //link to your login page from the forum
-$_nodesforum_external_user_system_logout_link='/logout'; //link to your logout page from the forum
-$_nodesforum_external_user_system_register_link='/register'; //link to your register page from the forum
-$_nodesforum_external_user_system_profile_options_link='/options'; //link for logged in user to get to his profile options page from the forum
+$_nodesforum_external_user_system_login_link=''; //link to your login page from the forum
+$_nodesforum_external_user_system_logout_link=''; //link to your logout page from the forum
+$_nodesforum_external_user_system_register_link=''; //link to your register page from the forum
+$_nodesforum_external_user_system_profile_options_link=''; //link for logged in user to get to his profile options page from the forum
 
 
 //-------------technical (only change if $_nodesforum_use_external_user_system=='yes' and there is a conflict, otherwise leave to default)
@@ -87,9 +87,7 @@ $_nodesforum_howmany_moderator_actions_perpage=20; //how many actions per page i
 $_nodesforum_minimum_post_length=16; //min lenght of a post
 $_nodesforum_minimum_reply_length=3; //min lenght of a reply
 $_nodesforum_show_how_deep_of_you_are_here=5; //show x folders deep in the navigation menu
-$_nodesforum_max_title_length=100; //max lenght of a title
-$_nodesforum_max_word_length_in_titles=30; //max word lenght in titles
-$_nodesforum_max_word_length_in_posts=60; //max word lenght in posts
+$_nodesforum_max_word_length_in_titles=30; //words longer than this in titles will have their middle replaced by dots (...) and will have an acronym on them that shows the whole word when you put your mouse over them. thats to avoid that the pages get fucked up when someone puts long words with no spaces in the title of their post or folder
 $_nodesforum_code_of_ad_after_first_post=''; //the html code that you place in this variable will be output after each first post
 
 
