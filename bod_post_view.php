@@ -166,8 +166,15 @@ if($_nodesforum_display_fapID)
         }
         if($_nodesforum_ismod==1 && $_nodesforum_display_enc_ip[$key]!='')
         {echo ' <span style="font-size:80%;">IP (encrypted): <input type="text" value="'.base64_encode($_nodesforum_display_enc_ip[$key]).'" readonly="readonly" onmouseup="highlight(this)" /></span>';}
+        
         if($_nodesforum_display_creator_uniqueID[$key]=='0' && $_nodesforum_display_creator_ip[$key]==$_nodesforum_enc_ip && $nowtime<$oldestacceptabletimeforguesteditbyip)
         {echo '</span>';}
+        
+        //spam purge button!
+        if($_nodesforum_ismod==1){
+			echo '<acronym title="purge spammer" style="border:none;"><a onclick="purgeSpammer(\''.$this_creator_uniqueID.'\',\''.base64_encode($_nodesforum_display_enc_ip[$key]).'\')" style="cursor:pointer;"><img src="'.$_nodesforum_power_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';
+		}
+		
         echo '</td><td style="text-align:right;vertical-align:bottom;">';
         echo 'post #'.$value.' ';
         //quote button

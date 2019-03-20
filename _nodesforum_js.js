@@ -242,3 +242,43 @@ function selectNode (node) {
    }
 
 }
+
+function purgeSpammer(user_id,user_ip){
+	if(user_id=="0"){
+		var areyousure = confirm("Spammer Purge: are you sure that you want to delete all the posts from ip "+user_ip+" and ban it for as far as your moderator go across the entire forum?");
+	}else{
+		var areyousure = confirm("Spammer Purge: are you sure that you want to delete all the posts from user id "+user_id+" and his/her ip "+user_ip+" and ban this user and his/her ip for as far as your moderator go across the entire forum?");
+	}
+	if(areyousure){
+		var purge_reason = "Spammer Purge process";
+		if(user_id!="0"){
+			//ban user
+			jax("/","POST","_nodesforum_banned_uniqueID="+user_id+"&_nodesforum_banned_reason="+purge_reason+"&_nodesforum_ban=ban");
+		}
+		//ban ip
+		jax("/","POST","_nodesforum_banned_ip="+user_ip+"&_nodesforum_banned_ip_reason="+purge_reason+"&_nodesforum_ban_ip=ban IP");
+		if(user_id!="0"){
+			//delete user post
+			jax("/?_nodesforum_delete=0&_nodesforum_delete_user="+user_id+"&_nodesforum_delete_imsure=1","GET","");
+		}
+		//delete ip posts
+		jax("/?_nodesforum_delete=0&_nodesforum_delete_ip="+user_ip+"&_nodesforum_delete_imsure=1","GET","");
+	}
+}
+function jax(url,method,data){
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == XMLHttpRequest.DONE) {
+			alert(xhr.responseText);
+		}
+	}
+
+	if(method=="POST"){
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+		xhr.send(data);
+	} else if(method=="GET"){
+		xhr.open("GET", url, true);
+		xhr.send();
+	}
+}

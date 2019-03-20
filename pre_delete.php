@@ -2,7 +2,6 @@
 
 
 
-
 $addslashed_delete=_nodesforum_my_custom_addslashes($_GET['_nodesforum_delete']);
 //get info about post or folder to delete
 $result = mysql_query("SELECT creator_uniqueID, creator_ip, creation_time, folder_or_post, containing_folder_or_post, ancestry, skeleton FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE fapID = '$addslashed_delete'");
@@ -206,7 +205,6 @@ if(
     }
 
 
-
     if(isset($_GET['_nodesforum_delete_user']) || isset($_GET['_nodesforum_delete_ip']))
     {
         $action_explanor=$action_explanor.' ('.$count_deleted.')';
@@ -226,9 +224,7 @@ if(
 
 
 
-
-
-    if(!isset($_GET['_nodesforum_delete_user']) && !isset($_GET['_nodesforum_delete_ip']))
+    if(!isset($_GET['_nodesforum_delete_user']) && !isset($_GET['_nodesforum_delete_ip']) && $_GET['_nodesforum_delete']!=0)
     {
         //delete this folder or post and all folder and posts that have this folder or post in their ancestry (are children)
         mysql_query("UPDATE ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts SET deletion_time = '$nowtime' WHERE fapID = '$addslashed_delete' || ancestry LIKE '%".$_nodesforum_ancestry_separator.$addslashed_delete.$_nodesforum_ancestry_separator."%' && deletion_time = 0");
@@ -279,6 +275,8 @@ if(
         {$specific_user_or_ip_clause=" creator_uniqueID = '"._nodesforum_my_custom_addslashes($_GET['_nodesforum_delete_user'])."' ";}
         else if($_GET['_nodesforum_delete_ip'])
         {$specific_user_or_ip_clause=" AES_ENCRYPT(creator_ip,creator_ip) = '".mysql_real_escape_string(base64_decode($_GET['_nodesforum_delete_ip']))."' ";}
+        else
+        {die('malformed request');}
         mysql_query("UPDATE ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts SET deletion_time = '$nowtime' WHERE ancestry LIKE '%".$_nodesforum_ancestry_separator.$addslashed_delete.$_nodesforum_ancestry_separator."%' && $specific_user_or_ip_clause && deletion_time = 0");
 
 
