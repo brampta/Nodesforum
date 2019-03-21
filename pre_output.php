@@ -1,7 +1,7 @@
 <?php
 
 //error_reporting(E_ALL ^ E_NOTICE);
-
+$json_data=array(); //for json output format $_GET['format']='json'
 
 
 if ($_nodesforum_use_external_user_system == 'no')
@@ -361,4 +361,9 @@ if ($randominius == 1)
 
 if ($_nodesforum_db_isconn == 1)
 { mysql_close($conn); }
+
+if(isset($_GET['format']) && $_GET['format']=='json'){
+	echo json_encode($json_data); exit;
+}
+
 ?>

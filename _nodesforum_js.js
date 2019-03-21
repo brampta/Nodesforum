@@ -243,6 +243,7 @@ function selectNode (node) {
 
 }
 
+var waiting_for_requests={};
 function purgeSpammer(user_id,user_ip){
 	if(user_id=="0"){
 		var areyousure = confirm("Spammer Purge: are you sure that you want to delete all the posts from ip "+user_ip+" and ban it for as far as your moderator go across the entire forum?");
@@ -250,26 +251,72 @@ function purgeSpammer(user_id,user_ip){
 		var areyousure = confirm("Spammer Purge: are you sure that you want to delete all the posts from user id "+user_id+" and his/her ip "+user_ip+" and ban this user and his/her ip for as far as your moderator go across the entire forum?");
 	}
 	if(areyousure){
+		waiting_for_requests={};
 		var purge_reason = "Spammer Purge process";
 		if(user_id!="0"){
 			//ban user
-			jax("/","POST","_nodesforum_banned_uniqueID="+user_id+"&_nodesforum_banned_reason="+purge_reason+"&_nodesforum_ban=ban");
+			waiting_for_requests['1']={method:'ban',result:'ok',status:'waiting'};
+			jax("/?format=json&request_number=1","POST","_nodesforum_banned_uniqueID="+user_id+"&_nodesforum_banned_reason="+purge_reason+"&_nodesforum_ban=ban",purgeSpammerResults);
 		}
 		//ban ip
-		jax("/","POST","_nodesforum_banned_ip="+user_ip+"&_nodesforum_banned_ip_reason="+purge_reason+"&_nodesforum_ban_ip=ban IP");
+		waiting_for_requests['2']={method:'ban_ip',result:'ok',status:'waiting'};
+		jax("/?format=json&request_number=2","POST","_nodesforum_banned_ip="+user_ip+"&_nodesforum_banned_ip_reason="+purge_reason+"&_nodesforum_ban_ip=ban IP",purgeSpammerResults);
 		if(user_id!="0"){
 			//delete user post
-			jax("/?_nodesforum_delete=0&_nodesforum_delete_user="+user_id+"&_nodesforum_delete_imsure=1","GET","");
+			waiting_for_requests['3']={method:'delete',result:'ok',status:'waiting'};
+			jax("/?_nodesforum_delete=0&_nodesforum_delete_user="+user_id+"&_nodesforum_delete_imsure=1&format=json&request_number=3","GET","",purgeSpammerResults);
 		}
 		//delete ip posts
-		jax("/?_nodesforum_delete=0&_nodesforum_delete_ip="+user_ip+"&_nodesforum_delete_imsure=1","GET","");
+		waiting_for_requests['4']={method:'delete',result:'ok',status:'waiting'};
+		jax("/?_nodesforum_delete=0&_nodesforum_delete_ip="+user_ip+"&_nodesforum_delete_imsure=1&format=json&request_number=4","GET","",purgeSpammerResults);
 	}
 }
-function jax(url,method,data){
+function purgeSpammerResults(result_plain){
+	//console.log(result);
+	var result = JSON.parse(result_plain)
+	var this_request_num = result.request_number;
+	if(result.method==waiting_for_requests[this_request_num].method && result.result==waiting_for_requests[this_request_num].result){
+		//delete waiting_for_requests[this_request_num];
+		waiting_for_requests[this_request_num].status='done';
+	}else{
+		waiting_for_requests[this_request_num].status='error';
+		//alert('ajax error: '+result_plain);
+		console.log('ajax error:expected:result');
+		console.log(waiting_for_requests[this_request_num]);
+		console.log(result_plain);
+	}
+	var count_waiting=0;
+	var count_errors=0;
+	for (var property in waiting_for_requests) {
+		if (waiting_for_requests.hasOwnProperty(property)) {
+			if(waiting_for_requests[property].status=='waiting'){
+				count_waiting++;
+			}else if(waiting_for_requests[property].status=='error'){
+				count_errors++;
+			}
+		}
+	}
+	if(count_waiting==0){
+		//all waiting done, lets shoot results
+		if(count_errors>=1){
+			var message='Spammer Purge done but there were some errors';
+			console.log(waiting_for_requests);
+		}else{
+			var message='Spammer Purge done, reload the page to see the results';
+		}
+		alert(message);
+	}
+}
+var count_requests=0;
+function jax(url,method,data,callback){
+	count_requests++;
+	
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == XMLHttpRequest.DONE) {
-			alert(xhr.responseText);
+			//alert(xhr.responseText);
+			//var result = JSON.parse(xhr.responseText);
+			callback(xhr.responseText);
 		}
 	}
 

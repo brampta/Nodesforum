@@ -357,9 +357,15 @@ if(
     }
 
 
-    //now redirect to lose vars in URL
-    $location='Location: ?_nodesforum_node='.$_GET['_nodesforum_node'].'&_nodesforum_page='.$_GET['_nodesforum_page'];
-    header($location);
+	if(isset($_GET['format']) && $_GET['format']=='json'){
+		$json_data['request_number']=$_GET['request_number'];
+		$json_data['method']='delete';
+		$json_data['result']='ok';
+	}else{
+		//now redirect to lose vars in URL
+		$location='Location: ?_nodesforum_node='.$_GET['_nodesforum_node'].'&_nodesforum_page='.$_GET['_nodesforum_page'];
+		header($location);
+	}
 }
 
 

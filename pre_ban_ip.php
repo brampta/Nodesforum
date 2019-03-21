@@ -60,4 +60,8 @@ if($error==0)
 	$_nodesforum_ban_banned=1;
 }
 
-?>
+if(isset($_GET['format']) && $_GET['format']=='json'){
+	$json_data['request_number']=$_GET['request_number'];
+	$json_data['method']='ban_ip';
+	$json_data['result']='ok';
+}
