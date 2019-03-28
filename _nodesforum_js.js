@@ -256,19 +256,19 @@ function purgeSpammer(user_id,user_ip){
 		if(user_id!="0"){
 			//ban user
 			waiting_for_requests['1']={method:'ban',result:'ok',status:'waiting'};
-			jax("/?format=json&request_number=1","POST","_nodesforum_banned_uniqueID="+user_id+"&_nodesforum_banned_reason="+purge_reason+"&_nodesforum_ban=ban",purgeSpammerResults);
+			jax("?format=json&request_number=1","POST","_nodesforum_banned_uniqueID="+user_id+"&_nodesforum_banned_reason="+purge_reason+"&_nodesforum_ban=ban",purgeSpammerResults);
 		}
 		//ban ip
 		waiting_for_requests['2']={method:'ban_ip',result:'ok',status:'waiting'};
-		jax("/?format=json&request_number=2","POST","_nodesforum_banned_ip="+user_ip+"&_nodesforum_banned_ip_reason="+purge_reason+"&_nodesforum_ban_ip=ban IP",purgeSpammerResults);
+		jax("?format=json&request_number=2","POST","_nodesforum_banned_ip="+user_ip+"&_nodesforum_banned_ip_reason="+purge_reason+"&_nodesforum_ban_ip=ban IP",purgeSpammerResults);
 		if(user_id!="0"){
 			//delete user post
 			waiting_for_requests['3']={method:'delete',result:'ok',status:'waiting'};
-			jax("/?_nodesforum_delete=0&_nodesforum_delete_user="+user_id+"&_nodesforum_delete_imsure=1&format=json&request_number=3","GET","",purgeSpammerResults);
+			jax("?_nodesforum_delete=0&_nodesforum_delete_user="+user_id+"&_nodesforum_delete_imsure=1&format=json&request_number=3","GET","",purgeSpammerResults);
 		}
 		//delete ip posts
 		waiting_for_requests['4']={method:'delete',result:'ok',status:'waiting'};
-		jax("/?_nodesforum_delete=0&_nodesforum_delete_ip="+user_ip+"&_nodesforum_delete_imsure=1&format=json&request_number=4","GET","",purgeSpammerResults);
+		jax("?_nodesforum_delete=0&_nodesforum_delete_ip="+user_ip+"&_nodesforum_delete_imsure=1&format=json&request_number=4","GET","",purgeSpammerResults);
 	}
 }
 function purgeSpammerResults(result_plain){
