@@ -161,7 +161,13 @@ if($_nodesforum_display_fapID)
                 $delete_button='';
                 if($_nodesforum_display_deletion_time[$key]==0)
                 {$delete_button='<acronym title="delete folder" style="border:none;"><a onclick="delete_node('.$value.',1,'."'".urlencode($_nodesforum_display_creator_publicname[$this_creator_uniqueID])."'".','.$_nodesforum_display_subfolders[$key].','.$_nodesforum_display_posts[$key].','."'".$_GET['_nodesforum_node']."'".','.$_GET['_nodesforum_page'].')" style="cursor:pointer;"><img src="'.$_nodesforum_delete_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';}
-                $modstring=' '.$sticky_buttons.$edit_button.$move_button.$delete_button;
+                
+                //spam purge button!
+				if($_nodesforum_ismod==1 && $_nodesforum_display_creator_uniqueID[$key]!=$_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]){
+					$spam_purge_button='<acronym title="purge spammer" style="border:none;"><a onclick="purgeSpammer(\''.$this_creator_uniqueID.'\',\''.base64_encode($_nodesforum_display_enc_ip[$key]).'\')" style="cursor:pointer;"><img src="'.$_nodesforum_power_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';
+				}
+                
+                $modstring=' '.$sticky_buttons.$edit_button.$move_button.$delete_button.$spam_purge_button;
             }
         }
         else if($_nodesforum_display_folder_or_post[$key]==2)
@@ -240,7 +246,13 @@ if($_nodesforum_display_fapID)
                 $delete_button='';
                 if($_nodesforum_display_deletion_time[$key]==0)
                 {$delete_button='<acronym title="delete post" style="border:none;"><a onclick="delete_node('.$value.',2,'."'".urlencode($_nodesforum_display_creator_publicname[$this_creator_uniqueID])."'".','.$_nodesforum_display_replies[$key].','.$_nodesforum_display_views[$key].','."'".$_GET['_nodesforum_node']."'".','.$_GET['_nodesforum_page'].')" style="cursor:pointer;"><img src="'.$_nodesforum_delete_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';}
-                $modstring=' '.$sticky_buttons.$edit_button.$move_button.$delete_button;
+                
+                //spam purge button!
+				if($_nodesforum_ismod==1 && $_nodesforum_display_creator_uniqueID[$key]!=$_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]){
+					$spam_purge_button='<acronym title="purge spammer" style="border:none;"><a onclick="purgeSpammer(\''.$this_creator_uniqueID.'\',\''.base64_encode($_nodesforum_display_enc_ip[$key]).'\')" style="cursor:pointer;"><img src="'.$_nodesforum_power_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';
+				}
+                
+                $modstring=' '.$sticky_buttons.$edit_button.$move_button.$delete_button.$spam_purge_button;
             }
         }
         if($_nodesforum_display_last_post_postID[$key]!=0)

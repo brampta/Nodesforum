@@ -250,25 +250,26 @@ function purgeSpammer(user_id,user_ip){
 	}else{
 		var areyousure = confirm("Spammer Purge: are you sure that you want to delete all the posts from user id "+user_id+" and his/her ip "+user_ip+" and ban this user and his/her ip for as far as your moderator go across the entire forum?");
 	}
-	if(areyousure){
+	var areyoureallysure = confirm("Are you really sure that you want to completely purge everything from this person or any one else who might have been using the same IP? By the way just in case it is possible to undo this operation in the mods log, just click *see the log of moderator actions on this folder and its children* at the bottom right of this page");
+	if(areyousure && areyoureallysure){
 		waiting_for_requests={};
 		var purge_reason = "Spammer Purge process";
 		if(user_id!="0"){
 			//ban user
 			waiting_for_requests['1']={method:'ban',result:'ok',status:'waiting'};
-			jax("?format=json&request_number=1","POST","_nodesforum_banned_uniqueID="+user_id+"&_nodesforum_banned_reason="+purge_reason+"&_nodesforum_ban=ban",purgeSpammerResults);
+			jax("?format=json&request_number=1","POST","_nodesforum_banned_uniqueID="+encodeURIComponent(user_id)+"&_nodesforum_banned_reason="+encodeURIComponent(purge_reason)+"&_nodesforum_ban=ban",purgeSpammerResults);
 		}
 		//ban ip
 		waiting_for_requests['2']={method:'ban_ip',result:'ok',status:'waiting'};
-		jax("?format=json&request_number=2","POST","_nodesforum_banned_ip="+user_ip+"&_nodesforum_banned_ip_reason="+purge_reason+"&_nodesforum_ban_ip=ban IP",purgeSpammerResults);
+		jax("?format=json&request_number=2","POST","_nodesforum_banned_ip="+encodeURIComponent(user_ip)+"&_nodesforum_banned_ip_reason="+encodeURIComponent(purge_reason)+"&_nodesforum_ban_ip=ban IP",purgeSpammerResults);
 		if(user_id!="0"){
 			//delete user post
 			waiting_for_requests['3']={method:'delete',result:'ok',status:'waiting'};
-			jax("?_nodesforum_delete=0&_nodesforum_delete_user="+user_id+"&_nodesforum_delete_imsure=1&format=json&request_number=3","GET","",purgeSpammerResults);
+			jax("?_nodesforum_delete=0&_nodesforum_delete_user="+encodeURIComponent(user_id)+"&_nodesforum_delete_imsure=1&format=json&request_number=3","GET","",purgeSpammerResults);
 		}
 		//delete ip posts
 		waiting_for_requests['4']={method:'delete',result:'ok',status:'waiting'};
-		jax("?_nodesforum_delete=0&_nodesforum_delete_ip="+user_ip+"&_nodesforum_delete_imsure=1&format=json&request_number=4","GET","",purgeSpammerResults);
+		jax("?_nodesforum_delete=0&_nodesforum_delete_ip="+encodeURIComponent(user_ip)+"&_nodesforum_delete_imsure=1&format=json&request_number=4","GET","",purgeSpammerResults);
 	}
 }
 function purgeSpammerResults(result_plain){

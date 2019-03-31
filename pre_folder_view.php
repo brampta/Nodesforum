@@ -102,10 +102,11 @@ else
 
 
 
-    $myquery="SELECT fapID, folder_or_post, creator_uniqueID, creation_time, title, subfolders, posts, replies, views, last_post_postID, last_post_user_uniqueID, last_post_time, containing_folder_or_post, deletion_time, sticky, IF(sticky = 0,'True','False') AS not_sticky, skeleton FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE $wherer ORDER BY $orderer LIMIT $startat, $_nodesforum_howmany_posts_perpage";
+    $myquery="SELECT fapID, folder_or_post, creator_uniqueID, creator_ip, AES_ENCRYPT(creator_ip,creator_ip) AS enc_ip, creation_time, title, subfolders, posts, replies, views, last_post_postID, last_post_user_uniqueID, last_post_time, containing_folder_or_post, deletion_time, sticky, IF(sticky = 0,'True','False') AS not_sticky, skeleton FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE $wherer ORDER BY $orderer LIMIT $startat, $_nodesforum_howmany_posts_perpage";
     $result = mysql_query($myquery);
     while($row = mysql_fetch_array($result))
     {
+		//echo "<pre>".print_r($row,true)."</pre>";
         $_nodesforum_count_fap_results++;
         $this_fapID=$row['fapID'];
         $_nodesforum_display_fapID[$_nodesforum_count_fap_results]=$this_fapID;
@@ -114,6 +115,11 @@ else
         $this_creator_uniqueID=$_nodesforum_display_creator_uniqueID[$_nodesforum_count_fap_results];
         if(!$_nodesforum_creator_publicname[$this_creator_uniqueID])
         {$_nodesforum_creator_publicname[$this_creator_uniqueID]='yes';}
+        $_nodesforum_display_creator_ip[$_nodesforum_count_fap_results]=$row['creator_ip'];
+        if($row['creator_ip']=='')
+        {$_nodesforum_display_enc_ip[$_nodesforum_count_fap_results]='';}
+        else
+        {$_nodesforum_display_enc_ip[$_nodesforum_count_fap_results]=$row['enc_ip'];}
         $_nodesforum_display_creation_time[$_nodesforum_count_fap_results]=$row['creation_time'];
         $_nodesforum_display_title[$_nodesforum_count_fap_results]=$row['title'];
         $_nodesforum_remember_titles[$this_fapID]=$row['title'];

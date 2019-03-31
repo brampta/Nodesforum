@@ -293,6 +293,12 @@ if ($_nodesforum_use_external_user_system == 'no')
 }
 
 
+//============CONTROLLER============//
+if(isset($_GET['script'])){
+	if($_GET['script']=='delete_children_of_deleted')
+	include('script_delete_children_of_deleted.php');
+	die('finished executing '.htmlspecialchars($_GET['script']));
+}
 
 $_nodesforum_willread_user_data_for_forumoptionspage = 0;
 if (isset($_GET['_nodesforum_login']))
