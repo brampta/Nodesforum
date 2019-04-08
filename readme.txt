@@ -1,3 +1,27 @@
+nodesforum 1.1
+
+10 years later, more or less, I needed a forum for stuff and decided to use this old script of mine. Since it was always meant to be open source but was only given as a ZIP first step was to put it on git and on github:
+https://github.com/brampta/Nodesforum
+
+I found that my old Nodesforum were being hit super hard by spam, I already knew but over the years it only got worse! I had mechanisms to clear spam in place but they were too much work to use to clear the incredible mass of spam present.
+
+First I found the motivation for the spam, anyone could post links, even guests, and those links did not have rel="nofollow" hence Nodesforum was a great target for spam! First step was to correct that.
+
+Secondly I created a "Spammer Purge" button that clears a spammer in 1 click (and a few confirms to be safe, its a heavy operation but, like any delete on Nodesforum it can be undone). 
+
+Eventually I made the Spammer Purge be available not just on posts but folders too.
+
+Then I found that the mechanisms in place for spam, the old ones (delete all from user/delete all from IP), which are also the same mechanisms which are leveraged by the Spam Purge new hot functionality had some issues. So I want to solve these issues before deploying the new version accross my installations.
+
+issue #1: When deleting a post or a folder all its children are also deleted, however this fails to happen when deleted all posts from a user or an IP. Started creating a script for that
+
+issue #1.2: Also an other consequence of bug #1 is that the children of deleted posts or folders after a delete all from user or IP operation do not get marked as deleted in mods log
+
+issue #2: once again when deleting all from user or IP, there is no mechanism in place to make sure affected posts or folders get the last post/poster recalculated
+
+This is where I am at now. Solution for issue #1 is built as a script and ran alone and works, just need to wire it in the delete all from user/ip operation. Next I'll need to build solutions for the 2 other little problems.
+
+
 nodesforum 1.065
 
 

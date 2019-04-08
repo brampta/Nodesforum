@@ -119,7 +119,36 @@ if(
             $myquery_explanor_pre_action="INSERT INTO ".$_nodesforum_db_table_name_modifier."_nodesforum_mods_log (fapID, ancestry, mod_uniqueID, moded_uniqueID, authoritative_folderID, subaction_of, action_time, action_code, action, retrieval_number) VALUES ('$row[fapID]', '$addslashed_ancestry', '$persondoingshit', '$this_modded', '$delete_authority', '0', '$nowtime', 'DEL', '";
             $myquery_explanor_post_action="', '$mods_log_retrieval_number')";
         }
-        else if((!isset($_GET['_nodesforum_delete_user']) && !isset($_GET['_nodesforum_delete_ip'])) || (!isset($_GET['_nodesforum_delete_ip']) && (isset($_GET['_nodesforum_delete_user']) && $this_creator_uniqueID==$_GET['_nodesforum_delete_user'])) || (!isset($_GET['_nodesforum_delete_user']) && (isset($_GET['_nodesforum_delete_ip']) && $this_AES_ip==base64_decode($_GET['_nodesforum_delete_ip']))))
+        else if(
+			//possibility 1
+			(
+				!isset($_GET['_nodesforum_delete_user'])
+					&&
+				!isset($_GET['_nodesforum_delete_ip'])
+			)
+				||
+			//possiblity 2
+			(
+				!isset($_GET['_nodesforum_delete_ip'])
+					&&
+				(
+					isset($_GET['_nodesforum_delete_user'])
+						&&
+					$this_creator_uniqueID==$_GET['_nodesforum_delete_user']
+				)
+			)
+				||
+			//possibility 3
+			(
+				!isset($_GET['_nodesforum_delete_user'])
+					&&
+				(
+					isset($_GET['_nodesforum_delete_ip'])
+						&&
+					$this_AES_ip==base64_decode($_GET['_nodesforum_delete_ip'])
+				)
+			)
+		)
         {
             $first_letterof_containing_folder_or_post=substr($row['containing_folder_or_post'],0,1);
             $containing_node=substr($row['containing_folder_or_post'],1);
