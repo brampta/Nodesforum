@@ -71,6 +71,7 @@ while($row = mysql_fetch_array($result)){
 			mysql_query($myquery);
 		}
 		
+		//NEEDS TO BE TESTED
 		//make -1 posts or folders at the rupture point
         if($this_folder_or_post==1)
         {
@@ -108,6 +109,7 @@ while($row = mysql_fetch_array($result)){
 	}
 }
 
+//NEEDS TO BE TESTED
 //modify user stats
 if($folders_stat_todecrease)
 {

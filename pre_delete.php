@@ -120,6 +120,8 @@ if(
             $myquery_explanor_post_action="', '$mods_log_retrieval_number')";
         }
         else if(
+        //I dont think this part works, because the select query that this loop runs on only selects posts matching the ID of the post to delete or having it in its ancestry, in the case of a mass user or IP delete there should be an extra clause to also select posts with the matching user ID or IP.
+        //BUT, that is what should have already been but we must not forget about the other posts who are children of the posts matching by userID or IP, these will need to be found in advance by pulling a list of posts matching by user ID or IP ahead of time and then preparing a list of all posts having those in their ancestry!!
 			//possibility 1
 			(
 				!isset($_GET['_nodesforum_delete_user'])
@@ -255,6 +257,8 @@ if(
 
     if(!isset($_GET['_nodesforum_delete_user']) && !isset($_GET['_nodesforum_delete_ip']) && $_GET['_nodesforum_delete']!=0)
     {
+		//=========NORMAL DELETE=========
+		
         //delete this folder or post and all folder and posts that have this folder or post in their ancestry (are children)
         mysql_query("UPDATE ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts SET deletion_time = '$nowtime' WHERE fapID = '$addslashed_delete' || ancestry LIKE '%".$_nodesforum_ancestry_separator.$addslashed_delete.$_nodesforum_ancestry_separator."%' && deletion_time = 0");
         //make element be not skeleton
@@ -297,7 +301,7 @@ if(
     }
     else
     {
-
+		//=========MASS DELETE=========
 
         //delete the stuff
         if($_GET['_nodesforum_delete_user'])
@@ -308,7 +312,9 @@ if(
         {die('malformed request');}
         mysql_query("UPDATE ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts SET deletion_time = '$nowtime' WHERE ancestry LIKE '%".$_nodesforum_ancestry_separator.$addslashed_delete.$_nodesforum_ancestry_separator."%' && $specific_user_or_ip_clause && deletion_time = 0");
 
-
+		//there are bugs right now that cause children of deleted items to not be properly deleted, for this reason I have created a script to fix that (script_delete_children_of_deleted) and until all is properly handled correctly I will simply call this script here
+		include('script_delete_children_of_deleted.php');
+		
 
         //modify post and folder stats
         if($parent_stats_decrease_folders)
@@ -361,6 +367,9 @@ if(
                 }
             }
         }
+        
+        //there are some bugs in all this logic, best to call the script to update last posts now
+        include('script_update_last_posts.php');
     }
 
 
