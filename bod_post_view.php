@@ -28,7 +28,7 @@ if($_nodesforum_display_fapID)
     $countemz=0;
     $doonce=0;
     foreach($_nodesforum_display_fapID as $key => $value)
-    {var_dump($_nodesforum_display_fapID[$key]);
+    {
         $countemz++;
         $this_creator_uniqueID=$_nodesforum_display_creator_uniqueID[$key];
         echo '<a name="_nodesforum_anchor_'.$value.'"></a><div style="height:4px;"><!-- --></div><div style="width:100%;"><table style="width:100%;table-layout:fixed;" class="class_nodesforum_bgcolor3"><tr>
