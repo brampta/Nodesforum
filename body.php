@@ -9,9 +9,9 @@ echo '<script type="text/javascript" src="'.$_nodesforum_code_path.'_nodesforum_
 
 echo '<style type="text/css">
 
-.class_nodesforum_bgcolor1 {color:'.$_nodesforum_text_color.';background-color:'.$_nodesforum_background_color1.';background-image:url("'.$_nodesforum_mysterypath.'/gradios2.png");background-position:bottom;background-repeat:repeat-x;vertical-align:top;}
-.class_nodesforum_bgcolor2 {color:'.$_nodesforum_text_color.';background-color:'.$_nodesforum_background_color2.';background-image:url("'.$_nodesforum_mysterypath.'/gradios2.png");background-position:bottom;background-repeat:repeat-x;vertical-align:top;}
-.class_nodesforum_inner {padding-left:4px;padding-right:4px;background-image:url("'.$_nodesforum_mysterypath.'/gradios.png");background-repeat:repeat-x;}
+.class_nodesforum_bgcolor1 {color:'.$_nodesforum_text_color.';background-color:'.$_nodesforum_background_color1.';background-image:url("'.$_icons_path.'/gradios2.png");background-position:bottom;background-repeat:repeat-x;vertical-align:top;}
+.class_nodesforum_bgcolor2 {color:'.$_nodesforum_text_color.';background-color:'.$_nodesforum_background_color2.';background-image:url("'.$_icons_path.'/gradios2.png");background-position:bottom;background-repeat:repeat-x;vertical-align:top;}
+.class_nodesforum_inner {padding-left:4px;padding-right:4px;background-image:url("'.$_icons_path.'/gradios.png");background-repeat:repeat-x;}
 .class_nodesforum_bgcolor3 {color:'.$_nodesforum_text_color.';background-color:'.$_nodesforum_frames_color.';}
 .class_nodesforum_bgcolor4 {color:'.$_nodesforum_text_color.';background-color:'.$_nodesforum_bottom_color.';}
 .class_nodesforum_bgcolorinherit {color:inherit;}
