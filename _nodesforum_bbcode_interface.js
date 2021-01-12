@@ -117,11 +117,11 @@ pic_names[12]='surprise_bb';
 
 
 
-var _nodesforum_smileys_button = '<div style="display:inline;position:relative;"><a onclick="_nodesforum_show_select_menu(' + "'_nodesforum_show_smileys_div', '_nodesforum_smileys_button'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;" id="_nodesforum_smileys_button"><img src="' + _nodesforum_mysterypath + '/minipics/smileys/smile.gif" /></a><div id="_nodesforum_show_smileys_div" style="display:none;position:absolute;"><table class="class_nodesforum_bgcolor3"><tr><td class="class_nodesforum_bgcolor1"><table>';
+var _nodesforum_smileys_button = '<div style="display:inline;position:relative;"><a onclick="_nodesforum_show_select_menu(' + "'_nodesforum_show_smileys_div', '_nodesforum_smileys_button'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;" id="_nodesforum_smileys_button"><img src="' + _nodesforum_images_repo_path + '/minipics/smileys/smile.gif" /></a><div id="_nodesforum_show_smileys_div" style="display:none;position:absolute;"><table class="class_nodesforum_bgcolor3"><tr><td class="class_nodesforum_bgcolor1"><table>';
 
 for(x in smiley_codes)
 {
-    _nodesforum_smileys_button = _nodesforum_smileys_button + '<tr><td><a onclick="_nodesforum_add_tag(' + "'" + escape('[SMILEY]' + smiley_codes[x] + '[/SMILEY]') + "'" + ',' + "''" + ')" style="cursor:pointer;"><img src="' + _nodesforum_mysterypath + '/minipics/smileys/' + pic_names[x] + '.gif" /></a></td></tr>';
+    _nodesforum_smileys_button = _nodesforum_smileys_button + '<tr><td><a onclick="_nodesforum_add_tag(' + "'" + escape('[SMILEY]' + smiley_codes[x] + '[/SMILEY]') + "'" + ',' + "''" + ')" style="cursor:pointer;"><img src="' + _nodesforum_images_repo_path + '/minipics/smileys/' + pic_names[x] + '.gif" /></a></td></tr>';
 }
 
 _nodesforum_smileys_button = _nodesforum_smileys_button + '</table></td></tr></table></div></div>';
@@ -130,7 +130,7 @@ _nodesforum_smileys_button = _nodesforum_smileys_button + '</table></td></tr></t
 
 
 
-var _nodesforum_colors_button = '<a onclick="_nodesforum_insert_color()" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/colors.gif" /></a>';
+var _nodesforum_colors_button = '<a onclick="_nodesforum_insert_color()" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/colors.gif" /></a>';
 var _nodesforum_last_color = 'Black';
 function _nodesforum_insert_color()
 {
@@ -143,7 +143,7 @@ function _nodesforum_insert_color()
 }
 
 
-var _nodesforum_link_button = '<a onclick="_nodesforum_insert_link()" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/link.gif" /></a>';
+var _nodesforum_link_button = '<a onclick="_nodesforum_insert_link()" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/link.gif" /></a>';
 function _nodesforum_insert_link()
 {
     var askachoice = prompt('Please enter the URL of your link:','http://');
@@ -155,7 +155,7 @@ function _nodesforum_insert_link()
 }
 
 
-var _nodesforum_image_button = '<a onclick="_nodesforum_insert_image()" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/image.gif" /></a>';
+var _nodesforum_image_button = '<a onclick="_nodesforum_insert_image()" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/image.gif" /></a>';
 function _nodesforum_insert_image()
 {
     var askachoice = prompt('Please enter the URL of your image:','http://');
@@ -169,29 +169,29 @@ function _nodesforum_insert_image()
 
 
 
-var _nodesforum_ordered_list_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[LIST=1]\n[*]') + "'" + ',' + "'" + escape('\n[/LIST]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/ordered_list.gif" /></a>';
-var _nodesforum_unordered_list_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[LIST]\n[*]') + "'" + ',' + "'" + escape('\n[/LIST]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/unordered_list.gif" /></a>';
+var _nodesforum_ordered_list_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[LIST=1]\n[*]') + "'" + ',' + "'" + escape('\n[/LIST]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/ordered_list.gif" /></a>';
+var _nodesforum_unordered_list_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[LIST]\n[*]') + "'" + ',' + "'" + escape('\n[/LIST]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/unordered_list.gif" /></a>';
 
 
 
-var _nodesforum_bold_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[B]') + "'" + ',' + "'" + escape('[/B]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/bold.gif" /></a>';
-var _nodesforum_italic_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[I]') + "'" + ',' + "'" + escape('[/I]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/italic.gif" /></a>';
-var _nodesforum_underlined_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[U]') + "'" + ',' + "'" + escape('[/U]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/underlined.gif" /></a>';
-var _nodesforum_strike_through_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[S]') + "'" + ',' + "'" + escape('[/S]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/strike-through.gif" /></a>';
-var _nodesforum_sub_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[SUB]') + "'" + ',' + "'" + escape('[/SUB]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/sub.gif" /></a>';
-var _nodesforum_sup_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[SUP]') + "'" + ',' + "'" + escape('[/SUP]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/sup.gif" /></a>';
-
-
-
-
-var _nodesforum_align_left_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[LEFT]') + "'" + ',' + "'" + escape('[/LEFT]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/left.gif" /></a>';
-var _nodesforum_align_center_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[CENTER]') + "'" + ',' + "'" + escape('[/CENTER]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/center.gif" /></a>';
-var _nodesforum_align_right_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[RIGHT]') + "'" + ',' + "'" + escape('[/RIGHT]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/right.gif" /></a>';
+var _nodesforum_bold_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[B]') + "'" + ',' + "'" + escape('[/B]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/bold.gif" /></a>';
+var _nodesforum_italic_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[I]') + "'" + ',' + "'" + escape('[/I]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/italic.gif" /></a>';
+var _nodesforum_underlined_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[U]') + "'" + ',' + "'" + escape('[/U]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/underlined.gif" /></a>';
+var _nodesforum_strike_through_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[S]') + "'" + ',' + "'" + escape('[/S]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/strike-through.gif" /></a>';
+var _nodesforum_sub_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[SUB]') + "'" + ',' + "'" + escape('[/SUB]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/sub.gif" /></a>';
+var _nodesforum_sup_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[SUP]') + "'" + ',' + "'" + escape('[/SUP]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/sup.gif" /></a>';
 
 
 
 
-var _nodesforum_quote_button = '<a onclick="_nodesforum_addloosequote()" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/quote.gif" /></a>';
+var _nodesforum_align_left_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[LEFT]') + "'" + ',' + "'" + escape('[/LEFT]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/left.gif" /></a>';
+var _nodesforum_align_center_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[CENTER]') + "'" + ',' + "'" + escape('[/CENTER]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/center.gif" /></a>';
+var _nodesforum_align_right_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[RIGHT]') + "'" + ',' + "'" + escape('[/RIGHT]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/right.gif" /></a>';
+
+
+
+
+var _nodesforum_quote_button = '<a onclick="_nodesforum_addloosequote()" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/quote.gif" /></a>';
 function _nodesforum_addloosequote()
 {
     var mysource = prompt('source: (optional, example: who said it and where. maybe a link)');
@@ -216,7 +216,7 @@ for (xol in ajax_pipes)
 
 
 
-var _nodesforum_strict_quote_button = '<a onclick="_nodesforum_addstrictquote()" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/quote2.gif" /></a>';
+var _nodesforum_strict_quote_button = '<a onclick="_nodesforum_addstrictquote()" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/quote2.gif" /></a>';
 function _nodesforum_addstrictquote()
 {
     var postID = prompt('post #: (required)');
@@ -275,12 +275,12 @@ function _nodesforum_different_escape_certain_chars(stringz,chars_to_escape)
 
 
 
-var _nodesforum_code_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[CODE]') + "'" + ',' + "'" + escape('[/CODE]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/code.gif" /></a>';
+var _nodesforum_code_button = '<a onclick="_nodesforum_add_tag(' + "'" + escape('[CODE]') + "'" + ',' + "'" + escape('[/CODE]') + "'" + ')" style="cursor:pointer;padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/code.gif" /></a>';
 
 
 
-var _nodesforum_undo_button = '<span id="_nodesforum_undo_span" style="padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/undo_grey.gif" /></span>';
-var _nodesforum_redo_button = '<span id="_nodesforum_redo_span" style="padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/redo_grey.gif" /></span>';
+var _nodesforum_undo_button = '<span id="_nodesforum_undo_span" style="padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/undo_grey.gif" /></span>';
+var _nodesforum_redo_button = '<span id="_nodesforum_redo_span" style="padding-left:1px;padding-right:1px;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/redo_grey.gif" /></span>';
 
 
 
@@ -288,7 +288,7 @@ var _nodesforum_redo_button = '<span id="_nodesforum_redo_span" style="padding-l
 
 
 
-var _nodesforum_biggen_smallen_button = '<div style="display:inline;padding-left:1px;padding-right:1px;position:relative;"><a onclick="_nodesforum_smallen_text()" style="cursor:pointer;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/smallen.gif" style="position:absolute;" /></a><a onclick="_nodesforum_biggen_text()" style="cursor:pointer;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/biggen.gif" style="position:absolute;top:8px;" /></a></span>';
+var _nodesforum_biggen_smallen_button = '<div style="display:inline;padding-left:1px;padding-right:1px;position:relative;"><a onclick="_nodesforum_smallen_text()" style="cursor:pointer;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/smallen.gif" style="position:absolute;" /></a><a onclick="_nodesforum_biggen_text()" style="cursor:pointer;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/biggen.gif" style="position:absolute;top:8px;" /></a></span>';
 
 
 
@@ -322,7 +322,7 @@ function setpic(element_id,pic_url)
 
 function _nodesforum_make_selector(selector_name,selector_choices_opening_tags_array,selector_choices_closing_tags_array,selector_choices_styles_array,selector_choices_texts_array)
 {
-    var selector_code = '<div style="display:inline;position:relative;"><span style="margin:1px;cursor:pointer;position:relative;top:-2px;color:#000000;font-size:16px;background-color:#FFFFFF;border-style:solid;border-color:#444444;border-width:1px;z-index:10;" onmouseover="setpic(' + "'_nodesforum_main_select_box_arrow_" + selector_name + "','" + _nodesforum_mysterypath + "/minipics/bbcode/little_arrow2.gif'" + ')" onmouseout="setpic(' + "'_nodesforum_main_select_box_arrow_" + selector_name + "','" + _nodesforum_mysterypath + "/minipics/bbcode/little_arrow.gif'" + ')" id="_nodesforum_select_handler_' + selector_name + '"><span onclick="_nodesforum_show_select_menu(' + "'" + '_nodesforum_show_' + selector_name + '_div' + "'" + ',' + "'_nodesforum_select_handler_" + selector_name + "'" + ')">&#160;' + selector_name + '<img src="' + _nodesforum_mysterypath + '/minipics/bbcode/little_arrow.gif" style="vertical-align:text-top;position:relative;top:2px;" id="_nodesforum_main_select_box_arrow_' + selector_name + '" /></span></span>';
+    var selector_code = '<div style="display:inline;position:relative;"><span style="margin:1px;cursor:pointer;position:relative;top:-2px;color:#000000;font-size:16px;background-color:#FFFFFF;border-style:solid;border-color:#444444;border-width:1px;z-index:10;" onmouseover="setpic(' + "'_nodesforum_main_select_box_arrow_" + selector_name + "','" + _nodesforum_images_repo_path + "/minipics/bbcode/little_arrow2.gif'" + ')" onmouseout="setpic(' + "'_nodesforum_main_select_box_arrow_" + selector_name + "','" + _nodesforum_images_repo_path + "/minipics/bbcode/little_arrow.gif'" + ')" id="_nodesforum_select_handler_' + selector_name + '"><span onclick="_nodesforum_show_select_menu(' + "'" + '_nodesforum_show_' + selector_name + '_div' + "'" + ',' + "'_nodesforum_select_handler_" + selector_name + "'" + ')">&#160;' + selector_name + '<img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/little_arrow.gif" style="vertical-align:text-top;position:relative;top:2px;" id="_nodesforum_main_select_box_arrow_' + selector_name + '" /></span></span>';
     selector_code = selector_code + '<div id="_nodesforum_show_' + selector_name + '_div" style="position:absolute;top:0px;height:0px;display:none;z-index:20;overflow:auto;height:260px;overflow-x: hidden;"><table class="class_nodesforum_bgcolor3">';
 
     for(x in selector_choices_texts_array)
@@ -664,11 +664,11 @@ function _nodesforum_set_undo_button_state()
     //if(steps[last_step])
     if(this_step>0)
     {
-        document.getElementById("_nodesforum_undo_span").innerHTML = '<a onclick="_nodesforum_undo()" style="cursor:pointer;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/undo.gif" /></a>';
+        document.getElementById("_nodesforum_undo_span").innerHTML = '<a onclick="_nodesforum_undo()" style="cursor:pointer;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/undo.gif" /></a>';
     }
     else
     {
-        document.getElementById("_nodesforum_undo_span").innerHTML = '<img src="' + _nodesforum_mysterypath + '/minipics/bbcode/undo_grey.gif" />';
+        document.getElementById("_nodesforum_undo_span").innerHTML = '<img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/undo_grey.gif" />';
     }
 }
 
@@ -693,11 +693,11 @@ function _nodesforum_set_redo_button_state()
     var next_step = this_step + 1;
     if(steps[next_step])
     {
-        document.getElementById("_nodesforum_redo_span").innerHTML = '<a onclick="_nodesforum_redo()" style="cursor:pointer;"><img src="' + _nodesforum_mysterypath + '/minipics/bbcode/redo.gif" /></a>';
+        document.getElementById("_nodesforum_redo_span").innerHTML = '<a onclick="_nodesforum_redo()" style="cursor:pointer;"><img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/redo.gif" /></a>';
     }
     else
     {
-        document.getElementById("_nodesforum_redo_span").innerHTML = '<img src="' + _nodesforum_mysterypath + '/minipics/bbcode/redo_grey.gif" />';
+        document.getElementById("_nodesforum_redo_span").innerHTML = '<img src="' + _nodesforum_images_repo_path + '/minipics/bbcode/redo_grey.gif" />';
     }
 }
 

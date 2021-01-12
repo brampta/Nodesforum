@@ -38,6 +38,7 @@ echo '" method="post">
 
 <script type="text/javascript">
 var _nodesforum_mysterypath = "'.$_nodesforum_mysterypath.'";
+var _nodesforum_images_repo_path = "'.$_nodesforum_code_path.'images_repo";
 var _nodesforum_bbcode_escape_char = "'.$_nodesforum_bbcode_escape_char.'";
 var _nodesforum_code_path = "'.$_nodesforum_code_path.'";
 </script>

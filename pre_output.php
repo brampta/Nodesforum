@@ -122,28 +122,28 @@ if ($lastglobtime < ($nowtime - 15) && $lastpathrotationtime < ($nowtime - (12 *
 
 
 
-
-$_nodesforum_lock_icon = $_nodesforum_mysterypath . '/minipics/lock.gif';
-$_nodesforum_home_icon = $_nodesforum_mysterypath . '/minipics/home.gif';
-$_nodesforum_tool_icon = $_nodesforum_mysterypath . '/minipics/tool.gif';
-$_nodesforum_folder_icon = $_nodesforum_mysterypath . '/minipics/folder.gif';
-$_nodesforum_post_icon = $_nodesforum_mysterypath . '/minipics/post.gif';
-$_nodesforum_delete_icon = $_nodesforum_mysterypath . '/minipics/no.gif';
-$_nodesforum_warn_icon = $_nodesforum_mysterypath . '/minipics/warn.gif';
-$_nodesforum_userhome_icon = $_nodesforum_mysterypath . '/minipics/userhome.gif';
-$_nodesforum_userhome_grey_icon = $_nodesforum_mysterypath . '/minipics/userhome_grey.gif';
-$_nodesforum_reply_icon = $_nodesforum_mysterypath . '/minipics/reply.gif';
-$_nodesforum_history_icon = $_nodesforum_mysterypath . '/minipics/history.gif';
-$_nodesforum_move_icon = $_nodesforum_mysterypath . '/minipics/move.gif';
-$_nodesforum_restore_icon = $_nodesforum_mysterypath . '/minipics/restore.gif';
-$_nodesforum_no2_icon = $_nodesforum_mysterypath . '/minipics/no2.gif';
-$_nodesforum_power_icon = $_nodesforum_mysterypath . '/minipics/power.gif';
-$_nodesforum_clip_icon = $_nodesforum_mysterypath . '/minipics/clip.gif';
-$_nodesforum_declip_icon = $_nodesforum_mysterypath . '/minipics/declip.gif';
-$_nodesforum_up_icon = $_nodesforum_mysterypath . '/minipics/up.gif';
-$_nodesforum_down_icon = $_nodesforum_mysterypath . '/minipics/down.gif';
-$_nodesforum_skeleton_icon = $_nodesforum_mysterypath . '/minipics/skeleton.gif';
-$_nodesforum_magnif_icon = $_nodesforum_mysterypath . '/minipics/magnif.gif';
+$_icons_path=$_nodesforum_code_path.'images_repo';
+$_nodesforum_lock_icon = $_icons_path . '/minipics/lock.gif';
+$_nodesforum_home_icon = $_icons_path . '/minipics/home.gif';
+$_nodesforum_tool_icon = $_icons_path . '/minipics/tool.gif';
+$_nodesforum_folder_icon = $_icons_path . '/minipics/folder.gif';
+$_nodesforum_post_icon = $_icons_path . '/minipics/post.gif';
+$_nodesforum_delete_icon = $_icons_path . '/minipics/no.gif';
+$_nodesforum_warn_icon = $_icons_path . '/minipics/warn.gif';
+$_nodesforum_userhome_icon = $_icons_path . '/minipics/userhome.gif';
+$_nodesforum_userhome_grey_icon = $_icons_path . '/minipics/userhome_grey.gif';
+$_nodesforum_reply_icon = $_icons_path . '/minipics/reply.gif';
+$_nodesforum_history_icon = $_icons_path . '/minipics/history.gif';
+$_nodesforum_move_icon = $_icons_path . '/minipics/move.gif';
+$_nodesforum_restore_icon = $_icons_path . '/minipics/restore.gif';
+$_nodesforum_no2_icon = $_icons_path . '/minipics/no2.gif';
+$_nodesforum_power_icon = $_icons_path . '/minipics/power.gif';
+$_nodesforum_clip_icon = $_icons_path . '/minipics/clip.gif';
+$_nodesforum_declip_icon = $_icons_path . '/minipics/declip.gif';
+$_nodesforum_up_icon = $_icons_path . '/minipics/up.gif';
+$_nodesforum_down_icon = $_icons_path . '/minipics/down.gif';
+$_nodesforum_skeleton_icon = $_icons_path . '/minipics/skeleton.gif';
+$_nodesforum_magnif_icon = $_icons_path . '/minipics/magnif.gif';
 
 function unicode_wordwrap($string, $maxlen=10)
 {
