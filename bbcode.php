@@ -205,32 +205,32 @@ $_nodesforum_smiley_spacing_style='style="padding-left:1px;padding-right:1px;"';
 
 
 $bb_replace['22a']='/\[smiley\]:\)\[\/smiley\]/i';
-$bb_replacements['22a']='<img src="'.$_nodesforum_mysterypath.'/minipics/smileys/smile.gif" '.$_nodesforum_smiley_spacing_style.' />';
+$bb_replacements['22a']='<img src="'.$_icons_path.'/minipics/smileys/smile.gif" '.$_nodesforum_smiley_spacing_style.' />';
 $bb_replace['22b']='/\[smiley\]:p\[\/smiley\]/i';
-$bb_replacements['22b']='<img src="'.$_nodesforum_mysterypath.'/minipics/smileys/tongue.gif" '.$_nodesforum_smiley_spacing_style.' />';
+$bb_replacements['22b']='<img src="'.$_icons_path.'/minipics/smileys/tongue.gif" '.$_nodesforum_smiley_spacing_style.' />';
 $bb_replace['22c']='/\[smiley\]:\(\[\/smiley\]/i';
-$bb_replacements['22c']='<img src="'.$_nodesforum_mysterypath.'/minipics/smileys/frown.gif" '.$_nodesforum_smiley_spacing_style.' />';
+$bb_replacements['22c']='<img src="'.$_icons_path.'/minipics/smileys/frown.gif" '.$_nodesforum_smiley_spacing_style.' />';
 $bb_replace['22d']='/\[smiley\]:D\[\/smiley\]/i';
-$bb_replacements['22d']='<img src="'.$_nodesforum_mysterypath.'/minipics/smileys/bigsmile.gif" '.$_nodesforum_smiley_spacing_style.' />';
+$bb_replacements['22d']='<img src="'.$_icons_path.'/minipics/smileys/bigsmile.gif" '.$_nodesforum_smiley_spacing_style.' />';
 $bb_replace['22e']='/\[smiley\];\)\[\/smiley\]/i';
-$bb_replacements['22e']='<img src="'.$_nodesforum_mysterypath.'/minipics/smileys/wink.gif" '.$_nodesforum_smiley_spacing_style.' />';
+$bb_replacements['22e']='<img src="'.$_icons_path.'/minipics/smileys/wink.gif" '.$_nodesforum_smiley_spacing_style.' />';
 
 $bb_replace['22f']='/\[smiley\]8\)\[\/smiley\]/i';
-$bb_replacements['22f']='<img src="'.$_nodesforum_mysterypath.'/minipics/smileys/glasses.gif" '.$_nodesforum_smiley_spacing_style.' />';
+$bb_replacements['22f']='<img src="'.$_icons_path.'/minipics/smileys/glasses.gif" '.$_nodesforum_smiley_spacing_style.' />';
 $bb_replace['22g']='/\[smiley\]B\)\[\/smiley\]/i';
-$bb_replacements['22g']='<img src="'.$_nodesforum_mysterypath.'/minipics/smileys/shades.gif" '.$_nodesforum_smiley_spacing_style.' />';
+$bb_replacements['22g']='<img src="'.$_icons_path.'/minipics/smileys/shades.gif" '.$_nodesforum_smiley_spacing_style.' />';
 $bb_replace['22h']='/\[smiley\]:(\/|\\\)\[\/smiley\]/i';
-$bb_replacements['22h']='<img src="'.$_nodesforum_mysterypath.'/minipics/smileys/unsure.gif" '.$_nodesforum_smiley_spacing_style.' />';
+$bb_replacements['22h']='<img src="'.$_icons_path.'/minipics/smileys/unsure.gif" '.$_nodesforum_smiley_spacing_style.' />';
 
 
 $bb_replace['22sbb']='/\[(smiley|SMILEY)\]8(O|0)\[\/(smiley|SMILEY)\]/';
-$bb_replacements['22sbb']='<img src="'.$_nodesforum_mysterypath.'/minipics/smileys/surprise_bb.gif" '.$_nodesforum_smiley_spacing_style.' />';
+$bb_replacements['22sbb']='<img src="'.$_icons_path.'/minipics/smileys/surprise_bb.gif" '.$_nodesforum_smiley_spacing_style.' />';
 $bb_replace['22sbs']='/\[(smiley|SMILEY)\]8o\[\/(smiley|SMILEY)\]/';
-$bb_replacements['22sbs']='<img src="'.$_nodesforum_mysterypath.'/minipics/smileys/surprise_bs.gif" '.$_nodesforum_smiley_spacing_style.' />';
+$bb_replacements['22sbs']='<img src="'.$_icons_path.'/minipics/smileys/surprise_bs.gif" '.$_nodesforum_smiley_spacing_style.' />';
 $bb_replace['22sss']='/\[(smiley|SMILEY)\]:o\[\/(smiley|SMILEY)\]/';
-$bb_replacements['22sss']='<img src="'.$_nodesforum_mysterypath.'/minipics/smileys/surprise_ss.gif" '.$_nodesforum_smiley_spacing_style.' />';
+$bb_replacements['22sss']='<img src="'.$_icons_path.'/minipics/smileys/surprise_ss.gif" '.$_nodesforum_smiley_spacing_style.' />';
 $bb_replace['22ssb']='/\[(smiley|SMILEY)\]:(O|0)\[\/(smiley|SMILEY)\]/';
-$bb_replacements['22ssb']='<img src="'.$_nodesforum_mysterypath.'/minipics/smileys/surprise_sb.gif" '.$_nodesforum_smiley_spacing_style.' />';
+$bb_replacements['22ssb']='<img src="'.$_icons_path.'/minipics/smileys/surprise_sb.gif" '.$_nodesforum_smiley_spacing_style.' />';
 
 
 
