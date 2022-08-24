@@ -1,3 +1,2 @@
-lastpathloadtimefile
-lastpathrotationtimefile
-_*
+*
+!.gitignore
