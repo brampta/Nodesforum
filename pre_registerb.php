@@ -71,8 +71,9 @@ if($error==0)
 			'.$_nodesforum_instance_asolute_URL.'
 			
 			';
-			$headers = "From: ".$_nodesforum_validate_email_address_from;
-			mail($to,$subject,$message,$headers);
+			//$headers = "From: ".$_nodesforum_validate_email_address_from;
+			//mail($to,$subject,$message,$headers);
+			send_mail($to, null, $_nodesforum_validate_email_address_from, null, $subject, $message, null);
 			$_nodesforum_register_suxxess=1;
 		}
 		else

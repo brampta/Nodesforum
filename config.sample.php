@@ -109,3 +109,12 @@ $_nodesforum_php_encyption_for_IP_addresses='sha512'; //to grant ultimate privac
 $_nodesforum_delete_ips_after_x_days=365*2; //ip addresses on the forum might be encrypted with an algorythm that we cannot decode today but maybe some day it will be decryptable. to guarantee the greatest level of privacy to the users of your forum it is best to not keep the ip addresses on posts forever. the number you set on this variable will be the number of days after which ip addresses associated with posts are erased
 $_nodesforum_keep_ips_banned_for_x_days=30; //most people do not use static ip addresses. someone could have an ip today and another tomorow and someone else could have his first ip. for that reason it is not a good idea to permanently ban an ip address. the number you set on this variable will be the number of days for which a ban on an ip will last
 
+
+//------------MAIL
+$_nodesforum_mailer='php'; //php, uses mail() or custom, drops to a function in a file of your choosing
+$_nodesforum_mailer_custom_file='/var/www/html/mymailer/sendmailcustom.php'; //the path of the file where you will write your custom mail function, like this:
+/*
+ * function send_mail_custom($to, $toname, $from, $fromname, $subject, $message_html, $message_text){
+ *  //do stuff
+ * }
+ */

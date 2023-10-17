@@ -62,8 +62,9 @@ while($row = mysql_fetch_array($result))
 		'.$_nodesforum_instance_asolute_URL.'
 
 		';
-	$headers = "From: ".$_nodesforum_validate_resend_password_from;
-	mail($to,$subject,$message,$headers);
+	//$headers = "From: ".$_nodesforum_validate_resend_password_from;
+	//mail($to,$subject,$message,$headers);
+	send_mail($to, null, $_nodesforum_validate_resend_password_from, null, $subject, $message, null);
 
 
 	//erase request key from db

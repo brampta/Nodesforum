@@ -52,8 +52,9 @@ if($error==0)
 			'.$_nodesforum_instance_asolute_URL.'
 	
 			';
-		$headers = "From: ".$_nodesforum_validate_resend_password_from;
-		mail($to,$subject,$message,$headers);
+		//$headers = "From: ".$_nodesforum_validate_resend_password_from;
+		//mail($to,$subject,$message,$headers);
+		send_mail($to, null, $_nodesforum_validate_resend_password_from, null, $subject, $message, null);
 
 		$_nodesforum_resendpass_suxxess=1;
 	}

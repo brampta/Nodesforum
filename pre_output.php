@@ -209,6 +209,19 @@ function _nodesforum_display_title($string, $max_len, $apply_maxlen=true)
 //}
 
 
+function send_mail($to, $toname, $from, $fromname, $subject, $message_html, $message_text){
+    global $_nodesforum_mailer, $_nodesforum_mailer_custom_file;
+    if($_nodesforum_mailer=='php'){
+        $headers = "From: ".$from;
+        return mail($to,$subject,$message_html,$headers);
+    }elseif($_nodesforum_mailer=='custom'){
+        if(file_exists($_nodesforum_mailer_custom_file)){
+            include_once $_nodesforum_mailer_custom_file;
+            return send_mail_custom($to, $toname, $from, $fromname, $subject, $message_html, $message_text);
+        }
+    }
+}
+
 include(nodesforum_sanitize_nodesforum_code_path($_nodesforum_code_path . 'bbcode.php'));
 
 

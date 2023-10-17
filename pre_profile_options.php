@@ -87,8 +87,9 @@ if($_nodesforum_use_external_user_system=='no' && isset($_SESSION[$_nodesforum_e
 				'.$_nodesforum_instance_asolute_URL.'
 				
 				';
-				$headers = "From: ".$_nodesforum_validate_email_address_from;
-				mail($to,$subject,$message,$headers);
+				//$headers = "From: ".$_nodesforum_validate_email_address_from;
+				//mail($to,$subject,$message,$headers);
+				send_mail($to, null, $_nodesforum_validate_email_address_from, null, $subject, $message, null);
 				$_nodesforum_po_email_validation_send=1;
 			}
 			else
