@@ -64,7 +64,7 @@ while($row = mysql_fetch_array($result))
 		';
 	//$headers = "From: ".$_nodesforum_validate_resend_password_from;
 	//mail($to,$subject,$message,$headers);
-	send_mail($to, null, $_nodesforum_validate_resend_password_from, null, $subject, $message, null);
+	nodesforum_send_mail($to, null, $_nodesforum_validate_resend_password_from, null, $subject, $message, null);
 
 
 	//erase request key from db

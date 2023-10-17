@@ -209,7 +209,7 @@ function _nodesforum_display_title($string, $max_len, $apply_maxlen=true)
 //}
 
 
-function send_mail($to, $toname, $from, $fromname, $subject, $message_html, $message_text){
+function nodesforum_send_mail($to, $toname, $from, $fromname, $subject, $message_html, $message_text){
     global $_nodesforum_mailer, $_nodesforum_mailer_custom_file;
     if($_nodesforum_mailer=='php'){
         $headers = "From: ".$from;
