@@ -45,7 +45,7 @@ else if($_nodesforum_public_name_invalid==0)
 }
 if($_nodesforum_image_verification_on_registration=='yes')
 {
-	if(md5($_POST['_nodesforum_numba'])!=$_SESSION['img_ver_registro'])
+	if(md5(strtolower($_POST['_nodesforum_numba']))!=$_SESSION['img_ver_registro'])
 	{$error=1; $_nodesforum_img_ver_invalid=1;}
 }
 if($error==0)

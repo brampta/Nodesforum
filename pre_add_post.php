@@ -60,7 +60,7 @@
 	}
 	if(!isset($_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]) && $_nodesforum_image_verification_on_guest_reply=='yes')
 	{
-		if(md5($_POST['_nodesforum_numbazx'])!=$_SESSION['img_ver_gpost'])
+		if(md5(strtolower($_POST['_nodesforum_numbazx']))!=$_SESSION['img_ver_gpost'])
 		{$error=1; $_nodesforum_img_ver_invalid=1;}
 	}
 	if($_nodesforum_folder_or_post==1)

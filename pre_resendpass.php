@@ -10,7 +10,7 @@ $error=0;
 $addslashed_email=_nodesforum_my_custom_addslashes($_POST['_nodesforum_resend_email']);
 if($_nodesforum_image_verification_on_forgotten_pass=='yes')
 {
-	if(md5($_POST['_nodesforum_numbaz'])!=$_SESSION['img_ver_forgotpass'])
+	if(md5(strtolower($_POST['_nodesforum_numbaz']))!=$_SESSION['img_ver_forgotpass'])
 	{$error=1; $_nodesforum_img_ver_invalid=1;}
 	unset($_SESSION['img_ver_forgotpass']);
 }

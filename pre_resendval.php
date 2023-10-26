@@ -11,7 +11,7 @@ $addslashed_email=_nodesforum_my_custom_addslashes($_POST['_nodesforum_remember_
 $_nodesforum_remember_uniqueID=$_POST['_nodesforum_remember_uniqueID'];
 if($_nodesforum_image_verification_on_resend_validation_mail=='yes')
 {
-	if(md5($_POST['_nodesforum_numbax'])!=$_SESSION['img_ver_resendval'])
+	if(md5(strtolower($_POST['_nodesforum_numbax']))!=$_SESSION['img_ver_resendval'])
 	{$error=1; $_nodesforum_resendval_img_ver_invalid=1;}
 	unset($_SESSION['img_ver_resendval']);
 }
