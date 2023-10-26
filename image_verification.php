@@ -50,7 +50,7 @@ $session_name='img_ver_'.(addslashes($_GET['name']));
 //// destroy the image to free up the memory
 //imagedestroy($image);
 
-$permitted_chars = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789abcdefghijklmnpqrstuvwxyz';
+$permitted_chars = 'ABCDEFGHJKMNPQRSTUVWXYZ2345678abcdefghijkmnprstuvwxyz';
 $string_length = 12;
 $box_width = 400;
 function secure_generate_string($input, $strength = 5, $secure = true)
