@@ -51,8 +51,8 @@ $session_name='img_ver_'.(addslashes($_GET['name']));
 //imagedestroy($image);
 
 $permitted_chars = 'ABCDEFGHJKMNPQRSTUVWXYZ2345678abcdefghijkmnprstuvwxyz';
-$string_length = 12;
-$box_width = 400;
+$string_length = 24;
+$box_width = 500;
 function secure_generate_string($input, $strength = 5, $secure = true)
 {
 	$input_length = strlen($input);
