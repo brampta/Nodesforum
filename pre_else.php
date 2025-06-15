@@ -215,6 +215,14 @@ if(substr($_GET['_nodesforum_node'],0,1)=='h')
     $addslashed_node=substr($addslashed_node,1);
 }
 
+$temporary_remove_audit_a=0;
+if(substr($_GET['_nodesforum_node'],0,1)=='a')
+{
+    $temporary_remove_audit_a=1;
+    $_GET['_nodesforum_node']=substr($_GET['_nodesforum_node'],1);
+    $addslashed_node=substr($addslashed_node,1);
+}
+
 
 
 
@@ -657,12 +665,21 @@ $_nodesforum_modship_authoritative_folder=-1;
 $_nodesforum_modship_authority_depth=9999999999999;
 $_nodesforum_mod_level=9999999999999;
 
+$_nodesforum_righttoaudit=0;
+$_nodesforum_explain_righttoaudit='';
+$_nodesforum_righttoaudit_authoritative_folder=-1;
+$_nodesforum_righttoaudit_authority_depth=9999999999999;
+
 $_nodesforum_isbanned=0;
 $_nodesforum_explain_banship='';
 $_nodesforum_banship_authoritative_folder=-1;
 $_nodesforum_banship_authority_depth=9999999999999;
 $_nodesforum_ban_reason='';
 
+if($_nodesforum_folder_or_post==1)
+{$thinger='folder';}
+else if($_nodesforum_folder_or_post==2)
+{$thinger='post';}
 
 if($_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]==$_nodesforum_main_mod_uniqueID)
 {
@@ -673,6 +690,12 @@ if($_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]==$_nodesfo
     $_nodesforum_remember_modership_folders[0]='rememeber';
     foreach($_nodesforum_risky_bbcode_title as $key => $value)
     {$_nodesforum_remember_modership_folders[$key]='rememeber';}
+
+    $_nodesforum_righttoaudit=1;
+    $_nodesforum_explain_righttoaudit=' (main forum moderator)';
+    $_nodesforum_righttoaudit_authoritative_folder=0;
+    $_nodesforum_remember_righttoaudit_folders[0]='rememeber';
+    $_nodesforum_remember_righttoaudit_folders_audited[0]=1;
 }
 else
 {
@@ -685,6 +708,8 @@ else
 
     $ancestry_plus_node=$_nodesforum_ancestry.$_GET['_nodesforum_node'].$_nodesforum_ancestry_separator;
     $exploded_ancestry_plus_node=explode($_nodesforum_ancestry_separator,$ancestry_plus_node);
+    //remove empty elements
+    $exploded_ancestry_plus_node=array_filter($exploded_ancestry_plus_node, function($value) { return $value !== ''; });
 
     //"limit to relevant" clause to make mod power check lighter
     if(isset($_GET['_nodesforum_move']) || isset($_GET['_nodesforum_restore']))
@@ -755,14 +780,45 @@ else
                 $_nodesforum_remember_modership_folder_modlevel[$this_folderID]=$this_mod_level;
             }
         }
-        $myquery="SELECT fapID FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE creator_uniqueID = '$my_uniqueID' $limit_to_relevant_clause_for_fap";
+        $myquery="SELECT fapID, audited FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE creator_uniqueID = '$my_uniqueID' $limit_to_relevant_clause_for_fap";
         $result = mysql_query($myquery);
         while($row = mysql_fetch_array($result))
         {
             $this_folderID=$row['fapID'];
             $_nodesforum_remember_modership_folders[$this_folderID]='rememeber';
+            $this_audited = $row['audited'];
+            $_nodesforum_remember_righttoaudit_folders_audited[$this_folderID]=$this_audited;
         }
         $_nodesforum_remember_modership_folders['u'.$my_uniqueID]='rememeber';
+
+
+
+        //here we must find all the keys of _nodesforum_remember_modership_folders
+        //that do not start with a letter (so are actual folders)
+        //and dont already have a corresponding $_nodesforum_remember_righttoaudit_folders_audited
+        //we need to make a request to get the audited value of all the missing posts and folders!
+        //so first find the _nodesforum_remember_modership_folders missing their _nodesforum_remember_righttoaudit_folders_audited
+        $_missing_nodesforum_remember_righttoaudit_folders_audited = array();
+        foreach($_nodesforum_remember_modership_folders as $key => $value)
+        {
+            if(substr($key,0,1)!='u' && substr($key,0,1)!='p' && substr($key,0,1)!='f' && !isset($_nodesforum_remember_righttoaudit_folders_audited[$key]))
+            {
+                $_missing_nodesforum_remember_righttoaudit_folders_audited[$key]='rememeber';
+            }
+        }
+        //now make a request to get the audited value of all the missing posts and folders
+        if(count($_missing_nodesforum_remember_righttoaudit_folders_audited)>0)
+        {
+            $missing_fapIDs = implode(',',array_keys($_missing_nodesforum_remember_righttoaudit_folders_audited));
+            $myquery="SELECT fapID, audited FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE fapID IN ($missing_fapIDs)";
+            $result = mysql_query($myquery);
+            while($row = mysql_fetch_array($result))
+            {
+                $this_folderID=$row['fapID'];
+                $_nodesforum_remember_righttoaudit_folders_audited[$this_folderID]=$row['audited'];
+            }
+        }
+
 
         if($_nodesforum_remember_modership_folders || $_nodesforum_remember_bannership_folders)
         {
@@ -770,6 +826,7 @@ else
 
 
             //find if guy has mod power running ancestors from the root
+            //and if he has the right to audit!
             $depth=0;
             foreach($exploded_ancestry_plus_node as $key => $value)
             {
@@ -778,30 +835,60 @@ else
                     $depth++;
                     if($_nodesforum_remember_modership_folders[$value])
                     {
-                        $_nodesforum_ismod=1;
-                        if($value==$_GET['_nodesforum_node'])
-                        {
-                            if($_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]==$_nodesforum_creator_uniqueID)
+
+                        //maybe give mod power here
+                        if($_nodesforum_ismod==0){
+                            $_nodesforum_ismod=1;
+                            if($value==$_GET['_nodesforum_node'])
                             {
-                                $_nodesforum_mod_level=0;
-                                $_nodesforum_explain_modship=' (creator of this '.$thinger.')';
-                                if(substr($_GET['_nodesforum_node'],0,1)=='u')
-                                {$_nodesforum_explain_modship=' (this is your own forum page)';}
+                                if($_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]==$_nodesforum_creator_uniqueID)
+                                {
+                                    $_nodesforum_mod_level=0;
+                                    $_nodesforum_explain_modship=' (creator of this '.$thinger.')';
+                                    if(substr($_GET['_nodesforum_node'],0,1)=='u')
+                                    {$_nodesforum_explain_modship=' (this is your own forum page)';}
+                                }
+                                else if(substr($_GET['_nodesforum_node'],0,1)!='p')
+                                {
+                                    $_nodesforum_mod_level=$_nodesforum_remember_modership_folder_modlevel[$value];
+                                    $_nodesforum_explain_modship=' (moderator level '.$_nodesforum_mod_level.')';
+                                }
                             }
-                            else if(substr($_GET['_nodesforum_node'],0,1)!='p')
+                            else
                             {
-                                $_nodesforum_mod_level=$_nodesforum_remember_modership_folder_modlevel[$value];
-                                $_nodesforum_explain_modship=' (moderator level '.$_nodesforum_mod_level.')';
+                                $_nodesforum_mod_level=-1;
+                                $_nodesforum_explain_modship=' (moderator of <a href="?_nodesforum_node='.$value.'">parent folder</a>)';
                             }
+                            $_nodesforum_modship_authoritative_folder=$value;
+                            $_nodesforum_modship_authority_depth=$depth;
+                            //break;
                         }
-                        else
-                        {
-                            $_nodesforum_mod_level=-1;
-                            $_nodesforum_explain_modship=' (moderator of <a href="?_nodesforum_node='.$value.'">parent folder</a>)';
+
+                        //maybe give right to audit here
+                        if($_nodesforum_remember_righttoaudit_folders[$value]){var_dump('$_nodesforum_remember_righttoaudit_folders[$value]',$_nodesforum_remember_righttoaudit_folders[$value]);}
+                        if($_nodesforum_remember_righttoaudit_folders_audited[$value]==1){echo '$_nodesforum_remember_righttoaudit_folders_audited[$value] was equal to 1';}
+                        if(
+                            $_nodesforum_remember_righttoaudit_folders[$value] // root folder
+                            && $_nodesforum_remember_righttoaudit_folders_audited[$value]==1 // or this folder is already audited
+                            && $_nodesforum_righttoaudit==0 // and we are not already right to audit
+                        ){
+                            $_nodesforum_righttoaudit=1;
+                            if($value==$_GET['_nodesforum_node'])
+                            {
+                                $_nodesforum_explain_righttoaudit=' (you have the right to audit this '.$thinger.')';
+                            }
+                            else
+                            {
+                                $_nodesforum_explain_righttoaudit=' (you have the right to audit <a href="?_nodesforum_node='.$value.'">parent folder</a>)';
+                            }
+                            $_nodesforum_righttoaudit_authoritative_folder=$value;
+                            $_nodesforum_righttoaudit_authority_depth=$depth;
                         }
-                        $_nodesforum_modship_authoritative_folder=$value;
-                        $_nodesforum_modship_authority_depth=$depth;
-                        break;
+
+                        //if already mod and has right to audit, no need to check further
+                        if($_nodesforum_ismod==1 && $_nodesforum_righttoaudit==1){
+                            break;
+                        }
                     }
                 }
             }
@@ -884,7 +971,35 @@ if($_nodesforum_ismod==1 && $_nodesforum_isbanned==1)
     else
     {$_nodesforum_isbanned=0;}
 }
+if($_nodesforum_righttoaudit==1 && $_nodesforum_isbanned==1)
+{
+    if($_nodesforum_banship_authority_depth<$_nodesforum_righttoaudit_authority_depth)
+    {$_nodesforum_righttoaudit=0;}
+    else
+    {$_nodesforum_isbanned=0;}
+}
 
+
+
+//if right to audit, find folders or posts needing auditing inside of the current folder or post
+//show a count and a link to the audit page
+//only if in folder or post view
+$_nodesforum_mod_audit_count=0;
+$_nodesforum_mod_audit_notification_html='';
+if($_nodesforum_folder_or_post==1 || $_nodesforum_folder_or_post==2)
+{
+    if($_nodesforum_righttoaudit==1){
+        
+        //find all folders or posts where audited == 0 and that are inside of the current folder or post
+        //ancestry like '%|'.$_GET['_nodesforum_node'].'|%'
+        $check_need_audit_query="SELECT fapID FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE ancestry LIKE '%|".$_GET['_nodesforum_node']."|%' && audited = 0 && deletion_time = 0";
+        $result = mysql_query($check_need_audit_query);
+        while($row = mysql_fetch_array($result)){
+            $this_fapID=$row['fapID'];
+            $_nodesforum_mod_audit_count++;
+        }
+    }
+}
 
 
 
@@ -946,8 +1061,8 @@ else if($_nodesforum_ismod==1)
 
 
 
-
-
+//before re-adding the l, h or a, remember the actual node
+$remember_actual_node=$addslashed_node;
 
 if($temporary_remove_modslog_l==1)
 {
@@ -963,7 +1078,6 @@ if($temporary_remove_modslog_l==1)
 
 if($temporary_remove_history_h==1)
 {
-    $remember_actual_node=$addslashed_node;
     $_nodesforum_folder_or_post=3;
     //adjust history nav
     $cutlastword_pos=strripos($_nodesforum_youarehere,' /> ')+4;
@@ -971,6 +1085,17 @@ if($temporary_remove_history_h==1)
     //put l back
     $_GET['_nodesforum_node']='h'.$_GET['_nodesforum_node'];
     $addslashed_node='h'.$addslashed_node;
+}
+
+if($temporary_remove_audit_a==1)
+{
+    $_nodesforum_folder_or_post=7;
+    //adjust history nav
+    $cutlastword_pos=strripos($_nodesforum_youarehere,' /> ')+4;
+    $_nodesforum_youarehere=substr($_nodesforum_youarehere,0,$cutlastword_pos).'<a href="?_nodesforum_node='.$_GET['_nodesforum_node'].'">'.substr($_nodesforum_youarehere,$cutlastword_pos).'</a> => <img src="'.$_nodesforum_audit_icon.'" style="vertical-align:text-bottom;border:none;" /> '.$_nodesforum_title.' audit';
+    //put l back
+    $_GET['_nodesforum_node']='a'.$_GET['_nodesforum_node'];
+    $addslashed_node='a'.$addslashed_node;
 }
 
 
@@ -1046,7 +1171,12 @@ if($_GET['_nodesforum_node']=='p4' && $_nodesforum_ismod==1 && isset($_POST['_no
 if(isset($_GET['_nodesforum_delete']) && $_nodesforum_isbanned==0)
 {include(nodesforum_sanitize_nodesforum_code_path($_nodesforum_code_path.'pre_delete.php'));}
 
-
+//audit folder or post
+if(isset($_GET['_nodesforum_audit']) && $_nodesforum_isbanned==0)
+{include(nodesforum_sanitize_nodesforum_code_path($_nodesforum_code_path.'pre_audit.php'));}
+//unaudit folder or post
+if(isset($_GET['_nodesforum_unaudit']) && $_nodesforum_isbanned==0)
+{include(nodesforum_sanitize_nodesforum_code_path($_nodesforum_code_path.'pre_unaudit.php'));}
 
 
 //move
@@ -1183,8 +1313,8 @@ if(($_nodesforum_folder_or_post==1 || $_nodesforum_folder_or_post==2) && $_nodes
 
 
 
-//folder or history view
-if($_nodesforum_folder_or_post==1 || $_nodesforum_folder_or_post==3)
+//folder, history or audit view
+if($_nodesforum_folder_or_post==1 || $_nodesforum_folder_or_post==3 || $_nodesforum_folder_or_post==7)
 {include(nodesforum_sanitize_nodesforum_code_path($_nodesforum_code_path.'pre_folder_view.php'));}
 //post view
 else if($_nodesforum_folder_or_post==2)
@@ -1196,4 +1326,3 @@ else if($_nodesforum_folder_or_post==4 && ($_nodesforum_ismod==1 || (isset($_SES
 
 
 
-?>

@@ -5,7 +5,7 @@
 
 if(isset($_POST['_nodesforum_create_new_tables']))
 {
-    if(mysql_query("CREATE TABLE ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts (fapID int NOT NULL AUTO_INCREMENT, PRIMARY KEY(fapID), folder_or_post int NOT NULL, containing_folder_or_post varchar(102), creator_uniqueID varchar(100), creator_ip varchar(128), creation_time int NOT NULL, title varchar(1000), post longtext, allow_posting int NOT NULL, allow_guest_reply int NOT NULL, ancestry text, subfolders int NOT NULL, posts int NOT NULL, replies int NOT NULL, views int NOT NULL, last_post_postID int NOT NULL, last_post_user_uniqueID varchar(100), last_post_time int NOT NULL, sticky int NOT NULL, skeleton int NOT NULL, deletion_time int NOT NULL, disable_auto_smileys int NOT NULL, disable_auto_links int NOT NULL, FULLTEXT(title, post)) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci"))
+    if(mysql_query("CREATE TABLE ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts (fapID int NOT NULL AUTO_INCREMENT, PRIMARY KEY(fapID), folder_or_post int NOT NULL, containing_folder_or_post varchar(102), creator_uniqueID varchar(100), creator_ip varchar(128), creation_time int NOT NULL, title varchar(1000), post longtext, allow_posting int NOT NULL, allow_guest_reply int NOT NULL, ancestry text, subfolders int NOT NULL, posts int NOT NULL, replies int NOT NULL, views int NOT NULL, last_post_postID int NOT NULL, last_post_user_uniqueID varchar(100), last_post_time int NOT NULL, sticky int NOT NULL, skeleton int NOT NULL, deletion_time int NOT NULL, `audited` tinyint NOT NULL DEFAULT '0', disable_auto_smileys int NOT NULL, disable_auto_links int NOT NULL, KEY `folders_and_posts_index` (`audited`), FULLTEXT(title, post)) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci"))
     {
         mysql_query("CREATE TABLE ".$_nodesforum_db_table_name_modifier."_nodesforum_users (uniqueID int NOT NULL AUTO_INCREMENT, PRIMARY KEY(uniqueID), email BLOB, password BLOB, validation_key varchar(100), public_name varchar(100), registration_time int NOT NULL) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci");
         mysql_query("CREATE TABLE ".$_nodesforum_db_table_name_modifier."_nodesforum_newemails (newemailID int NOT NULL AUTO_INCREMENT, PRIMARY KEY(newemailID), email BLOB, uniqueID int NOT NULL, validation_key varchar(100), time int NOT NULL) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci");
@@ -16,6 +16,18 @@ if(isset($_POST['_nodesforum_create_new_tables']))
         mysql_query("CREATE TABLE ".$_nodesforum_db_table_name_modifier."_nodesforum_mods (modID int NOT NULL AUTO_INCREMENT, PRIMARY KEY(modID), mod_uniqueID varchar(100), folderID varchar(101), mod_level int NOT NULL, promotion_time int NOT NULL, reason text, ip BLOB) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci");
         mysql_query("CREATE TABLE ".$_nodesforum_db_table_name_modifier."_nodesforum_mods_log (logID int NOT NULL AUTO_INCREMENT, PRIMARY KEY(logID), fapID varchar(101), ancestry text, mod_uniqueID varchar(100), moded_uniqueID varchar(100), authoritative_folderID varchar(101), subaction_of int NOT NULL, action_time int NOT NULL, action_code varchar(10), action longtext, retrieval_number varchar(15)) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci");
         mysql_query("CREATE TABLE ".$_nodesforum_db_table_name_modifier."_nodesforum_3rd_party_tag_limits (tagID int NOT NULL AUTO_INCREMENT, PRIMARY KEY(tagID), tag_name varchar(100), user_limit int NOT NULL, guest_limit int NOT NULL) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci");
+
+
+        //maybe soon!
+        // //notification subscriptions table
+        // mysql_query("CREATE TABLE ".$_nodesforum_db_table_name_modifier."_nodesforum_notification_subscriptions (
+        //     subscriptionID int NOT NULL AUTO_INCREMENT, PRIMARY KEY(subscriptionID),
+        //     fapID int NOT NULL,
+        //     email BLOB NOT NULL,
+        //     type varchar(50) NOT NULL,
+        //     subscription_time int NOT NULL
+        // ) ENGINE = MYISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci");
+
         $_nodesforum_tables_created=1;
     }
     else
@@ -57,6 +69,13 @@ if($_POST['_nodesforum_clone_old_tables'])
         mysql_query("CREATE TABLE ".$_nodesforum_db_table_name_modifier."_nodesforum_3rd_party_tag_limits SELECT * FROM "._nodesforum_my_custom_addslashes($_POST['_nodesforum_old_startwith'])."_nodesforum_3rd_party_tag_limits");
         mysql_query("ALTER TABLE ".$_nodesforum_db_table_name_modifier."_nodesforum_3rd_party_tag_limits ADD PRIMARY KEY(tagID)");
         mysql_query("ALTER TABLE ".$_nodesforum_db_table_name_modifier."_nodesforum_3rd_party_tag_limits change tagID tagID int NOT NULL AUTO_INCREMENT");
+
+        //maybe soon!
+        // //notification subscriptions table
+        // mysql_query("CREATE TABLE ".$_nodesforum_db_table_name_modifier."_nodesforum_notification_subscriptions SELECT * FROM "._nodesforum_my_custom_addslashes($_POST['_nodesforum_old_startwith'])."_nodesforum_notification_subscriptions");
+        // mysql_query("ALTER TABLE ".$_nodesforum_db_table_name_modifier."_nodesforum_notification_subscriptions ADD PRIMARY KEY(subscriptionID)");
+        // mysql_query("ALTER TABLE ".$_nodesforum_db_table_name_modifier."_nodesforum_notification_subscriptions change subscriptionID subscriptionID int NOT NULL AUTO_INCREMENT");
+
         $_nodesforum_tables_created=1;
     }
     else

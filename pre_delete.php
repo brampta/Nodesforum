@@ -286,7 +286,7 @@ if(
                 $last_fapID=0;
                 $last_creatorID=0;
                 $last_post_time=0;
-                $result = mysql_query("SELECT fapID, creator_uniqueID, creation_time FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE ancestry LIKE '%".$_nodesforum_ancestry_separator.mysql_real_escape_string($value).$_nodesforum_ancestry_separator."%' && folder_or_post = 2 && deletion_time = 0 ORDER BY creation_time DESC LIMIT 0, 1");
+                $result = mysql_query("SELECT fapID, creator_uniqueID, creation_time FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE ancestry LIKE '%".$_nodesforum_ancestry_separator.mysql_real_escape_string($value).$_nodesforum_ancestry_separator."%' && folder_or_post = 2 && deletion_time = 0 && audited = 1 ORDER BY creation_time DESC LIMIT 0, 1");
                 while($row = mysql_fetch_array($result))
                 {
                     $last_fapID=$row['fapID'];
@@ -353,7 +353,7 @@ if(
                         $last_fapID=0;
                         $last_creatorID=0;
                         $last_post_time=0;
-                        $result = mysql_query("SELECT fapID, creator_uniqueID, creation_time FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE ancestry LIKE '%".$_nodesforum_ancestry_separator.mysql_real_escape_string($value2).$_nodesforum_ancestry_separator."%' && folder_or_post = 2 && deletion_time = 0 ORDER BY creation_time DESC LIMIT 0, 1");
+                        $result = mysql_query("SELECT fapID, creator_uniqueID, creation_time FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE ancestry LIKE '%".$_nodesforum_ancestry_separator.mysql_real_escape_string($value2).$_nodesforum_ancestry_separator."%' && folder_or_post = 2 && deletion_time = 0 && audited = 1 ORDER BY creation_time DESC LIMIT 0, 1");
                         while($row = mysql_fetch_array($result))
                         {
                             $last_fapID=$row['fapID'];

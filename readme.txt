@@ -1,3 +1,20 @@
+nodesforum 1.2, june 2025
+
+So many years later again (how long has it been now? 15 years according to domain whois, but maybe 5 years since last update..).
+The forum has been a spam fest forever. I dont know why I never added an audit mechanism (so posts need to be approved before being visible),
+I think that's the only thing that can stop spam. At that point I have 2 options,
+either I add this audit feature or I throw all this to the garbage. Since I have worked a lot on this, and there are a few cool features.
+I decided to save this forum and implement audit capability!
+It will be a new beginning for the Nodesforum!!
+
+[database changes]
+add the audited (tinyint) column to the _nodesforum_folders_and_posts table 
+
+[config changes]
+add the $_nodesforum_admin_email config
+add the $_nodesforum_email_from config
+
+
 nodesforum 1.1
 
 10 years later, more or less, I needed a forum for stuff and decided to use this old script of mine. Since it was always meant to be open source but was only given as a ZIP first step was to put it on git and on github:

@@ -75,6 +75,10 @@
 		else
 		{$new_ancestry=$_nodesforum_ancestry.$addslashed_node.$_nodesforum_ancestry_separator;}
 		
+		$audited=0;
+		if($_nodesforum_righttoaudit==1){
+			$audited=1;
+		}
 		$myquery="INSERT INTO ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts (
 			folder_or_post,
 			containing_folder_or_post,
@@ -95,7 +99,8 @@
 			last_post_time,
 			sticky,
 			disable_auto_smileys,
-			disable_auto_links
+			disable_auto_links,
+			audited
 		) VALUES (
 			'2',
 			'$containing_folder_or_post',
@@ -116,7 +121,8 @@
 			'$nowtime',
 			'0',
 			'$disable_auto_smileys',
-			'$disable_auto_links'
+			'$disable_auto_links',
+			'$audited'
 		)";
 		if(mysql_query($myquery))
 		{
@@ -235,5 +241,3 @@
 		{$_nodesforum_create_post_dberror=1; $_nodesforum_remember_wtf=mysql_error();}
 	}
 
-
-?>

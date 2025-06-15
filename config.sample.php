@@ -31,6 +31,7 @@ $_nodesforum_image_verification_on_registration='yes'; //will ask for image veri
 $_nodesforum_image_verification_on_forgotten_pass='yes'; //will ask for image verification when user has password resent to his email. requires the gd php extension
 $_nodesforum_image_verification_on_resend_validation_mail='yes'; //will ask for image verification when user has validation email resent. requires the gd php extension
 $_nodesforum_validate_email='yes'; //if yes user will have to validate email when registering if no email validation will be skipped
+$_nodesforum_email_from='admin@home.nodesforum.com'; //emails sent from your server will be from this address
 $_nodesforum_validate_email_address_from='admin@home.nodesforum.com'; //validation emails sent from your server will be from this address
 $_nodesforum_validate_resend_password_from='admin@home.nodesforum.com'; //password reset request links sent from your server will be from this address
 $_nodesforum_instance_asolute_URL='http://home.nodesforum.com/test'; //emails sent by your server need to contain links that link back to the forum. this must be set to the URL of the root of the forum. the URL after which we can add a ? and then some variables
@@ -118,3 +119,6 @@ $_nodesforum_mailer_custom_file='/var/www/html/mymailer/sendmailcustom.php'; //t
  *  //do stuff
  * }
  */
+
+//------------OTHER
+$_nodesforum_admin_email = 'info@intercode.ca'; //notifications about new posts and other admin notifications will be sent to this email address

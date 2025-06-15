@@ -112,6 +112,11 @@ if($_nodesforum_display_fapID)
             $link_liner='text-decoration:line-through;';
             $text_cell_class='class_nodesforum_bgcolor2';
         }
+        if($_nodesforum_display_audited[$key]!=1)
+        {
+            //$link_liner='style="text-decoration:line-through;"';
+            $title_cell_class='class_nodesforum_bgcolor2';
+        }
 
         $user_or_guest=1;
         if($this_creator_uniqueID=='0' || $this_creator_uniqueID==$_nodesforum_uniqueID_of_deleted_user)
@@ -128,6 +133,11 @@ if($_nodesforum_display_fapID)
             <div style="width:100%;overflow:auto;overflow-y:visible;">
             <div style="max-height:'.$maxheight.'px;overflow-y:auto;height:expression( this.scrollHeight > '.$maxheight.'? '."'".''.$maxheight.'px'."'".' : '."'".'auto'."'".' );">
             <div style="padding:16px;padding-bottom:30px;">';
+
+        if($_nodesforum_display_audited[$key]==0){
+            echo '<span class="class_nodesforum_unnaproved">..[Awaiting Approval]..</span>';
+        }
+
         if($countemz==1 && $_GET['_nodesforum_page']==1)
         {echo '<h2 style="color:'.$_nodesforum_text_color.';margin:0px;padding-bottom:16px;">'._nodesforum_display_title($_nodesforum_display_title[$key],$_nodesforum_max_word_length_in_titles,false).'</h2>';}
         echo '<div style="width:100%;padding:0px;"><div style="width:100%;padding:0px;margin:0px;'.$link_liner.'color:'.$_nodesforum_text_color.';" class="class_nodesforum_bgcolorinherit">'.display_bb($_nodesforum_display_post[$key],$_nodesforum_display_p_inf_str[$this_creator_uniqueID],$user_or_guest,$_nodesforum_display_disable_auto_smileys[$key],$_nodesforum_display_disable_auto_links[$key],0).'</div></div>';
@@ -164,6 +174,16 @@ if($_nodesforum_display_fapID)
                 echo ' <span id="'.$counter_id.'">time left: '.$time_left.' seconds</span><script type="text/javascript">show_countdown('.$time_left.',"'.$counter_id.'")</script>';
             }
         }
+
+        if($_nodesforum_righttoaudit==1){
+            if($_nodesforum_display_audited[$key]==0)
+            {
+                echo '<acronym title="approve post" style="border:none;"><a href="?_nodesforum_node='.$_GET['_nodesforum_node'].'&_nodesforum_page='.$_GET['_nodesforum_page'].'&_nodesforum_audit='.$value.'"><img src="'.$_nodesforum_audit_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';
+            }else{
+                echo '<acronym title="unapprove post" style="border:none;"><a href="?_nodesforum_node='.$_GET['_nodesforum_node'].'&_nodesforum_page='.$_GET['_nodesforum_page'].'&_nodesforum_unaudit='.$value.'"><img src="'.$_nodesforum_unaudit_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';
+            }
+        }
+
         if($_nodesforum_ismod==1 && $_nodesforum_display_enc_ip[$key]!='')
         {echo ' <span style="font-size:80%;">IP (encrypted): <input type="text" value="'.base64_encode($_nodesforum_display_enc_ip[$key]).'" readonly="readonly" onmouseup="highlight(this)" /></span>';}
         
@@ -219,6 +239,3 @@ echo $pagination;
 
 
 
-
-
-?>

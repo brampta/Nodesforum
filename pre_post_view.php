@@ -12,7 +12,16 @@
         if($get_ghost_permalink_page==1)
         {$_GET['_nodesforum_page']=$ghost_permalink_page;}
     }
-    $queryRows=mysql_query("SELECT COUNT(fapID) FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE (fapID = '$addslashed_node' || containing_folder_or_post = 'p$addslashed_node')".$hideghosts);
+
+    $hideunaudited=' && (audited = 1 || creator_ip = \''.$_nodesforum_enc_ip.'\' || creator_uniqueID = \''.$_nodesforum_uniqueID.'\')';
+    if($_nodesforum_righttoaudit==1 /*&& $_GET['unaudited']==1*/)
+    {
+        $hideunaudited='';
+        if($get_unaudited_permalink_page==1)
+        {$_GET['_nodesforum_page']=$unaudited_permalink_page;}
+    }
+
+    $queryRows=mysql_query("SELECT COUNT(fapID) FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE (fapID = '$addslashed_node' || containing_folder_or_post = 'p$addslashed_node')".$hideghosts.$hideunaudited);
     $numRows=mysql_fetch_array($queryRows);
     $_nodesforum_totalfap=$numRows[0];
     $_nodesforum_totalpages=ceil($_nodesforum_totalfap/$_nodesforum_howmany_replies_perpage);
@@ -21,7 +30,8 @@
     $startat=($_GET['_nodesforum_page']-1)*$_nodesforum_howmany_replies_perpage;
 
     $_nodesforum_count_fap_results=0;
-    $result = mysql_query("SELECT fapID, creator_uniqueID, creator_ip, AES_ENCRYPT(creator_ip,creator_ip) AS enc_ip, creation_time, title, post, disable_auto_smileys, disable_auto_links, deletion_time FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE (fapID = '$addslashed_node' || containing_folder_or_post = 'p$addslashed_node') $hideghosts ORDER BY creation_time LIMIT $startat, $_nodesforum_howmany_replies_perpage");
+    $query = "SELECT fapID, creator_uniqueID, creator_ip, AES_ENCRYPT(creator_ip,creator_ip) AS enc_ip, creation_time, title, post, disable_auto_smileys, disable_auto_links, deletion_time, audited FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE (fapID = '$addslashed_node' || containing_folder_or_post = 'p$addslashed_node') $hideghosts $hideunaudited ORDER BY creation_time LIMIT $startat, $_nodesforum_howmany_replies_perpage";
+    $result = mysql_query($query);
     while($row = mysql_fetch_array($result))
     {
         $_nodesforum_count_fap_results++;
@@ -41,6 +51,7 @@
         $_nodesforum_display_disable_auto_smileys[$_nodesforum_count_fap_results]=$row['disable_auto_smileys'];
         $_nodesforum_display_disable_auto_links[$_nodesforum_count_fap_results]=$row['disable_auto_links'];
         $_nodesforum_display_deletion_time[$_nodesforum_count_fap_results]=$row['deletion_time'];
+        $_nodesforum_display_audited[$_nodesforum_count_fap_results]=$row['audited'];
     }
 
 
@@ -64,7 +75,8 @@
         {$_nodesforum_creator_publicname[$this_mod_uniqueID]='yes';}
         $_nodesforum_count_mod_results++;
     }
-    $result = mysql_query("SELECT mod_uniqueID, mod_level, ip, reason FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_mods WHERE folderID = '$addslashed_node' ORDER BY mod_level, promotion_time LIMIT 1000000");
+    $query = "SELECT mod_uniqueID, mod_level, ip, reason FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_mods WHERE folderID = '$addslashed_node' ORDER BY mod_level, promotion_time LIMIT 1000000";
+    $result = mysql_query($query);
     while($row = mysql_fetch_array($result))
     {
         $this_uniqueID=$row['mod_uniqueID'];
@@ -195,8 +207,3 @@
 
 
 
-
-
-
-
-?>

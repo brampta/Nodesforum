@@ -21,6 +21,22 @@ echo '<style type="text/css">
 .class_nodesforum_bgcolor1 a:hover, .class_nodesforum_bgcolor2 a:hover, .class_nodesforum_bgcolor3 a:hover, .class_nodesforum_bgcolor4 a:hover, .class_nodesforum_bgcolorinherit a:hover, .class_nodesforum_bgcolor1 a:hover:visited, .class_nodesforum_bgcolor2 a:hover:visited, .class_nodesforum_bgcolor3 a:hover:visited, .class_nodesforum_bgcolor4 a:hover:visited, .class_nodesforum_bgcolorinherit a:hover:visited {color:'.$_nodesforum_link_hover_color.';}
 .class_nodesforum_bgcolor1 a:visited, .class_nodesforum_bgcolor2 a:visited, .class_nodesforum_bgcolor3 a:visited, .class_nodesforum_bgcolor4 a:visited, .class_nodesforum_bgcolorinherit a:visited {color:'.$_nodesforum_link_visited_color.';}
 
+.class_nodesforum_inner acronym a {
+    display: inline-block;
+	padding: 0 4px;
+	background-color:'.$_nodesforum_background_color2.';
+	color:'.$_nodesforum_link_color.';
+	border-radius: 3px;
+	margin: 4px 2px 0;
+	box-shadow: -1px -2px 0 '.$_nodesforum_frames_color.';
+	border: 1px solid '.$_nodesforum_frames_color.';
+}
+
+.class_nodesforum_unnaproved {
+	font-style: italic;
+	opacity: 0.5;
+}
+
 
 </style>
 
@@ -111,8 +127,7 @@ echo '<div style="height:4px;"><!-- --></div><div style="width:100%;"><table cla
 
 
 //--------------YOUR MOD LEVEL
-if($_nodesforum_ismod==1)
-{
+if($_nodesforum_ismod==1){
 	if($_nodesforum_mod_level<1)
 	{$showmodlevel='&infin;';}
 	else
@@ -120,6 +135,28 @@ if($_nodesforum_ismod==1)
 	echo '<div style="height:4px;"><!-- --></div><div style="width:100%;"><table class="class_nodesforum_bgcolor3" style="width:100%;"><tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner"><img src="'.$_nodesforum_tool_icon.'" style="vertical-align:text-bottom;border:none;" /> your moderator level here: '.$showmodlevel.$_nodesforum_explain_modship.'</div></td></tr></table></div>';
 }
 //--------------YOUR MOD LEVEL
+
+//--------------YOUR RIGHT TO AUDIT
+if($_nodesforum_righttoaudit==1){
+	echo '<div style="height:4px;"><!-- --></div><div style="width:100%;"><table class="class_nodesforum_bgcolor3" style="width:100%;"><tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner"><img src="'.$_nodesforum_audit_icon.'" style="vertical-align:text-bottom;border:none;" /> you have the right to audit this '.$thinger.' '.$_nodesforum_explain_righttoaudit.'</div></td></tr></table></div>';
+	if($_nodesforum_mod_audit_count>0){
+		if($last_audit_notification_time==0){
+			$last_audit_notification_history_text = 'never';
+		}else{
+			$last_audit_notification_history_text = 'on <script type="text/javascript">
+				var writness = _nodesforum_maketimus('.$last_audit_notification_time.');
+				document.write(writness);
+				</script>';
+		}
+        echo
+            '<div style="height:4px;"><!-- --></div><div style="width:100%;"><table class="class_nodesforum_bgcolor3" style="width:100%;"><tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner">'
+            .'<img src="'.$_nodesforum_audit_icon.'" style="vertical-align:middle;margin-right:8px;border:none;" alt="Audit" />'
+            .'There are <span style="color:'.$_nodesforum_link_color.'">'.$_nodesforum_mod_audit_count.'</span> folders or posts inside of this '.$thinger.' that need auditing. '
+            .'<a href="?_nodesforum_node=a'.$remember_actual_node.'" style="color:'.$_nodesforum_link_color.';text-decoration:underline;font-weight:bold;">Click here to audit them</a>. (last admin notification was sent: '.$last_audit_notification_history_text.')'
+            .'</div></td></tr></table></div>';
+    }
+}
+//--------------YOUR RIGHT TO AUDIT
 
 //--------------YOUR BANISSEMENT
 if($_nodesforum_isbanned==1)
@@ -218,8 +255,21 @@ if(isset($_GET['_nodesforum_move']))
 
 
 //---------------FOLDER (or history) VIEW
-if(isset($_GET['_nodesforum_node']) && !isset($_GET['_nodesforum_add_folder']) && !isset($_GET['_nodesforum_add_post']) && !isset($_GET['_nodesforum_edit_folder']) && !isset($_GET['_nodesforum_edit_post']) && !isset($_GET['_nodesforum_move']) && ($_nodesforum_folder_or_post==1 || $_nodesforum_folder_or_post==3) && $_nodesforum_postfound!=1 && $_nodesforum_folder_or_post!=6)
-{
+if(
+	isset($_GET['_nodesforum_node'])
+	&& !isset($_GET['_nodesforum_add_folder'])
+	&& !isset($_GET['_nodesforum_add_post'])
+	&& !isset($_GET['_nodesforum_edit_folder'])
+	&& !isset($_GET['_nodesforum_edit_post']) 
+	&& !isset($_GET['_nodesforum_move'])
+	&& (
+		$_nodesforum_folder_or_post==1 
+		|| $_nodesforum_folder_or_post==3
+		|| $_nodesforum_folder_or_post==7
+	)
+	&& $_nodesforum_postfound!=1
+	&& $_nodesforum_folder_or_post!=6
+){
 	include(nodesforum_sanitize_nodesforum_code_path($_nodesforum_code_path.'bod_folder_view.php'));
 	if($_nodesforum_folder_or_post==1)
 	{include(nodesforum_sanitize_nodesforum_code_path($_nodesforum_code_path.'bod_mod_forms.php'));}
@@ -289,11 +339,3 @@ echo '</td></tr></table></div>';
 
 
 
-
-
-
-
-
-
-
-?>

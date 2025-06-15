@@ -45,6 +45,10 @@ if($_POST['_nodesforum_new_folder_skeleton']==1 && $_nodesforum_power_on_skeleto
 {$skeleton=1;}
 if($error==0)
 {
+	$audited=0;
+	if($_nodesforum_righttoaudit==1){
+		$audited=1;
+	}
 	$new_ancestry=$_nodesforum_ancestry.$addslashed_node.$_nodesforum_ancestry_separator;
 	if(mysql_query("INSERT INTO ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts (
 		folder_or_post,
@@ -67,7 +71,8 @@ if($error==0)
 		sticky,
 		skeleton,
 		disable_auto_smileys,
-		disable_auto_links
+		disable_auto_links,
+		audited
 	) VALUES (
 		'1',
 		'f$addslashed_node',
@@ -89,7 +94,8 @@ if($error==0)
 		'0',
 		'$skeleton',
 		'$disable_auto_smileys',
-		'$disable_auto_links'
+		'$disable_auto_links',
+		'$audited'
 		)"))
 	{
 		$_nodesforum_youarehere=$_nodesforum_original_youarehere;
@@ -120,5 +126,3 @@ if($error==0)
 }
 
 
-
-?>

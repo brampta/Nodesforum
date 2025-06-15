@@ -130,6 +130,8 @@ $_nodesforum_tool_icon = $_icons_path . '/minipics/tool.gif';
 $_nodesforum_folder_icon = $_icons_path . '/minipics/folder.gif';
 $_nodesforum_post_icon = $_icons_path . '/minipics/post.gif';
 $_nodesforum_delete_icon = $_icons_path . '/minipics/no.gif';
+$_nodesforum_audit_icon = $_icons_path . '/minipics/yes.gif';
+$_nodesforum_unaudit_icon = $_icons_path . '/minipics/no2.gif';
 $_nodesforum_warn_icon = $_icons_path . '/minipics/warn.gif';
 $_nodesforum_userhome_icon = $_icons_path . '/minipics/userhome.gif';
 $_nodesforum_userhome_grey_icon = $_icons_path . '/minipics/userhome_grey.gif';
@@ -382,6 +384,58 @@ if ($randominius == 1)
 }
 
 
+//send email notification to admin about new posts or folders to audit
+
+//check if last notification was sent in the last 24 hours
+$last_audit_notification_flag_path = $_nodesforum_code_path . 'cache/last_audit_notification.txt';
+$last_audit_notification_time = 0;
+if(file_exists($last_audit_notification_flag_path)){
+    $last_audit_notification_time = file_get_contents($last_audit_notification_flag_path);
+}
+
+if($last_audit_notification_time < ($nowtime - (24 * 3600))){
+    
+    $check_need_audit_query="SELECT fapID FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE audited = 0 && deletion_time = 0";
+    $result = mysql_query($check_need_audit_query);
+    while($row = mysql_fetch_array($result)){
+        $this_fapID=$row['fapID'];
+        $_nodesforum_mod_audit_count++;
+    }
+    if($_nodesforum_mod_audit_count>0){
+        $subject = $_nodesforum_forum_name.' - folders or posts needing auditing';
+        $audit_message = 
+            '<img src="'.$_nodesforum_instance_asolute_URL.$_nodesforum_audit_icon.'" style="vertical-align:middle;margin-right:8px;border:none;" alt="Audit" />'
+            .'There are <span style="color:'.$_nodesforum_link_color.'">'.$_nodesforum_mod_audit_count.'</span> folders or posts inside of this '.$thinger.' that need auditing. '
+            .'<a href="'.$_nodesforum_instance_asolute_URL.'?_nodesforum_node=a'.$remember_actual_node.'" style="color:'.$_nodesforum_link_color.';text-decoration:underline;font-weight:bold;">Click here to audit them</a>.';
+
+
+        //email about posts or folders needing auditing
+        $to=$_nodesforum_admin_email;
+        $message= $audit_message.'
+
+        
+            '.$_nodesforum_forum_name.'
+            '.$_nodesforum_instance_asolute_URL.'
+
+            ';
+        //$headers = "From: ".$_nodesforum_validate_resend_password_from;
+        //mail($to,$subject,$message,$headers);
+        $sendmail_results = nodesforum_send_mail($to, null, $_nodesforum_email_from, null, $subject, $message, null);
+        if(!$sendmail_results){
+            //echo a warning if the email could not be sent
+            echo '<span style="color:red;">Warning: unable to send email notification about posts or folders needing auditing</span><br />';
+        }
+
+        //set a flag in cache/ to remember last send time for audit notifications
+        file_put_contents($last_audit_notification_flag_path, $nowtime);
+        //check if the cache file was written correctly, if echo a warning
+        if(!file_exists($last_audit_notification_flag_path) || file_get_contents($last_audit_notification_flag_path)!=$nowtime){
+            echo '<span style="color:red;">Warning: unable to write last audit notification time to cache/last_audit_notification.txt</span><br />';
+        }
+    }
+
+}
+
 if ($_nodesforum_db_isconn == 1)
 { mysql_close($conn); }
 
@@ -389,4 +443,3 @@ if(isset($_GET['format']) && $_GET['format']=='json'){
 	echo json_encode($json_data); exit;
 }
 
-?>

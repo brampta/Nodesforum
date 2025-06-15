@@ -88,6 +88,11 @@ if($_nodesforum_display_fapID)
             $link_liner='style="text-decoration:line-through;"';
             $title_cell_class='class_nodesforum_bgcolor2';
         }
+        if($_nodesforum_display_audited[$key]!=1)
+        {
+            //$link_liner='style="text-decoration:line-through;"';
+            $title_cell_class='class_nodesforum_bgcolor2';
+        }
         $show_title=_nodesforum_display_title($_nodesforum_display_title[$key],$_nodesforum_max_word_length_in_titles);
         $this_link='<a href="?_nodesforum_node='.$value.'" name="_nodesforum_anchor_'.$value.'" '.$link_liner.'>'.$show_title.'</a>';
         if($_nodesforum_display_folder_or_post[$key]==1)
@@ -117,6 +122,17 @@ if($_nodesforum_display_fapID)
                 }
                 //$contains_string=$_nodesforum_display_subfolders[$key].' subfolder'.$subfoldersS.', '.$_nodesforum_display_posts[$key].' post'.$postsS;
             }
+
+            //if were in audit view, the parent folder
+            if($_nodesforum_folder_or_post==7){
+                $container_fapID=substr($_nodesforum_display_containing_folder_or_post[$key],1);
+                $show_title=_nodesforum_display_title($_nodesforum_remember_titles[$container_fapID],$_nodesforum_max_word_length_in_titles);
+                $parent_link_liner='';
+                if($_nodesforum_display_deletion_time[$container_fapID]!=0)
+                {$parent_link_liner='style="text-decoration:line-through;"';}
+                $this_link.=' (in: <a href="?_nodesforum_node='.$container_fapID.'" '.$parent_link_liner.'>'.$show_title.'</a>)';
+            }
+
             if(($_nodesforum_ismod==1 || $_nodesforum_display_creator_uniqueID[$key]==$_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]) && ($_nodesforum_display_skeleton[$key]==0 || $_nodesforum_power_on_skeleton==1 || $_nodesforum_display_creator_uniqueID==$_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]) && $_nodesforum_isbanned==0 && substr($_GET['_nodesforum_node'],0,1)!='h')
             {
                 $sticky_buttons='';
@@ -161,13 +177,22 @@ if($_nodesforum_display_fapID)
                 $delete_button='';
                 if($_nodesforum_display_deletion_time[$key]==0)
                 {$delete_button='<acronym title="delete folder" style="border:none;"><a onclick="delete_node('.$value.',1,'."'".urlencode($_nodesforum_display_creator_publicname[$this_creator_uniqueID])."'".','.$_nodesforum_display_subfolders[$key].','.$_nodesforum_display_posts[$key].','."'".$_GET['_nodesforum_node']."'".','.$_GET['_nodesforum_page'].')" style="cursor:pointer;"><img src="'.$_nodesforum_delete_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';}
+
+                $audit_button='';
+                $unaudit_button='';
+                if($_nodesforum_display_audited[$key]==0){
+                    if($_nodesforum_righttoaudit==1)$audit_button='<acronym title="approve folder" style="border:none;"><a href="?_nodesforum_node='.$_GET['_nodesforum_node'].'&_nodesforum_page='.$_GET['_nodesforum_page'].'&_nodesforum_audit='.$value.'"><img src="'.$_nodesforum_audit_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';
+                    $this_link .= ' <span class="class_nodesforum_unnaproved">..[Awaiting Approval]..</span>';
+                }else{
+                    if($_nodesforum_righttoaudit==1)$unaudit_button='<acronym title="unapprove folder" style="border:none;"><a href="?_nodesforum_node='.$_GET['_nodesforum_node'].'&_nodesforum_page='.$_GET['_nodesforum_page'].'&_nodesforum_unaudit='.$value.'"><img src="'.$_nodesforum_unaudit_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';
+                }
                 
                 //spam purge button!
 				if($_nodesforum_ismod==1 && $_nodesforum_display_creator_uniqueID[$key]!=$_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]){
 					$spam_purge_button='<acronym title="purge spammer" style="border:none;"><a onclick="purgeSpammer(\''.$this_creator_uniqueID.'\',\''.base64_encode($_nodesforum_display_enc_ip[$key]).'\')" style="cursor:pointer;"><img src="'.$_nodesforum_power_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';
 				}
                 
-                $modstring=' '.$sticky_buttons.$edit_button.$move_button.$delete_button.$spam_purge_button;
+                $modstring=' '.$sticky_buttons.$edit_button.$move_button.$delete_button.$audit_button.$unaudit_button.$spam_purge_button;
             }
         }
         else if($_nodesforum_display_folder_or_post[$key]==2)
@@ -182,12 +207,21 @@ if($_nodesforum_display_fapID)
                 $parent_link_liner='';
                 if($_nodesforum_display_deletion_time[$container_fapID]!=0)
                 {$parent_link_liner='style="text-decoration:line-through;"';}
+                // if($_nodesforum_display_audited[$container_fapID]!=1)
+                // {$parent_link_liner='style="text-decoration:line-through;"';}
                 $this_link='<a href="?_nodesforum_permalink='.$value.'#_nodesforum_anchor_'.$value.'" '.$link_liner.'>reply</a> on: <a href="?_nodesforum_node='.$container_fapID.'" name="_nodesforum_anchor_'.$container_fapID.'" '.$parent_link_liner.'>'.$show_title.'</a>';
                 $_nodesforum_display_replies[$key]=$_nodesforum_remember_replies[$container_fapID];
                 $_nodesforum_display_views[$key]=$_nodesforum_remember_views[$container_fapID];
                 $_nodesforum_display_last_post_postID[$key]=$_nodesforum_remember_last_post_postID[$container_fapID];
                 $_nodesforum_display_last_post_user_uniqueID[$key]=$_nodesforum_remember_last_post_user_uniqueID[$container_fapID];
                 $_nodesforum_display_last_post_time[$key]=$_nodesforum_remember_last_post_time[$container_fapID];
+            }else if($_nodesforum_folder_or_post==7 && substr($_nodesforum_display_containing_folder_or_post[$key],0,1)=='f'){
+                $container_fapID=substr($_nodesforum_display_containing_folder_or_post[$key],1);
+                $show_title=_nodesforum_display_title($_nodesforum_remember_titles[$container_fapID],$_nodesforum_max_word_length_in_titles);
+                $parent_link_liner='';
+                if($_nodesforum_display_deletion_time[$container_fapID]!=0)
+                {$parent_link_liner='style="text-decoration:line-through;"';}
+                $this_link.=' (in: <a href="?_nodesforum_node='.$container_fapID.'" '.$parent_link_liner.'>'.$show_title.'</a>)';
             }
             $replyend='ies';
             if($_nodesforum_display_replies[$key]==1)
@@ -247,12 +281,21 @@ if($_nodesforum_display_fapID)
                 if($_nodesforum_display_deletion_time[$key]==0)
                 {$delete_button='<acronym title="delete post" style="border:none;"><a onclick="delete_node('.$value.',2,'."'".urlencode($_nodesforum_display_creator_publicname[$this_creator_uniqueID])."'".','.$_nodesforum_display_replies[$key].','.$_nodesforum_display_views[$key].','."'".$_GET['_nodesforum_node']."'".','.$_GET['_nodesforum_page'].')" style="cursor:pointer;"><img src="'.$_nodesforum_delete_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';}
                 
+                $audit_button='';
+                $unaudit_button='';
+                if($_nodesforum_display_audited[$key]==0){
+                    if($_nodesforum_righttoaudit==1)$audit_button='<acronym title="approve post" style="border:none;"><a href="?_nodesforum_node='.$_GET['_nodesforum_node'].'&_nodesforum_page='.$_GET['_nodesforum_page'].'&_nodesforum_audit='.$value.'"><img src="'.$_nodesforum_audit_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';
+                    $this_link .= ' <span class="class_nodesforum_unnaproved">..[Awaiting Approval]..</span>';
+                }else{
+                    if($_nodesforum_righttoaudit==1)$unaudit_button='<acronym title="unapprove post" style="border:none;"><a href="?_nodesforum_node='.$_GET['_nodesforum_node'].'&_nodesforum_page='.$_GET['_nodesforum_page'].'&_nodesforum_unaudit='.$value.'"><img src="'.$_nodesforum_unaudit_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';
+                }
+
                 //spam purge button!
 				if($_nodesforum_ismod==1 && $_nodesforum_display_creator_uniqueID[$key]!=$_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]){
 					$spam_purge_button='<acronym title="purge spammer" style="border:none;"><a onclick="purgeSpammer(\''.$this_creator_uniqueID.'\',\''.base64_encode($_nodesforum_display_enc_ip[$key]).'\')" style="cursor:pointer;"><img src="'.$_nodesforum_power_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';
 				}
                 
-                $modstring=' '.$sticky_buttons.$edit_button.$move_button.$delete_button.$spam_purge_button;
+                $modstring=' '.$sticky_buttons.$edit_button.$move_button.$delete_button.$audit_button.$unaudit_button.$spam_purge_button;
             }
         }
         if($_nodesforum_display_last_post_postID[$key]!=0)
@@ -300,5 +343,3 @@ else
 {echo '<tr><td style="text-align:center;vertical-align:top;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">empty</div></td></tr>';}
 echo '</table></div>'.$pagination;
 
-
-?>

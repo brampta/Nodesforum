@@ -25,15 +25,22 @@ if($_nodesforum_ismod==1 && $_GET['ghost']==1)
     {$_GET['_nodesforum_page']=$ghost_permalink_page;}
 }
 
+$hideunaudited=' && (audited = 1 || (creator_uniqueID = 0 && creator_ip = \''.$_nodesforum_enc_ip.'\') || (creator_uniqueID <> 0 && creator_uniqueID = \''.mysql_real_escape_string($_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]).'\'))';
+if($_nodesforum_righttoaudit==1 /*&& $_GET['unaudited']==1*/)
+{
+    $hideunaudited='';
+    if($get_unaudited_permalink_page==1)
+    {$_GET['_nodesforum_page']=$unaudited_permalink_page;}
+}
+
 if($_nodesforum_folder_or_post==1)
 {
-    $wherer="containing_folder_or_post = 'f".$addslashed_node."'".$hideghosts;
+    //folder view
+    $wherer="containing_folder_or_post = 'f".$addslashed_node."'".$hideghosts.$hideunaudited;
     $orderer="not_sticky, sticky, last_post_time DESC, creation_time";
-}
-else if($_nodesforum_folder_or_post==3)
-{
+}else if($_nodesforum_folder_or_post==3){
 
-
+    //history view
     $ip_wherer='';
     if(isset($_GET['_nodesforum_history_ip']) && $_nodesforum_ismod==1)
     {
@@ -69,14 +76,21 @@ else if($_nodesforum_folder_or_post==3)
     }
 
 
-    $wherer="ancestry LIKE '%".$remember_actual_node."%' ".$ip_wherer." ".$user_wherer." ".$hideghosts;
+    $wherer="ancestry LIKE '%|".$remember_actual_node."|%' ".$ip_wherer." ".$user_wherer." ".$hideghosts.$hideunaudited;
+    $orderer="creation_time DESC";
+}else if($_nodesforum_folder_or_post==7){
+
+    //audit posts and folders view
+    $wherer="ancestry LIKE '%|".$remember_actual_node."|%' && audited = 0 ".$hideghosts;
     $orderer="creation_time DESC";
 }
 
-$queryRows=mysql_query("SELECT COUNT(fapID) FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE $wherer");
+$count_query="SELECT COUNT(fapID) FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE $wherer";
+$queryRows=mysql_query($count_query);
 $numRows=@mysql_fetch_array($queryRows);
 if($numRows==null)
 {
+    var_dump('Error: '.$count_query.'<br />'.mysql_error());
     $_nodesforum_folder_or_post=6;
     $_nodesforum_youarehere='<img src="'.$_nodesforum_tool_icon.'" style="vertical-align:text-bottom;border:none;" /> installer';
 
@@ -102,7 +116,7 @@ else
 
 
 
-    $myquery="SELECT fapID, folder_or_post, creator_uniqueID, creator_ip, AES_ENCRYPT(creator_ip,creator_ip) AS enc_ip, creation_time, title, subfolders, posts, replies, views, last_post_postID, last_post_user_uniqueID, last_post_time, containing_folder_or_post, deletion_time, sticky, IF(sticky = 0,'True','False') AS not_sticky, skeleton FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE $wherer ORDER BY $orderer LIMIT $startat, $_nodesforum_howmany_posts_perpage";
+    $myquery="SELECT fapID, folder_or_post, creator_uniqueID, creator_ip, AES_ENCRYPT(creator_ip,creator_ip) AS enc_ip, creation_time, title, subfolders, posts, replies, views, last_post_postID, last_post_user_uniqueID, last_post_time, containing_folder_or_post, deletion_time, audited, sticky, IF(sticky = 0,'True','False') AS not_sticky, skeleton FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE $wherer ORDER BY $orderer LIMIT $startat, $_nodesforum_howmany_posts_perpage";
     $result = mysql_query($myquery);
     while($row = mysql_fetch_array($result))
     {
@@ -140,9 +154,14 @@ else
         $_nodesforum_remember_last_post_time[$this_fapID]=$row['last_post_time'];
         $_nodesforum_display_containing_folder_or_post[$_nodesforum_count_fap_results]=$row['containing_folder_or_post'];
         $containing_fapID=substr($_nodesforum_display_containing_folder_or_post[$_nodesforum_count_fap_results],1);
-        if($_nodesforum_display_folder_or_post[$_nodesforum_count_fap_results]==2 && substr($_nodesforum_display_containing_folder_or_post[$_nodesforum_count_fap_results],0,1)=='p' && !$remember_parent_titles[$containing_fapID])
-        {$remember_parent_titles[$containing_fapID]='get';}
+        if(
+            //in history view, folders show replies and they need to show their parent post title
+            ($_nodesforum_display_folder_or_post[$_nodesforum_count_fap_results]==2 && substr($_nodesforum_display_containing_folder_or_post[$_nodesforum_count_fap_results],0,1)=='p' && !$remember_parent_titles[$containing_fapID])
+            //in audit post view, everything needs to show its parent post title
+            || $_nodesforum_folder_or_post==7
+        ){$remember_parent_titles[$containing_fapID]='get';}
         $_nodesforum_display_deletion_time[$_nodesforum_count_fap_results]=$row['deletion_time'];
+        $_nodesforum_display_audited[$_nodesforum_count_fap_results]=$row['audited'];
         $_nodesforum_display_sticky[$_nodesforum_count_fap_results]=$row['sticky'];
         $_nodesforum_display_skeleton[$_nodesforum_count_fap_results]=$row['skeleton'];
     }
@@ -159,15 +178,30 @@ else
     {
         $post_titles_getter_wherer='';
         $countadd=0;
+        $countuseradd=0;
         foreach($remember_parent_titles as $key => $value)
         {
-            if(!$_nodesforum_remember_titles[$key])
-            {
-                $countadd++;
-                if($countadd>1)
-                {$post_titles_getter_wherer=$post_titles_getter_wherer.", ";}
-                $post_titles_getter_wherer=$post_titles_getter_wherer."'".$key."'";
+            if($key===0){
+                //root parent post
+                $_nodesforum_remember_titles[0]='root';
+            }else if(substr($key,0,1)=='u'){
+                //users home folder parent post
+                if(!$_nodesforum_remember_titles[$key]){
+                    $countuseradd++;
+                    if($countadd>1)
+                    {$usernames_getter_wherer=$usernames_getter_wherer.", ";}
+                    $usernames_getter_wherer=$usernames_getter_wherer."'".substr($key,1)."'";
+                }
+            }else{
+                //folder or post parent post
+                if(!$_nodesforum_remember_titles[$key]){
+                    $countadd++;
+                    if($countadd>1)
+                    {$post_titles_getter_wherer=$post_titles_getter_wherer.", ";}
+                    $post_titles_getter_wherer=$post_titles_getter_wherer."'".$key."'";
+                }
             }
+            
         }
     }
     if($countadd>=1)
@@ -186,6 +220,20 @@ else
             $this_last_posts_uniqueID=$_nodesforum_remember_last_post_user_uniqueID[$this_fapID];
             if(!$_nodesforum_creator_publicname[$this_last_posts_uniqueID])
             {$_nodesforum_creator_publicname[$this_last_posts_uniqueID]='yes';}
+        }
+    }
+    if($countuseradd>=1)
+    {
+        $myquery="SELECT uniqueID, public_name FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_users WHERE uniqueID in ($usernames_getter_wherer)";
+        $result = mysql_query($myquery);
+        while($row = mysql_fetch_array($result))
+        {
+            $this_uniqueID=$row['uniqueID'];
+            $lastletterofguyname=substr($row['public_name'],strlen($row['public_name'])-1);
+            $proprietaryS='s';
+            if($lastletterofguyname=='s' || $lastletterofguyname=='z')
+            {$proprietaryS='';}
+            $_nodesforum_remember_titles['u'.$this_uniqueID]=$row['public_name'].'\''.$proprietaryS.' forum page';
         }
     }
 //get list of mods in that folder
@@ -308,5 +356,3 @@ else
 }
 
 
-
-?>
