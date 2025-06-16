@@ -799,11 +799,11 @@ else
         //we need to make a request to get the audited value of all the missing posts and folders!
         //so first find the _nodesforum_remember_modership_folders missing their _nodesforum_remember_righttoaudit_folders_audited
         $_missing_nodesforum_remember_righttoaudit_folders_audited = array();
-        foreach($_nodesforum_remember_modership_folders as $key => $value)
+        foreach($exploded_ancestry_plus_node as $key => $value)
         {
-            if(substr($key,0,1)!='u' && substr($key,0,1)!='p' && substr($key,0,1)!='f' && !isset($_nodesforum_remember_righttoaudit_folders_audited[$key]))
+            if(substr($value,0,1)!='u' && substr($value,0,1)!='p' && substr($value,0,1)!='f' && !isset($_nodesforum_remember_righttoaudit_folders_audited[$value]))
             {
-                $_missing_nodesforum_remember_righttoaudit_folders_audited[$key]='rememeber';
+                $_missing_nodesforum_remember_righttoaudit_folders_audited[$value]='rememeber';
             }
         }
         //now make a request to get the audited value of all the missing posts and folders
@@ -865,12 +865,10 @@ else
                         }
 
                         //maybe give right to audit here
-                        if($_nodesforum_remember_righttoaudit_folders[$value]){var_dump('$_nodesforum_remember_righttoaudit_folders[$value]',$_nodesforum_remember_righttoaudit_folders[$value]);}
-                        if($_nodesforum_remember_righttoaudit_folders_audited[$value]==1){echo '$_nodesforum_remember_righttoaudit_folders_audited[$value] was equal to 1';}
                         if(
-                            $_nodesforum_remember_righttoaudit_folders[$value] // root folder
-                            && $_nodesforum_remember_righttoaudit_folders_audited[$value]==1 // or this folder is already audited
-                            && $_nodesforum_righttoaudit==0 // and we are not already right to audit
+                            $_nodesforum_remember_modership_folders[$value] // is mod on this folder
+                            && $_nodesforum_remember_righttoaudit_folders_audited[$value]==1 // and this folder is already audited
+                            && $_nodesforum_righttoaudit==0 // and does not already have right to audit
                         ){
                             $_nodesforum_righttoaudit=1;
                             if($value==$_GET['_nodesforum_node'])

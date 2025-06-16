@@ -138,7 +138,7 @@ if($_nodesforum_ismod==1){
 
 //--------------YOUR RIGHT TO AUDIT
 if($_nodesforum_righttoaudit==1){
-	echo '<div style="height:4px;"><!-- --></div><div style="width:100%;"><table class="class_nodesforum_bgcolor3" style="width:100%;"><tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner"><img src="'.$_nodesforum_audit_icon.'" style="vertical-align:text-bottom;border:none;" /> you have the right to audit this '.$thinger.' '.$_nodesforum_explain_righttoaudit.'</div></td></tr></table></div>';
+	echo '<div style="height:4px;"><!-- --></div><div style="width:100%;"><table class="class_nodesforum_bgcolor3" style="width:100%;"><tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner"><img src="'.$_nodesforum_tool_icon.'" style="vertical-align:text-bottom;border:none;" /> you have the right to audit this '.$thinger.' '.$_nodesforum_explain_righttoaudit.'</div></td></tr></table></div>';
 	if($_nodesforum_mod_audit_count>0){
 		if($last_audit_notification_time==0){
 			$last_audit_notification_history_text = 'never';
@@ -150,7 +150,7 @@ if($_nodesforum_righttoaudit==1){
 		}
         echo
             '<div style="height:4px;"><!-- --></div><div style="width:100%;"><table class="class_nodesforum_bgcolor3" style="width:100%;"><tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner">'
-            .'<img src="'.$_nodesforum_audit_icon.'" style="vertical-align:middle;margin-right:8px;border:none;" alt="Audit" />'
+            .'<img src="'.$_nodesforum_warn_icon.'" style="vertical-align:middle;margin-right:8px;border:none;" alt="Audit" />'
             .'There are <span style="color:'.$_nodesforum_link_color.'">'.$_nodesforum_mod_audit_count.'</span> folders or posts inside of this '.$thinger.' that need auditing. '
             .'<a href="?_nodesforum_node=a'.$remember_actual_node.'" style="color:'.$_nodesforum_link_color.';text-decoration:underline;font-weight:bold;">Click here to audit them</a>. (last admin notification was sent: '.$last_audit_notification_history_text.')'
             .'</div></td></tr></table></div>';

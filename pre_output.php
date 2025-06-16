@@ -404,7 +404,7 @@ if($last_audit_notification_time < ($nowtime - (24 * 3600))){
     if($_nodesforum_mod_audit_count>0){
         $subject = $_nodesforum_forum_name.' - folders or posts needing auditing';
         $audit_message = 
-            '<img src="'.$_nodesforum_instance_asolute_URL.$_nodesforum_audit_icon.'" style="vertical-align:middle;margin-right:8px;border:none;" alt="Audit" />'
+            '<img src="'.$_nodesforum_instance_asolute_URL.$_nodesforum_warn_icon.'" style="vertical-align:middle;margin-right:8px;border:none;" alt="Audit" />'
             .'There are <span style="color:'.$_nodesforum_link_color.'">'.$_nodesforum_mod_audit_count.'</span> folders or posts inside of this '.$thinger.' that need auditing. '
             .'<a href="'.$_nodesforum_instance_asolute_URL.'?_nodesforum_node=a'.$remember_actual_node.'" style="color:'.$_nodesforum_link_color.';text-decoration:underline;font-weight:bold;">Click here to audit them</a>.';
 
