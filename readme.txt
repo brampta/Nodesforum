@@ -8,7 +8,7 @@ I decided to save this forum and implement audit capability!
 It will be a new beginning for the Nodesforum!!
 
 [database changes]
-add the audited (tinyint) column to the _nodesforum_folders_and_posts table 
+add the audited (tinyint) column to the _nodesforum_folders_and_posts table and put an index on it!!
 
 [config changes]
 add the $_nodesforum_admin_email config
