@@ -123,7 +123,7 @@ if($_nodesforum_display_fapID)
                 //$contains_string=$_nodesforum_display_subfolders[$key].' subfolder'.$subfoldersS.', '.$_nodesforum_display_posts[$key].' post'.$postsS;
             }
 
-            //if were in audit view, the parent folder
+            //if were in audit view, show the parent folder
             if($_nodesforum_folder_or_post==7){
                 $container_fapID=substr($_nodesforum_display_containing_folder_or_post[$key],1);
                 $show_title=_nodesforum_display_title($_nodesforum_remember_titles[$container_fapID],$_nodesforum_max_word_length_in_titles);
@@ -223,6 +223,14 @@ if($_nodesforum_display_fapID)
                 {$parent_link_liner='style="text-decoration:line-through;"';}
                 $this_link.=' (in: <a href="?_nodesforum_node='.$container_fapID.'" '.$parent_link_liner.'>'.$show_title.'</a>)';
             }
+
+            //if is post or reply, and in audit view, show the post contents overview
+            if($_nodesforum_folder_or_post==7){
+                //show post contents overview
+                $this_link.= '<div style="width:100%;padding:0px;"><div style="width:100%;padding:0px;margin:0px;'.$link_liner.'color:'.$_nodesforum_text_color.';max-height:200px;overflow-y:auto;" class="class_nodesforum_bgcolorinherit">'.display_bb($_nodesforum_display_post[$key],$_nodesforum_display_p_inf_str[$this_creator_uniqueID],$user_or_guest,$_nodesforum_display_disable_auto_smileys[$key],$_nodesforum_display_disable_auto_links[$key],0).'</div></div>';
+
+            }
+
             $replyend='ies';
             if($_nodesforum_display_replies[$key]==1)
             {$replyend='y';}
