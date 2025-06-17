@@ -641,6 +641,41 @@ function display_bb($string,$p_inf_str='1!1!1!1!1!1!1!1!1!1',$user_or_guest=0,$d
     global $_nodesforum_bbcode_escape_char;
 
 
+
+
+    // 1. Extract all [code]...[/code] blocks (with nesting support) and replace with placeholders
+    $code_blocks = [];
+    $placeholder_prefix = '[[CODE_BLOCK_';
+    $placeholder_suffix = ']]';
+    $code_index = 0;
+
+    while (true) {
+        $start = stripos($string, '[code]');
+        if ($start === false) break;
+        $level = 1;
+        $pos = $start + 6;
+        while ($level > 0) {
+            $next_open = stripos($string, '[code]', $pos);
+            $next_close = stripos($string, '[/code]', $pos);
+            if ($next_close === false) break 2; // Unmatched tag, abort
+            if ($next_open !== false && $next_open < $next_close) {
+                $level++;
+                $pos = $next_open + 6;
+            } else {
+                $level--;
+                $pos = $next_close + 7;
+            }
+        }
+        $end = $pos;
+        $code_content = substr($string, $start + 6, $end - $start - 13); // 6 for [code], 7 for [/code]
+        $code_blocks[$code_index] = htmlspecialchars($code_content, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $string = substr($string, 0, $start) . $placeholder_prefix . $code_index . $placeholder_suffix . substr($string, $end);
+        $code_index++;
+    }
+
+
+
+
     $no_more_quote_tags=0;
     $count_tags=0;
     $max_tags=100;
@@ -1597,45 +1632,56 @@ function display_bb($string,$p_inf_str='1!1!1!1!1!1!1!1!1!1',$user_or_guest=0,$d
 
 
     //build code tags here:
-    $no_more_code_tags=0;
-    $count_tags=0;
-    $max_tags=100;
-    $reading_head=0;
-    while($no_more_code_tags==0)
-    {
-        $count_tags++;
-        if($count_tags>=$max_tags)
-        {
-            echo 'max loops busted on loop looking for code tags to rebuild<br />';
-            break;
-        }
+    // $no_more_code_tags=0;
+    // $count_tags=0;
+    // $max_tags=100;
+    // $reading_head=0;
+    // while($no_more_code_tags==0)
+    // {
+    //     $count_tags++;
+    //     if($count_tags>=$max_tags)
+    //     {
+    //         echo 'max loops busted on loop looking for code tags to rebuild<br />';
+    //         break;
+    //     }
 
-        $find_first_code_tag=stripos(' '.$string,'[code]',$reading_head);
-        if($find_first_code_tag)
-        {
+    //     $find_first_code_tag=stripos(' '.$string,'[code]',$reading_head);
+    //     if($find_first_code_tag)
+    //     {
 
-            $reading_head=$find_first_code_tag+2;
-            $find_first_code_tag=$find_first_code_tag-1;
+    //         $reading_head=$find_first_code_tag+2;
+    //         $find_first_code_tag=$find_first_code_tag-1;
 
-            $find_first_closing_tag_after_that=stripos($string,'[/code]',$find_first_code_tag);
-            if($find_first_closing_tag_after_that)
-            {
+    //         $find_first_closing_tag_after_that=stripos($string,'[/code]',$find_first_code_tag);
+    //         if($find_first_closing_tag_after_that)
+    //         {
 
-                $string_inside_of_tags=substr($string,$find_first_code_tag+6,$find_first_closing_tag_after_that-($find_first_code_tag+6));
+    //             $string_inside_of_tags=substr($string,$find_first_code_tag+6,$find_first_closing_tag_after_that-($find_first_code_tag+6));
 
 
-                $string_before_tags=substr($string,0,$find_first_code_tag);
-                $string_after_tags=substr($string,$find_first_closing_tag_after_that+7);
-                $random_number=rand(1111111111,9999999999).rand(1111111111,9999999999).rand(1111111111,9999999999).rand(1111111111,9999999999).rand(1111111111,9999999999);
-                $string=$string_before_tags.'<div style="width:100%;"><div style="font-size:12px;text-align:left;padding-left:2em;padding-right:2em;">code:</div><div style="width:100%;overflow:auto;overflow-x:auto;overflow-y:visible;"><table class="class_nodesforum_bgcolor3" style="width:100%;"><tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner"><pre style="padding:4px;margin:0px;" id="pre_'.$random_number.'">'.$code_tag_contents_ont_the_side[$string_inside_of_tags].'</pre><br /></div></td></tr></table></div><div style="text-align:right;font-size:12px;padding-left:2em;padding-right:2em;"><a onclick="selectcode('."'pre_".$random_number."'".')" style="cursor:pointer;">select</a></div></div>'.$string_after_tags;
-            }
-            else
-            {$no_more_code_tags=1;}
-        }
-        else
-        {$no_more_code_tags=1;}
-    }
+    //             $string_before_tags=substr($string,0,$find_first_code_tag);
+    //             $string_after_tags=substr($string,$find_first_closing_tag_after_that+7);
+    //             $random_number=rand(1111111111,9999999999).rand(1111111111,9999999999).rand(1111111111,9999999999).rand(1111111111,9999999999).rand(1111111111,9999999999);
+    //             $string=$string_before_tags.'<div style="width:100%;"><div style="font-size:12px;text-align:left;padding-left:2em;padding-right:2em;">code:</div><div style="width:100%;overflow:auto;overflow-x:auto;overflow-y:visible;"><table class="class_nodesforum_bgcolor3" style="width:100%;"><tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner"><pre style="padding:4px;margin:0px;" id="pre_'.$random_number.'">'.$code_tag_contents_ont_the_side[$string_inside_of_tags].'</pre><br /></div></td></tr></table></div><div style="text-align:right;font-size:12px;padding-left:2em;padding-right:2em;"><a onclick="selectcode('."'pre_".$random_number."'".')" style="cursor:pointer;">select</a></div></div>'.$string_after_tags;
+    //         }
+    //         else
+    //         {$no_more_code_tags=1;}
+    //     }
+    //     else
+    //     {$no_more_code_tags=1;}
+    // }
 
+
+    // 3. Restore code blocks
+    $string = preg_replace_callback(
+        '/\[\[CODE_BLOCK_(\d+)\]\]/',
+        function($matches) use ($code_blocks) {
+            $key = $matches[1];
+            $random_number = rand(1111111111,9999999999).rand(1111111111,9999999999);
+            return '<div style="width:100%;"><div style="font-size:12px;text-align:left;padding-left:2em;padding-right:2em;">code:</div><div style="width:100%;overflow:auto;overflow-x:auto;overflow-y:visible;"><table class="class_nodesforum_bgcolor3" style="width:100%;"><tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner"><pre style="padding:4px;margin:0px;" id="pre_'.$random_number.'">'.$code_blocks[$key].'</pre><br /></div></td></tr></table></div><div style="text-align:right;font-size:12px;padding-left:2em;padding-right:2em;"><a onclick="selectcode(\'pre_'.$random_number.'\')" style="cursor:pointer;">select</a></div></div>';
+        },
+        $string
+    );
 
 
 
