@@ -74,7 +74,7 @@ if($_nodesforum_folder_description!='')
 
 
 
-echo '<div style="height:4px;"><!-- --></div><div style="width:100%;"><table style="width:100%;" class="class_nodesforum_bgcolor3">';
+echo '<div style="height:4px;"><!-- --></div><div style="width:100%;"><table style="width:100%;table-layout: fixed;" class="class_nodesforum_bgcolor3">';
 if($_nodesforum_display_fapID)
 {
     foreach($_nodesforum_display_fapID as $key => $value)
