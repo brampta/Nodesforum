@@ -613,7 +613,7 @@ function display_bb($string,$p_inf_str='1!1!1!1!1!1!1!1!1!1',$user_or_guest=0,$d
 
 
 
-//echo htmlspecialchars($string).'<br />';
+    //echo '<div style="background-color:red;">display_bb input:</div><pre>'.htmlspecialchars($string).'</pre><hr><br />';
 
 
     global $bb_replace;
@@ -644,6 +644,7 @@ function display_bb($string,$p_inf_str='1!1!1!1!1!1!1!1!1!1',$user_or_guest=0,$d
 
 
     // 1. Extract all [code]...[/code] blocks (with nesting support) and replace with placeholders
+    //echo '<div style="background-color:pink;">before code block extraction:</div><pre>'.htmlspecialchars($string).'</pre><hr><br />';
     static $global_code_blocks = [];
     static $global_code_index = 0;
     $placeholder_prefix = '[[CODE_BLOCK_';
@@ -693,6 +694,7 @@ function display_bb($string,$p_inf_str='1!1!1!1!1!1!1!1!1!1',$user_or_guest=0,$d
             }
         }
     }
+    //echo '<div style="background-color:cyan;">after code block extraction:</div><pre>'.htmlspecialchars($string).'</pre><hr><br />';
 
 
 
@@ -1816,14 +1818,14 @@ function display_bb($string,$p_inf_str='1!1!1!1!1!1!1!1!1!1',$user_or_guest=0,$d
         function($matches) use (&$global_code_blocks) {
             $key = $matches[1];
             $random_number = rand(1111111111,9999999999).rand(1111111111,9999999999);
-            return '<div style="width:100%;"><div style="font-size:12px;text-align:left;padding-left:2em;padding-right:2em;">code:</div><div style="width:100%;overflow:auto;overflow-x:auto;overflow-y:visible;"><table class="class_nodesforum_bgcolor3" style="width:100%;"><tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner"><pre style="padding:4px;margin:0px;" id="pre_'.$random_number.'">'.$global_code_blocks[$key].'</pre><br /></div></td></tr></table></div><div style="text-align:right;font-size:12px;padding-left:2em;padding-right:2em;"><a onclick="selectcode(\'pre_'.$random_number.'\')" style="cursor:pointer;">select</a></div></div>';
+            return '<div style="width:100%;"><div style="font-size:12px;text-align:left;padding-left:2em;padding-right:2em;">code:</div><div style="width:100%;overflow:auto;overflow-x:auto;overflow-y:visible;"><table class="class_nodesforum_bgcolor3" style="width:100%;"><tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner"><pre style="padding:4px;margin:0px;" id="pre_'.$random_number.'">'.htmlspecialchars($global_code_blocks[$key]).'</pre><br /></div></td></tr></table></div><div style="text-align:right;font-size:12px;padding-left:2em;padding-right:2em;"><a onclick="selectcode(\'pre_'.$random_number.'\')" style="cursor:pointer;">select</a></div></div>';
         },
         $string
     );
+
+    //echo '<div style="background-color:green;">display_bb output:</div><pre>'.htmlspecialchars($string).'</pre><hr><br />';
 
     return $string;
 }
 
 
-
-?>
