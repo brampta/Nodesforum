@@ -245,6 +245,7 @@ function selectNode (node) {
 
 var waiting_for_requests={};
 function purgeSpammer(user_id,user_ip){
+    console.log('purgeSpammer called with user_id: ' + user_id + ' and user_ip: ' + user_ip);
 	if(user_id=="0"){
 		var areyousure = confirm("Spammer Purge: are you sure that you want to delete all the posts from ip "+user_ip+" and ban it for as far as your moderator go across the entire forum?");
 	}else{
