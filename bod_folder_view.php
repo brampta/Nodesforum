@@ -74,7 +74,7 @@ if($_nodesforum_folder_description!='')
 
 
 
-echo '<div style="height:4px;"><!-- --></div><div style="width:100%;"><table style="width:100%;table-layout: fixed;" class="class_nodesforum_bgcolor3">';
+echo '<div style="height:4px;"><!-- --></div><div style="width:100%;"><table style="width:100%;table-layout: fixed;" class="class_nodesforum_bgcolor3 respo">';
 if($_nodesforum_display_fapID)
 {
     foreach($_nodesforum_display_fapID as $key => $value)
@@ -331,23 +331,23 @@ if($_nodesforum_display_fapID)
         {$skeleton_icon='<img src="'.$_nodesforum_skeleton_icon.'" style="vertical-align:text-bottom;border:none;" />';}
 
         $mycellpadding=10;
-        echo '<tr>
+        echo '<tr class="respo respoborder">
 
-			<td style="text-align:left;vertical-align:top;width:33%" class="'.$title_cell_class.'"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">'.$sticky_icon.$skeleton_icon.$this_icon.' '.$this_link.$modstring.'</div></td>
+			<td style="text-align:left;vertical-align:top;width:33%" class="'.$title_cell_class.' respo"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">'.$sticky_icon.$skeleton_icon.$this_icon.' '.$this_link.$modstring.'</div></td>
 
-			<td style="text-align:left;vertical-align:top;" class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">created by '.$creatorz_link.'<script type="text/javascript">
+			<td style="text-align:left;vertical-align:top;" class="class_nodesforum_bgcolor2 respo"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">created by '.$creatorz_link.'<script type="text/javascript">
 			var writness = " on " + _nodesforum_maketimus('.$_nodesforum_display_creation_time[$key].');
 			document.write(writness);
 			</script></div></td>
 
-			<td style="text-align:left;vertical-align:top;" class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">'.$contains_string.'</div></td>
+			<td style="text-align:left;vertical-align:top;" class="class_nodesforum_bgcolor2 respo"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">'.$contains_string.'</div></td>
 
-			<td style="text-align:left;vertical-align:top;" class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">'.$last_post_string.'</div></td>
+			<td style="text-align:left;vertical-align:top;" class="class_nodesforum_bgcolor2 respo"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">'.$last_post_string.'</div></td>
 
 			</tr>';
     }
 }
 else
-{echo '<tr><td style="text-align:center;vertical-align:top;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">empty</div></td></tr>';}
+{echo '<tr><td style="text-align:center;vertical-align:top;" class="class_nodesforum_bgcolor1 respo"><div class="class_nodesforum_inner">empty</div></td></tr>';}
 echo '</table></div>'.$pagination;
 

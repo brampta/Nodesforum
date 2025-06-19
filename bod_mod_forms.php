@@ -213,7 +213,7 @@ if($_nodesforum_ismod==1)
 {
 
 
-	$banpart_text=$banpart_text.'<a name="_nodesforum_ban"></a><div style="height:4px;"><!-- --></div><div style="width:100%;"><table style="width:100%;" class="class_nodesforum_bgcolor3"><tr><td style="width:33%;vertical-align:top;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">';
+	$banpart_text=$banpart_text.'<a name="_nodesforum_ban"></a><div style="height:4px;"><!-- --></div><div style="width:100%;"><table style="width:100%;" class="class_nodesforum_bgcolor3 respo"><tr class="respo"><td style="width:33%;vertical-align:top;" class="class_nodesforum_bgcolor1 respo"><div class="class_nodesforum_inner">';
 	
 	
 	
@@ -240,7 +240,7 @@ if($_nodesforum_ismod==1)
 
 	
 	
-	$banpart_text=$banpart_text.'</div></td><td  style="width:34%;vertical-align:top;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">';
+	$banpart_text=$banpart_text.'</div></td><td style="width:34%;vertical-align:top;" class="class_nodesforum_bgcolor1 respo"><div class="class_nodesforum_inner">';
 	
 	$banpart_text=$banpart_text.'<h4 style="margin:0px;">see posts from a user in '.$the_thing.'</h4>';
 	
@@ -252,7 +252,7 @@ if($_nodesforum_ismod==1)
 		</form>';
 	
 	
-	$banpart_text=$banpart_text.'</div></td><td style="width:33%;vertical-align:top;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">';
+	$banpart_text=$banpart_text.'</div></td><td style="width:33%;vertical-align:top;" class="class_nodesforum_bgcolor1 respo"><div class="class_nodesforum_inner">';
 	
 
 	$banpart_text=$banpart_text.'<h4 style="margin:0px;">erase all posts from a user in '.$the_thing.'</h4>';
@@ -303,7 +303,7 @@ if($_nodesforum_display_banned_ip_ip)
 if($_nodesforum_ismod==1)
 {
 
-	$banpart_text=$banpart_text.'<a name="_nodesforum_ban_ip"></a><div style="width:100%;"><table style="width:100%;" class="class_nodesforum_bgcolor3"><tr><td style="width:33%;vertical-align:top;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">';
+	$banpart_text=$banpart_text.'<a name="_nodesforum_ban_ip"></a><div style="width:100%;"><table style="width:100%;" class="class_nodesforum_bgcolor3 respo"><tr class="respo"><td style="width:33%;vertical-align:top;" class="class_nodesforum_bgcolor1 respo"><div class="class_nodesforum_inner">';
 
 
 
@@ -330,7 +330,7 @@ if($_nodesforum_ismod==1)
 
 
 
-	$banpart_text=$banpart_text.'</div></td><td  style="width:34%;vertical-align:top;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">';
+	$banpart_text=$banpart_text.'</div></td><td style="width:34%;vertical-align:top;" class="class_nodesforum_bgcolor1 respo"><div class="class_nodesforum_inner">';
 
 	
 	$banpart_text=$banpart_text.'<h4 style="margin:0px;">see posts from an ip in '.$the_thing.'</h4>';
@@ -343,7 +343,7 @@ if($_nodesforum_ismod==1)
 		</form>';
 	
 	
-	$banpart_text=$banpart_text.'</div></td><td style="width:33%;vertical-align:top;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">';
+	$banpart_text=$banpart_text.'</div></td><td style="width:33%;vertical-align:top;" class="class_nodesforum_bgcolor1 respo"><div class="class_nodesforum_inner">';
 	
 
 	$banpart_text=$banpart_text.'<h4 style="margin:0px;">erase all posts from an ip in '.$the_thing.'</h4>';
@@ -398,6 +398,3 @@ if($_nodesforum_ismod==1)
 
 
 
-
-
-?>

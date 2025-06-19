@@ -37,6 +37,25 @@ echo '<style type="text/css">
 	opacity: 0.5;
 }
 
+/* Responsive tables: stack on mobile */
+@media (max-width: 900px) {
+	.respo, .respo>tbody {
+		display: block !important;
+		width: 100% !important;
+	}
+	.respoborder {
+		border: 2px solid '.$_nodesforum_frames_color.';
+		width: calc(100% - 6px) !important;
+	}
+	.respohide {
+		display: none !important;
+	}
+	.respohori50 {
+		display: inline-block !important;
+		width: 50% !important;
+	}
+}
+
 
 </style>
 

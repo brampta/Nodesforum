@@ -1755,7 +1755,23 @@ function display_bb($string,$p_inf_str='1!1!1!1!1!1!1!1!1!1',$user_or_guest=0,$d
                 }
 
 
-                $string=$string_before_tags.'<blockquote style="margin:0px;"><table class="class_nodesforum_bgcolorinherit"><tr><td><table class="class_nodesforum_bgcolor3"><caption style="text-align:left;font-size:75%;">'.$caption_string.'</caption><tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner">'.display_bb($quote_texts[$string_inside_of_tags],0,0,1,1,1).'</div></td></tr></table>'.$source_string.'</td></tr></table></blockquote>'.$string_after_tags;
+                $string=$string_before_tags.'<blockquote style="margin:0px;overflow-y: auto;">
+                    <table class="class_nodesforum_bgcolorinherit">
+                        <tr>
+                            <td>
+                                <table class="class_nodesforum_bgcolor3">
+                                    <caption style="text-align:left;font-size:75%;">'.$caption_string.'</caption>
+                                    <tr>
+                                        <td class="class_nodesforum_bgcolor2">
+                                            <div class="class_nodesforum_inner">'.display_bb($quote_texts[$string_inside_of_tags],0,0,1,1,1).'</div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                '.$source_string.'
+                            </td>
+                        </tr>
+                    </table>
+                </blockquote>'.$string_after_tags;
             }
             else
             {$no_more_quote_tags=1;}
