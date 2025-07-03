@@ -204,7 +204,7 @@ for($i = 0; $i < $string_length; $i++) {
   );
 }
 
-$image = apply_wave_distortion($image, $box_width, $box_height, rand(9, 11), rand(43, 111));
+$image = apply_wave_distortion($image, $box_width, $box_height, rand(3, 7), rand(63, 111));
 
 
 
