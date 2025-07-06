@@ -201,6 +201,7 @@ if($_nodesforum_display_fapID)
             $this_icon='<img src="'.$_nodesforum_post_icon.'" style="vertical-align:text-bottom;border:none;" />';
             if(substr($_nodesforum_display_containing_folder_or_post[$key],0,1)=='p')
             {
+                //its a reply to a post
                 $this_icon='<img src="'.$_nodesforum_reply_icon.'" style="vertical-align:text-bottom;border:none;" />';
                 $container_fapID=substr($_nodesforum_display_containing_folder_or_post[$key],1);
                 $show_title=_nodesforum_display_title($_nodesforum_remember_titles[$container_fapID],$_nodesforum_max_word_length_in_titles);
@@ -215,13 +216,16 @@ if($_nodesforum_display_fapID)
                 $_nodesforum_display_last_post_postID[$key]=$_nodesforum_remember_last_post_postID[$container_fapID];
                 $_nodesforum_display_last_post_user_uniqueID[$key]=$_nodesforum_remember_last_post_user_uniqueID[$container_fapID];
                 $_nodesforum_display_last_post_time[$key]=$_nodesforum_remember_last_post_time[$container_fapID];
+                $_nodesforum_type_for_delete_node = 3; //reply to post
             }else if($_nodesforum_folder_or_post==7 && substr($_nodesforum_display_containing_folder_or_post[$key],0,1)=='f'){
+                //its a post in a folder
                 $container_fapID=substr($_nodesforum_display_containing_folder_or_post[$key],1);
                 $show_title=_nodesforum_display_title($_nodesforum_remember_titles[$container_fapID],$_nodesforum_max_word_length_in_titles);
                 $parent_link_liner='';
                 if($_nodesforum_display_deletion_time[$container_fapID]!=0)
                 {$parent_link_liner='style="text-decoration:line-through;"';}
                 $this_link.=' (in: <a href="?_nodesforum_node='.$container_fapID.'" '.$parent_link_liner.'>'.$show_title.'</a>)';
+                $_nodesforum_type_for_delete_node = 2; //post in folder
             }
 
             //if is post or reply, and in audit view, show the post contents overview
@@ -287,7 +291,7 @@ if($_nodesforum_display_fapID)
                 $move_button='<acronym title="move post" style="border:none;"><a href="?_nodesforum_node='.$_GET['_nodesforum_node'].'&_nodesforum_page='.$_GET['_nodesforum_page'].'&_nodesforum_move='.$value.'"><img src="'.$_nodesforum_move_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';
                 $delete_button='';
                 if($_nodesforum_display_deletion_time[$key]==0)
-                {$delete_button='<acronym title="delete post" style="border:none;"><a onclick="delete_node('.$value.',2,'."'".urlencode($_nodesforum_display_creator_publicname[$this_creator_uniqueID])."'".','.$_nodesforum_display_replies[$key].','.$_nodesforum_display_views[$key].','."'".$_GET['_nodesforum_node']."'".','.$_GET['_nodesforum_page'].')" style="cursor:pointer;"><img src="'.$_nodesforum_delete_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';}
+                {$delete_button='<acronym title="delete post" style="border:none;"><a onclick="delete_node('.$value.','.$_nodesforum_type_for_delete_node.','."'".urlencode($_nodesforum_display_creator_publicname[$this_creator_uniqueID])."'".','.$_nodesforum_display_replies[$key].','.$_nodesforum_display_views[$key].','."'".$_GET['_nodesforum_node']."'".','.$_GET['_nodesforum_page'].')" style="cursor:pointer;"><img src="'.$_nodesforum_delete_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';}
                 
                 $audit_button='';
                 $unaudit_button='';

@@ -18,10 +18,17 @@ while($row = mysql_fetch_array($result))
     $this_containing_folder_or_post=$row['containing_folder_or_post'];
     $first_letter_of_containing_folder_or_post=substr($this_containing_folder_or_post,0,1);
     $parent_fapID=substr($this_containing_folder_or_post,1);
-    $parent_ancestry_plus_node=$row['ancestry'];
+    $parent_ancestry_plus_node=$row['ancestry'].$addslashed_delete.$_nodesforum_ancestry_separator;
     $this_skeleton=$row['skeleton'];
 }
 $oldestacceptabletimeforguesteditbyip=$this_creation_time+($_nodesforum_allow_guests_to_edit_their_posts_for_x_hours*3600);
+$exploded_deletenode_ancestry=explode($_nodesforum_ancestry_separator,$parent_ancestry_plus_node);
+//remove empty elements (do not remove 0!)
+foreach($exploded_deletenode_ancestry as $key => $value){
+    if($value==''){
+        unset($exploded_deletenode_ancestry[$key]);
+    }
+}
 
 $issure=0;
 if(!isset($_GET['_nodesforum_delete_user']) && !isset($_GET['_nodesforum_delete_ip']))
@@ -33,21 +40,119 @@ else
 }
 
 
+$delete_node_is_children_of_current_node=0;
+if(in_array($addslashed_delete,$exploded_deletenode_ancestry)){
+    $delete_node_is_children_of_current_node=1;
+}
+//var_dump('$addslashed_delete',$addslashed_delete);
+//var_dump('$exploded_deletenode_ancestry',$exploded_deletenode_ancestry);
+//var_dump('$delete_node_is_children_of_current_node',$delete_node_is_children_of_current_node);
 
+//var_dump('$issure',$issure);
 
 //if has the right to delete..
+$youre_a_mod_and_have_rights_here=0;
+$you_are_the_creator_of_the_post_or_folder=0;
+$you_are_the_creator_of_this_guest_post_or_folder=0;
 if(
-(
-        (($_nodesforum_ismod==1 && $_GET['_nodesforum_node']==$parent_fapID) || ($_GET['_nodesforum_node']==$_GET['_nodesforum_delete'] && (isset($_GET['_nodesforum_delete_user']) || isset($_GET['_nodesforum_delete_ip']))))
-                ||
-                $this_creator_uniqueID==$_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]
-                ||
-                ($this_creator_uniqueID=='0' && $this_creator_ip==$_nodesforum_enc_ip && $nowtime<$oldestacceptabletimeforguesteditbyip)
+    //you have mods right here
+    $_nodesforum_ismod==1
+    &&
+    (
+
+
+        //and the parent of the post of folder is where we are!
+        //$_GET['_nodesforum_node']==$parent_fapID
+        
+        //instead of only checking the current node is the immediate parent,
+        //check if the current node is any parent
+        $delete_node_is_children_of_current_node==1
+
+
+
+        ||
+        //or its a mass delete on whole users stuff or an IP (to combat spam)
+        (
+            $_GET['_nodesforum_node']==$_GET['_nodesforum_delete']
+            && (
+                isset($_GET['_nodesforum_delete_user'])
+                || 
+                isset($_GET['_nodesforum_delete_ip'])
+            )
         )
-        &&
-        ($this_skeleton==0 || $_nodesforum_power_on_skeleton==1 || $this_creator_uniqueID==$_SESSION[$_nodesforum_external_user_system_uniqueID_session_name])
-        &&
-        $issure==1
+    )
+){$youre_a_mod_and_have_rights_here=1;}
+if($this_creator_uniqueID==$_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]){
+    $you_are_the_creator_of_the_post_or_folder=1;
+}
+if(
+    $this_creator_uniqueID=='0'
+    && $this_creator_ip==$_nodesforum_enc_ip
+    && $nowtime<$oldestacceptabletimeforguesteditbyip
+){
+    $you_are_the_creator_of_this_guest_post_or_folder=1;
+}
+
+// var_dump('$youre_a_mod_and_have_rights_here',$youre_a_mod_and_have_rights_here);
+// var_dump('$you_are_the_creator_of_the_post_or_folder',$you_are_the_creator_of_the_post_or_folder);
+// var_dump('$you_are_the_creator_of_this_guest_post_or_folder',$you_are_the_creator_of_this_guest_post_or_folder);
+
+if(
+
+
+    (
+        //either..
+
+        //youre a mod and you have rights here
+        // (
+        //     //you have mods right here
+        //     $_nodesforum_ismod==1
+        //     &&
+        //     (
+        //         //and the parent of the post of folder is where we are!
+        //         $_GET['_nodesforum_node']==$parent_fapID
+        //         ||
+        //         //or its a mass delete on whole users stuff or an IP (to combat spam)
+        //         (
+        //             $_GET['_nodesforum_node']==$_GET['_nodesforum_delete']
+        //             && (
+        //                 isset($_GET['_nodesforum_delete_user'])
+        //                 || 
+        //                 isset($_GET['_nodesforum_delete_ip'])
+        //             )
+        //         )
+        //     )
+        // )
+        $youre_a_mod_and_have_rights_here==1
+
+        //or your are the creator of the post or folder
+        ||
+        //$this_creator_uniqueID==$_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]
+        $you_are_the_creator_of_the_post_or_folder==1
+
+        //or its been created by a guest and you are the same IP and it hasnt been too long since it was created
+        ||
+        // (
+        //     $this_creator_uniqueID=='0'
+        //     && $this_creator_ip==$_nodesforum_enc_ip
+        //     && $nowtime<$oldestacceptabletimeforguesteditbyip
+        // )
+        $you_are_the_creator_of_this_guest_post_or_folder==1
+    )
+
+
+    //if its skeleton folder, needs mod right on skeletons or be creator of skeleton
+    &&
+    (
+        $this_skeleton==0
+        || $_nodesforum_power_on_skeleton==1
+        || $this_creator_uniqueID==$_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]
+    )
+
+
+    //has clicked I am sure
+    &&
+    $issure==1
 )
 {
     if($_nodesforum_ismod==1)
@@ -404,11 +509,10 @@ if(
 		$location='Location: ?_nodesforum_node='.$_GET['_nodesforum_node'].'&_nodesforum_page='.$_GET['_nodesforum_page'];
 		header($location);
 	}
+}else{
+    die('Error: You do not have the right to delete this post or folder.');
 }
 
 
 
 
-
-
-?>
