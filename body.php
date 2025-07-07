@@ -38,6 +38,11 @@ echo '<style type="text/css">
 }
 
 
+.audit-approve-cell { width: 90px; }
+.audit-delete-cell { width: 90px; }
+.audit-approve-cell.checked { background: green !important; }
+.audit-delete-cell.checked { background: red !important; }
+
 </style>
 
 

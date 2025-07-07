@@ -331,9 +331,23 @@ if($_nodesforum_display_fapID)
         {$skeleton_icon='<img src="'.$_nodesforum_skeleton_icon.'" style="vertical-align:text-bottom;border:none;" />';}
 
         $mycellpadding=10;
-        echo '<tr>
+        echo '<tr>';
 
-			<td style="text-align:left;vertical-align:top;width:33%" class="'.$title_cell_class.'"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">'.$sticky_icon.$skeleton_icon.$this_icon.' '.$this_link.$modstring.'</div></td>
+        // If in audit view, add approve/delete checkboxes
+        if($_nodesforum_folder_or_post==7){
+            // Approve checkbox cell
+            echo '<td class="audit-approve-cell" style="cursor:pointer;text-align:center;" onclick="toggleAuditCheckbox(event, this, \'approve\')">
+                <input type="checkbox" name="audit_approve['.$value.']" style="cursor:pointer;" /><br />
+                <span style="font-size:0.8em;">Approve</span>
+            </td>';
+            // Delete checkbox cell
+            echo '<td class="audit-delete-cell" style="cursor:pointer;text-align:center;" onclick="toggleAuditCheckbox(event, this, \'delete\')">
+                <input type="checkbox" name="audit_delete['.$value.']" style="cursor:pointer;" /><br />
+                <span style="font-size:0.8em;">Delete</span>
+            </td>';
+        }
+
+		echo '<td style="text-align:left;vertical-align:top;width:33%" class="'.$title_cell_class.'"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">'.$sticky_icon.$skeleton_icon.$this_icon.' '.$this_link.$modstring.'</div></td>
 
 			<td style="text-align:left;vertical-align:top;" class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">created by '.$creatorz_link.'<script type="text/javascript">
 			var writness = " on " + _nodesforum_maketimus('.$_nodesforum_display_creation_time[$key].');
@@ -349,5 +363,169 @@ if($_nodesforum_display_fapID)
 }
 else
 {echo '<tr><td style="text-align:center;vertical-align:top;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">empty</div></td></tr>';}
-echo '</table></div>'.$pagination;
+echo '</table></div>';
 
+
+if ($_nodesforum_folder_or_post == 7) {
+    // Add the mass action button, spinner, and logs
+    echo <<<EOT
+<style>
+#auditDeleteLogs, #auditResultPopup {
+    background: {$_nodesforum_background_color2};
+    color: {$_nodesforum_text_color};
+    border: 1px solid {$_nodesforum_frames_color};
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    font-size: 0.98em;
+    max-width: 700px;
+    word-break: break-all;
+}
+#auditDeleteLogs a { color: {$_nodesforum_link_color}; }
+#auditDeleteLogs a:visited { color: {$_nodesforum_link_visited_color}; }
+#auditDeleteLogs a:hover { color: {$_nodesforum_link_hover_color}; }
+#auditResultPopup {
+    display:none;
+    position:fixed;
+    left:50%; top:50%; transform:translate(-50%,-50%);
+    z-index:9999;
+    min-width:350px;
+    max-width:90vw;
+    background:{$_nodesforum_background_color1};
+    border:2px solid {$_nodesforum_frames_color};
+    box-shadow:0 0 20px #000;
+    padding:32px 24px 24px 24px;
+    text-align:center;
+}
+#auditResultPopup h2 { margin-top:0; color:{$_nodesforum_link_color}; }
+#auditResultPopup .btn {
+    display:inline-block;
+    margin:18px 12px 0 12px;
+    padding:14px 36px;
+    font-size:1.2em;
+    background:{$_nodesforum_link_color};
+    color:#000;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+}
+#auditResultPopup .btn.close { background:{$_nodesforum_frames_color}; color:{$_nodesforum_text_color}; }
+</style>
+<div style="margin:20px 0 10px 0;">
+    <button id="auditDeleteAllBtn" style="padding:8px 18px;font-size:1em;">Process All Checked Approvals/Deletions</button>
+    <span id="auditDeleteSpinner" style="display:none;margin-left:12px;"><img src="https://i.imgur.com/llF5iyg.gif" style="vertical-align:middle;width:22px;height:22px;" alt="Loading..." /></span>
+</div>
+<div id="auditDeleteLogs"></div>
+<div id="auditResultPopup">
+    <h2>Audit/Delete Recap</h2>
+    <div id="auditResultContent"></div>
+    <button class="btn reload" onclick="location.reload()">Reload Page</button>
+    <button class="btn close" onclick="document.getElementById('auditResultPopup').style.display='none'">Close</button>
+</div>
+<script>
+document.getElementById('auditDeleteAllBtn').addEventListener('click', function() {
+    var approve = [];
+    var del = [];
+    document.querySelectorAll('.audit-approve-cell input[type="checkbox"]:checked').forEach(function(cb) {
+        approve.push(cb.name.match(/\\[(\\d+)\\]/)[1]);
+    });
+    document.querySelectorAll('.audit-delete-cell input[type="checkbox"]:checked').forEach(function(cb) {
+        del.push(cb.name.match(/\\[(\\d+)\\]/)[1]);
+    });
+
+    var logDiv = document.getElementById('auditDeleteLogs');
+    var spinner = document.getElementById('auditDeleteSpinner');
+    var btn = document.getElementById('auditDeleteAllBtn');
+    var totalApprove = approve.length;
+    var totalDelete = del.length;
+    var viewNode = (new URLSearchParams(window.location.search)).get('_nodesforum_node');
+    var viewPage = (new URLSearchParams(window.location.search)).get('_nodesforum_page') || 1;
+
+    if (totalApprove === 0 && totalDelete === 0) {
+        logDiv.innerHTML = '<span style="color:#b00;">No items checked for approval or deletion.</span>';
+        return;
+    }
+
+    btn.disabled = true;
+    spinner.style.display = '';
+    logDiv.innerHTML = '<b>' + totalApprove + ' to approve, ' + totalDelete + ' to delete.</b><br>';
+
+    var i = 0, j = 0;
+    var auditResults = [];
+    var deleteResults = [];
+
+    function processNextApprove() {
+        if (i < approve.length) {
+            var url = '?_nodesforum_node=' + encodeURIComponent(viewNode) + '&_nodesforum_page=' + encodeURIComponent(viewPage) + '&_nodesforum_audit=' + encodeURIComponent(approve[i]) + '&format=json&request_number=' + (i+1);
+            logDiv.innerHTML += '<div>Approving ' + (i+1) + ' of ' + totalApprove + ': <a href="' + url + '" target="_blank">' + url + '</a></div>';
+            fetch(url, { credentials: 'same-origin' })
+                .then(response => response.json())
+                .then(json => {
+                    auditResults.push({url:url, json:json});
+                    logDiv.innerHTML += '<div style="color:#FFD328;">Response: ' + JSON.stringify(json) + '</div>';
+                    i++;
+                    processNextApprove();
+                })
+                .catch(err => {
+                    auditResults.push({url:url, json:{error:err.toString()}});
+                    logDiv.innerHTML += '<div style="color:#b00;">Error: ' + err + '</div>';
+                    i++;
+                    processNextApprove();
+                });
+        } else {
+            processNextDelete();
+        }
+    }
+
+    function processNextDelete() {
+        if (j < del.length) {
+            var url = '?_nodesforum_node=' + encodeURIComponent(viewNode) + '&_nodesforum_page=' + encodeURIComponent(viewPage) + '&_nodesforum_delete=' + encodeURIComponent(del[j]) + '&format=json&request_number=' + (j+1);
+            logDiv.innerHTML += '<div>Deleting ' + (j+1) + ' of ' + totalDelete + ': <a href="' + url + '" target="_blank">' + url + '</a></div>';
+            fetch(url, { credentials: 'same-origin' })
+                .then(response => response.json())
+                .then(json => {
+                    deleteResults.push({url:url, json:json});
+                    logDiv.innerHTML += '<div style="color:#FFD328;">Response: ' + JSON.stringify(json) + '</div>';
+                    j++;
+                    processNextDelete();
+                })
+                .catch(err => {
+                    deleteResults.push({url:url, json:{error:err.toString()}});
+                    logDiv.innerHTML += '<div style="color:#b00;">Error: ' + err + '</div>';
+                    j++;
+                    processNextDelete();
+                });
+        } else {
+            showRecap();
+        }
+    }
+
+    function showRecap() {
+        spinner.style.display = 'none';
+        var recap = '';
+        recap += '<div style="margin-bottom:12px;"><b>' + auditResults.length + ' approved, ' + deleteResults.length + ' deleted.</b></div>';
+        if(auditResults.length){
+            recap += '<div style="text-align:left;"><b>Approvals:</b><ul>';
+            auditResults.forEach(function(r, idx){
+                recap += '<li><a href="'+r.url+'" target="_blank">'+r.url+'</a><br><span style="color:#FFD328;">'+JSON.stringify(r.json)+'</span></li>';
+            });
+            recap += '</ul></div>';
+        }
+        if(deleteResults.length){
+            recap += '<div style="text-align:left;"><b>Deletions:</b><ul>';
+            deleteResults.forEach(function(r, idx){
+                recap += '<li><a href="'+r.url+'" target="_blank">'+r.url+'</a><br><span style="color:#FFD328;">'+JSON.stringify(r.json)+'</span></li>';
+            });
+            recap += '</ul></div>';
+        }
+        document.getElementById('auditResultContent').innerHTML = recap;
+        document.getElementById('auditResultPopup').style.display = '';
+    }
+
+    processNextApprove();
+});
+</script>
+EOT;
+}
+
+echo $pagination;

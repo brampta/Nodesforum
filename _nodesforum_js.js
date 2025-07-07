@@ -330,3 +330,47 @@ function jax(url,method,data,callback){
 		xhr.send();
 	}
 }
+
+
+//================ For audit view
+
+function toggleAuditCheckbox(event, cell, type) {
+    var row = cell.parentNode;
+    var approveCell = row.querySelector('.audit-approve-cell');
+    var deleteCell = row.querySelector('.audit-delete-cell');
+    var approveCheckbox = approveCell.querySelector('input[type="checkbox"]');
+    var deleteCheckbox = deleteCell.querySelector('input[type="checkbox"]');
+
+    // If the click was directly on the checkbox, just update colors (don't toggle)
+    if (event.target === approveCheckbox || event.target === deleteCheckbox) {
+        // Only one can be checked at a time
+        if (type === 'approve' && approveCheckbox.checked) {
+            deleteCheckbox.checked = false;
+            deleteCell.classList.remove('checked');
+        }
+        if (type === 'delete' && deleteCheckbox.checked) {
+            approveCheckbox.checked = false;
+            approveCell.classList.remove('checked');
+        }
+        approveCell.classList.toggle('checked', approveCheckbox.checked);
+        deleteCell.classList.toggle('checked', deleteCheckbox.checked);
+        return;
+    }
+
+    // If click was on the cell, toggle the checkbox and update colors
+    if (type === 'approve') {
+        approveCheckbox.checked = !approveCheckbox.checked;
+        approveCell.classList.toggle('checked', approveCheckbox.checked);
+        if (approveCheckbox.checked) {
+            deleteCheckbox.checked = false;
+            deleteCell.classList.remove('checked');
+        }
+    } else if (type === 'delete') {
+        deleteCheckbox.checked = !deleteCheckbox.checked;
+        deleteCell.classList.toggle('checked', deleteCheckbox.checked);
+        if (deleteCheckbox.checked) {
+            approveCheckbox.checked = false;
+            approveCell.classList.remove('checked');
+        }
+    }
+}
