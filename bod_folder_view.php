@@ -340,33 +340,33 @@ if($_nodesforum_display_fapID)
         // If in audit view, add approve/delete checkboxes
         if($_nodesforum_folder_or_post==7){
             // Approve checkbox cell
-            echo '<td class="audit-approve-cell" style="cursor:pointer;text-align:center;" onclick="toggleAuditCheckbox(event, this, \'approve\')">
+            echo '<td class="audit-approve-cell class_nodesforum_bgcolor2 audit-action-td" style="cursor:pointer;text-align:center;vertical-align:middle;" onclick="toggleAuditCheckbox(event, this, \'approve\')">
                 <input type="checkbox" name="audit_approve['.$value.']" style="cursor:pointer;" /><br />
                 <span style="font-size:0.8em;">Approve</span>
             </td>';
             // Delete checkbox cell
-            echo '<td class="audit-delete-cell" style="cursor:pointer;text-align:center;" onclick="toggleAuditCheckbox(event, this, \'delete\')">
+            echo '<td class="audit-delete-cell class_nodesforum_bgcolor2 audit-action-td" style="cursor:pointer;text-align:center;vertical-align:middle;" onclick="toggleAuditCheckbox(event, this, \'delete\')">
                 <input type="checkbox" name="audit_delete['.$value.']" style="cursor:pointer;" /><br />
                 <span style="font-size:0.8em;">Delete</span>
             </td>';
         }
 
-		echo '<td style="text-align:left;vertical-align:top;width:33%" class="'.$title_cell_class.' respo">
+		echo '<td style="text-align:left;vertical-align:top;width:33%" class="'.$title_cell_class.' respo main-content-td">
             <div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">
             '.$sticky_icon.$skeleton_icon.$this_icon.' '.$this_link.'<div class="modstring">'.$modstring.'</div>
             </div>
         </td>
 
-			<td style="text-align:left;vertical-align:top;" class="class_nodesforum_bgcolor2 respo"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">created by '.$creatorz_link.'<script type="text/javascript">
-			var writness = " on " + _nodesforum_maketimus('.$_nodesforum_display_creation_time[$key].');
-			document.write(writness);
-			</script></div></td>
+        <td style="text-align:left;vertical-align:top;" class="class_nodesforum_bgcolor2 respo main-content-td"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">created by '.$creatorz_link.'<script type="text/javascript">
+        var writness = " on " + _nodesforum_maketimus('.$_nodesforum_display_creation_time[$key].');
+        document.write(writness);
+        </script></div></td>
 
-			<td style="text-align:left;vertical-align:top;" class="class_nodesforum_bgcolor2 respo"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">'.$contains_string.'</div></td>
+        <td style="text-align:left;vertical-align:top;" class="class_nodesforum_bgcolor2 respo main-content-td"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">'.$contains_string.'</div></td>
 
-			<td style="text-align:left;vertical-align:top;" class="class_nodesforum_bgcolor2 respo"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">'.$last_post_string.'</div></td>
+        <td style="text-align:left;vertical-align:top;" class="class_nodesforum_bgcolor2 respo main-content-td"><div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">'.$last_post_string.'</div></td>
 
-			</tr>';
+        </tr>';
     }
 }
 else

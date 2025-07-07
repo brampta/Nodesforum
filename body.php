@@ -54,6 +54,26 @@ echo '<style type="text/css">
 		display: inline-block !important;
 		width: 50% !important;
 	}
+
+	tr.respo.respoborder {
+        display: flex !important;
+        flex-wrap: wrap;
+    }
+    .audit-action-td {
+        order: 10; /* send to end */
+        width: 100% !important;
+        flex: 1 1 50%;
+        text-align: center;
+    }
+    .main-content-td {
+        order: 1;
+        flex: 1 1 100%;
+    }
+    /* Optionally, make all tds full width on mobile */
+    tr.respo.respoborder > td {
+        width: 100% !important;
+        box-sizing: border-box;
+    }
 }
 
 
@@ -101,6 +121,7 @@ echo '<style type="text/css">
     font-weight:bold;
 }
 #auditResultPopup .btn.close { background:' . $_nodesforum_frames_color . '; color:' . $_nodesforum_text_color . '; }
+
 /* end of Audit stuff */
 
 
