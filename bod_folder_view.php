@@ -231,7 +231,7 @@ if($_nodesforum_display_fapID)
             //if is post or reply, and in audit view, show the post contents overview
             if($_nodesforum_folder_or_post==7){
                 //show post contents overview
-                $this_link.= '<div style="width:100%;padding:0px;"><div style="width:100%;padding:0px;margin:0px;'.$link_liner.'color:'.$_nodesforum_text_color.';max-height:200px;overflow-y:auto;" class="class_nodesforum_bgcolorinherit">'.display_bb($_nodesforum_display_post[$key],$_nodesforum_display_p_inf_str[$this_creator_uniqueID],$user_or_guest,$_nodesforum_display_disable_auto_smileys[$key],$_nodesforum_display_disable_auto_links[$key],0).'</div></div>';
+                $this_link.= '<div style="width:100%;padding:0px;" class="_nodesforum_folder_post_preview"><div style="width:100%;padding:0px;margin:0px;'.$link_liner.'color:'.$_nodesforum_text_color.';max-height:200px;overflow-y:auto;" class="class_nodesforum_bgcolorinherit">'.display_bb($_nodesforum_display_post[$key],$_nodesforum_display_p_inf_str[$this_creator_uniqueID],$user_or_guest,$_nodesforum_display_disable_auto_smileys[$key],$_nodesforum_display_disable_auto_links[$key],0).'</div></div>';
 
             }
 
@@ -351,7 +351,7 @@ if($_nodesforum_display_fapID)
             </td>';
         }
 
-		echo '<td style="text-align:left;vertical-align:top;width:33%" class="'.$title_cell_class.' respo main-content-td">
+		echo '<td style="text-align:left;vertical-align:top;width:33%" class="title_cell '.$title_cell_class.' respo main-content-td">
             <div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">
             '.$sticky_icon.$skeleton_icon.$this_icon.' '.$this_link.'<div class="modstring">'.$modstring.'</div>
             </div>

@@ -106,6 +106,8 @@ echo '<style type="text/css">
     box-shadow:0 0 20px #000;
     padding:32px 24px 24px 24px;
     text-align:center;
+	max-height: 90vh;
+    overflow-y: auto;
 }
 #auditResultPopup h2 { margin-top:0; color:' . $_nodesforum_link_color . '; }
 #auditResultPopup .btn {
