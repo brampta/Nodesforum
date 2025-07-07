@@ -37,11 +37,72 @@ echo '<style type="text/css">
 	opacity: 0.5;
 }
 
+/* Responsive tables: stack on mobile */
+@media (max-width: 900px) {
+	.respo, .respo>tbody {
+		display: block !important;
+		width: 100% !important;
+	}
+	.respoborder {
+		border: 2px solid '.$_nodesforum_frames_color.';
+		width: calc(100% - 6px) !important;
+	}
+	.respohide {
+		display: none !important;
+	}
+	.respohori50 {
+		display: inline-block !important;
+		width: 50% !important;
+	}
+}
 
+
+/* Audit stuff */
 .audit-approve-cell { width: 90px; }
 .audit-delete-cell { width: 90px; }
 .audit-approve-cell.checked { background: green !important; }
 .audit-delete-cell.checked { background: red !important; }
+#auditDeleteLogs, #auditResultPopup {
+    background: ' . $_nodesforum_background_color2 . ';
+    color: ' . $_nodesforum_text_color . ';
+    border: 1px solid ' . $_nodesforum_frames_color . ';
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    font-size: 0.98em;
+    max-width: 700px;
+    word-break: break-all;
+}
+#auditDeleteLogs a { color: ' . $_nodesforum_link_color . '; }
+#auditDeleteLogs a:visited { color: ' . $_nodesforum_link_visited_color . '; }
+#auditDeleteLogs a:hover { color: ' . $_nodesforum_link_hover_color . '; }
+#auditResultPopup {
+    position:fixed;
+    left:50%; top:50%; transform:translate(-50%,-50%);
+    z-index:9999;
+    min-width:350px;
+    max-width:90vw;
+    background:' . $_nodesforum_background_color1 . ';
+    border:2px solid ' . $_nodesforum_frames_color . ';
+    box-shadow:0 0 20px #000;
+    padding:32px 24px 24px 24px;
+    text-align:center;
+}
+#auditResultPopup h2 { margin-top:0; color:' . $_nodesforum_link_color . '; }
+#auditResultPopup .btn {
+    display:inline-block;
+    margin:18px 12px 0 12px;
+    padding:14px 36px;
+    font-size:1.2em;
+    background:' . $_nodesforum_link_color . ';
+    color:#000;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+}
+#auditResultPopup .btn.close { background:' . $_nodesforum_frames_color . '; color:' . $_nodesforum_text_color . '; }
+/* end of Audit stuff */
+
 
 </style>
 

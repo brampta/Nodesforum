@@ -31,60 +31,64 @@ if($_nodesforum_display_fapID)
     {
         $countemz++;
         $this_creator_uniqueID=$_nodesforum_display_creator_uniqueID[$key];
-        echo '<a name="_nodesforum_anchor_'.$value.'"></a><div style="height:4px;"><!-- --></div><div style="width:100%;"><table style="width:100%;table-layout:fixed;" class="class_nodesforum_bgcolor3"><tr>
-				<td style="width:180px;text-align:center;vertical-align:top;" class="class_nodesforum_bgcolor2" rowspan="3"><div class="class_nodesforum_inner"><center>';
+        echo '<a name="_nodesforum_anchor_'.$value.'"></a><div style="height:4px;"><!-- --></div><div style="width:100%;"><table style="width:100%;table-layout:fixed;" class="class_nodesforum_bgcolor3 respo respoborder"><tr class="respo">
+				<td style="width:180px;text-align:center;vertical-align:top;" class="class_nodesforum_bgcolor2 respo" rowspan="3"><div class="class_nodesforum_inner"><center>';
+
+
+        echo '<div class="respohori50">';
+
+            if($_nodesforum_display_avatar[$this_creator_uniqueID] && $_nodesforum_display_avatar[$this_creator_uniqueID]!='')
+            {echo '<table class="class_nodesforum_bgcolor3"><tr><td><img src="'.$_nodesforum_mysterypath.'/avatars/'.$_nodesforum_display_avatar[$this_creator_uniqueID].'" style="width:140px;height:140px;" id="post_avatar_'.$key.'" onload="resize_pic(140, 140, '."'post_avatar_".$key."'".')" /></td></tr></table>';}
 
 
 
-        if($_nodesforum_display_avatar[$this_creator_uniqueID] && $_nodesforum_display_avatar[$this_creator_uniqueID]!='')
-        {echo '<table class="class_nodesforum_bgcolor3"><tr><td><img src="'.$_nodesforum_mysterypath.'/avatars/'.$_nodesforum_display_avatar[$this_creator_uniqueID].'" style="width:140px;height:140px;" id="post_avatar_'.$key.'" onload="resize_pic(140, 140, '."'post_avatar_".$key."'".')" /></td></tr></table>';}
+            echo '<div style="padding:10px;">';
+            if($this_creator_uniqueID!='0' && $this_creator_uniqueID!=$_nodesforum_uniqueID_of_deleted_user)
+            {echo '<a href="?_nodesforum_node=u'.$this_creator_uniqueID.'" style="font-weight:bold;">';}
+            else
+            {echo '<i>';}
+            echo _nodesforum_display_title($_nodesforum_display_creator_publicname[$this_creator_uniqueID],$_nodesforum_max_word_length_in_titles);
+            if($this_creator_uniqueID!='0' && $this_creator_uniqueID!=$_nodesforum_uniqueID_of_deleted_user)
+            {echo'</a>';}
+            else
+            {echo '</i>';}
+            echo '</div>';
 
 
-        echo '<div style="padding:10px;">';
-        if($this_creator_uniqueID!='0' && $this_creator_uniqueID!=$_nodesforum_uniqueID_of_deleted_user)
-        {echo '<a href="?_nodesforum_node=u'.$this_creator_uniqueID.'" style="font-weight:bold;">';}
-        else
-        {echo '<i>';}
-        echo _nodesforum_display_title($_nodesforum_display_creator_publicname[$this_creator_uniqueID],$_nodesforum_max_word_length_in_titles);
-        if($this_creator_uniqueID!='0' && $this_creator_uniqueID!=$_nodesforum_uniqueID_of_deleted_user)
-        {echo'</a>';}
-        else
-        {echo '</i>';}
+        echo '</div><div class="respohori50">';
+
+
+
+
+            if($_nodesforum_display_has_folderstuff[$this_creator_uniqueID])
+            {
+                echo '<div style="width:100%;"><table style="font-size:80%;width:100%;" class="class_nodesforum_bgcolor3">';
+
+
+                if($_nodesforum_external_user_system_show_registration_time=='yes' && $this_creator_registration_time[$this_creator_uniqueID])
+                {
+                    echo '<tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner">member since:</div></td><td class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner"><script type="text/javascript">
+                        var writness = _nodesforum_maketimus('.$this_creator_registration_time[$this_creator_uniqueID].');
+                        document.write(writness);
+                        </script></div></td></tr>';
+                }
+
+
+                echo '<tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner"><img src="'.$_nodesforum_folder_icon.'" style="vertical-align:text-bottom;border:none;" /> folders:</div></td><td class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">'.$_nodesforum_display_total_folders[$this_creator_uniqueID].'</div></td></tr>
+                    <tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner"><img src="'.$_nodesforum_post_icon.'" style="vertical-align:text-bottom;border:none;" /> posts:</div></td><td class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">'.$_nodesforum_display_total_posts[$this_creator_uniqueID].'</div></td></tr>
+                    <tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner"><img src="'.$_nodesforum_reply_icon.'" style="vertical-align:text-bottom;border:none;" /> replies:</div></td><td class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">'.$_nodesforum_display_total_replies[$this_creator_uniqueID].'</div></td></tr>
+                    <tr><td class="class_nodesforum_bgcolor1" colspan="2"><div class="class_nodesforum_inner"><img src="'.$_nodesforum_history_icon.'" style="vertical-align:text-bottom;border:none;" /> <a href="?_nodesforum_node=h0&_nodesforum_history_user='.$this_creator_uniqueID.'">posting history</a></div></td></tr>
+                    </table></div>
+                    ';
+            }
+            else
+            {echo '<div style="width:100%;"><table style="font-size:80%;width:100%;display:none;" class="class_nodesforum_bgcolor3"><tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner">test</div></td></tr></table></div>';}
+
         echo '</div>';
 
 
-
-
-
-
-        if($_nodesforum_display_has_folderstuff[$this_creator_uniqueID])
-        {
-            echo '<div style="width:100%;"><table style="font-size:80%;width:100%;" class="class_nodesforum_bgcolor3">';
-
-
-            if($_nodesforum_external_user_system_show_registration_time=='yes' && $this_creator_registration_time[$this_creator_uniqueID])
-            {
-                echo '<tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner">member since:</div></td><td class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner"><script type="text/javascript">
-					var writness = _nodesforum_maketimus('.$this_creator_registration_time[$this_creator_uniqueID].');
-					document.write(writness);
-					</script></div></td></tr>';
-            }
-
-
-            echo '<tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner"><img src="'.$_nodesforum_folder_icon.'" style="vertical-align:text-bottom;border:none;" /> folders:</div></td><td class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">'.$_nodesforum_display_total_folders[$this_creator_uniqueID].'</div></td></tr>
-				<tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner"><img src="'.$_nodesforum_post_icon.'" style="vertical-align:text-bottom;border:none;" /> posts:</div></td><td class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">'.$_nodesforum_display_total_posts[$this_creator_uniqueID].'</div></td></tr>
-				<tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner"><img src="'.$_nodesforum_reply_icon.'" style="vertical-align:text-bottom;border:none;" /> replies:</div></td><td class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">'.$_nodesforum_display_total_replies[$this_creator_uniqueID].'</div></td></tr>
-				<tr><td class="class_nodesforum_bgcolor1" colspan="2"><div class="class_nodesforum_inner"><img src="'.$_nodesforum_history_icon.'" style="vertical-align:text-bottom;border:none;" /> <a href="?_nodesforum_node=h0&_nodesforum_history_user='.$this_creator_uniqueID.'">posting history</a></div></td></tr>
-				</table></div>
-				';
-        }
-        else
-        {echo '<div style="width:100%;"><table style="font-size:80%;width:100%;display:none;" class="class_nodesforum_bgcolor3"><tr><td class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner">test</div></td></tr></table></div>';}
-
-
-
         echo '</div></center></td>
-			<td style="text-align:left;vertical-align:top;height:1%;font-size:80%;" class="class_nodesforum_bgcolor2"><div class="class_nodesforum_inner" id="_nodesforum_time_div_'.$value.'">';
+			<td style="text-align:left;vertical-align:top;height:1%;font-size:80%;" class="class_nodesforum_bgcolor2 respo"><div class="class_nodesforum_inner" id="_nodesforum_time_div_'.$value.'">';
 
 
 
@@ -128,7 +132,7 @@ if($_nodesforum_display_fapID)
 
 
 
-        echo '<tr><td class="'.$text_cell_class.'" style="overflow:hidden;"><div class="class_nodesforum_inner" style="width:100%;overflow:hidden;padding:0px;">';
+        echo '<tr class="respo"><td class="'.$text_cell_class.' respo" style="overflow:hidden;"><div class="class_nodesforum_inner" style="width:100%;overflow:hidden;padding:0px;">';
         echo '<table style="width:100%;table-layout:fixed;color:'.$_nodesforum_text_color.';"><tr><td>
             <div style="width:100%;overflow:auto;overflow-y:visible;">
             <div style="max-height:'.$maxheight.'px;overflow-y:auto;height:expression( this.scrollHeight > '.$maxheight.'? '."'".''.$maxheight.'px'."'".' : '."'".'auto'."'".' );">
@@ -150,7 +154,7 @@ if($_nodesforum_display_fapID)
         echo '</div></td></tr>';
 
 
-        echo '<tr><td class="class_nodesforum_bgcolor2" style="height:28px;" id="_nodesforum_bottom_cell_'.$value.'"><div class="class_nodesforum_inner" style="height:100%;vertical-align:bottom;position:relative;">';
+        echo '<tr class="respo"><td class="class_nodesforum_bgcolor2 respo" style="height:28px;" id="_nodesforum_bottom_cell_'.$value.'"><div class="class_nodesforum_inner" style="height:100%;vertical-align:bottom;position:relative;">';
 
 
 
@@ -190,10 +194,10 @@ if($_nodesforum_display_fapID)
         if($_nodesforum_display_creator_uniqueID[$key]=='0' && $_nodesforum_display_creator_ip[$key]==$_nodesforum_enc_ip && $nowtime<$oldestacceptabletimeforguesteditbyip)
         {echo '</span>';}
         
-        //spam purge button!
-        if($_nodesforum_ismod==1 && $_nodesforum_display_creator_uniqueID[$key]!=$_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]){
-			echo '<acronym title="purge spammer" style="border:none;"><a onclick="purgeSpammer(\''.$this_creator_uniqueID.'\',\''.base64_encode($_nodesforum_display_enc_ip[$key]).'\')" style="cursor:pointer;"><img src="'.$_nodesforum_power_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';
-		}
+        // //spam purge button!
+        // if($_nodesforum_ismod==1 && $_nodesforum_display_creator_uniqueID[$key]!=$_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]){
+		// 	echo '<acronym title="purge spammer" style="border:none;"><a onclick="purgeSpammer(\''.$this_creator_uniqueID.'\',\''.base64_encode($_nodesforum_display_enc_ip[$key]).'\')" style="cursor:pointer;"><img src="'.$_nodesforum_power_icon.'" style="vertical-align:text-bottom;border:none;" /></a></acronym>';
+		// }
 		
         echo '</td><td style="text-align:right;vertical-align:bottom;">';
         echo 'post #'.$value.' ';
@@ -210,9 +214,9 @@ if($_nodesforum_display_fapID)
         if($countemz==1 && $_GET['_nodesforum_page']==1 && $_nodesforum_isbanned==0)
         {
             if(isset($_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]) || ($_nodesforum_allow_guest_replies=='yes' && $_nodesforum_allow_guest_reply==1))
-            {echo '<div style="width:100%;padding-top:4px;" class="class_nodesforum_bgcolor4"><center><div style="width:10%;"><table style="width:100%" class="class_nodesforum_bgcolor3"><tr><td style="text-align:center;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner"><a href="?_nodesforum_node='.$_GET['_nodesforum_node'].'&_nodesforum_add_post">reply</a></div></td></tr></table></div></center></div>';}
+            {echo '<div style="width:100%;padding-top:4px;" class="class_nodesforum_bgcolor4"><center><div style="width:100px;"><table style="width:100%" class="class_nodesforum_bgcolor3"><tr><td style="text-align:center;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner"><a href="?_nodesforum_node='.$_GET['_nodesforum_node'].'&_nodesforum_add_post">reply</a></div></td></tr></table></div></center></div>';}
             else
-            {echo '<div style="width:100%;padding-top:4px;" class="class_nodesforum_bgcolor4"><center><div style="width:10%;"><table style="width:100%" class="class_nodesforum_bgcolor3"><tr><td style="text-align:center;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">please <a href="'.$_nodesforum_external_user_system_login_link.'">login</a> to reply</div></td></tr></table></div></center></div>';}
+            {echo '<div style="width:100%;padding-top:4px;" class="class_nodesforum_bgcolor4"><center><div style="width:100px;"><table style="width:100%" class="class_nodesforum_bgcolor3"><tr><td style="text-align:center;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">please <a href="'.$_nodesforum_external_user_system_login_link.'">login</a> to reply</div></td></tr></table></div></center></div>';}
         }
         //else
         //{echo '<div style="height:4px;"><!-- --></div>';}
@@ -231,9 +235,9 @@ else
 if(($countemz>=2 || $_GET['_nodesforum_page']!=1) && $_nodesforum_display_fapID && $_nodesforum_isbanned==0)
 {
     if(isset($_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]) || ($_nodesforum_allow_guest_replies=='yes' && $_nodesforum_allow_guest_reply==1))
-    {echo '<div style="width:100%;padding-top:4px;" class="class_nodesforum_bgcolor4"><center><div style="width:10%;"><table style="width:100%" class="class_nodesforum_bgcolor3"><tr><td style="text-align:center;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner"><a href="?_nodesforum_node='.$_GET['_nodesforum_node'].'&_nodesforum_add_post">reply</a></div></td></tr></table></div></center></div>';}
+    {echo '<div style="width:100%;padding-top:4px;" class="class_nodesforum_bgcolor4"><center><div style="width:100px;"><table style="width:100%" class="class_nodesforum_bgcolor3"><tr><td style="text-align:center;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner"><a href="?_nodesforum_node='.$_GET['_nodesforum_node'].'&_nodesforum_add_post">reply</a></div></td></tr></table></div></center></div>';}
     else
-    {echo '<div style="width:100%;padding-top:4px;" class="class_nodesforum_bgcolor4"><center><div style="width:10%;"><table style="width:100%" class="class_nodesforum_bgcolor3"><tr><td style="text-align:center;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">please <a href="'.$_nodesforum_external_user_system_login_link.'">login</a> to reply</div></td></tr></table></div></center></div>';}
+    {echo '<div style="width:100%;padding-top:4px;" class="class_nodesforum_bgcolor4"><center><div style="width:100px;"><table style="width:100%" class="class_nodesforum_bgcolor3"><tr><td style="text-align:center;" class="class_nodesforum_bgcolor1"><div class="class_nodesforum_inner">please <a href="'.$_nodesforum_external_user_system_login_link.'">login</a> to reply</div></td></tr></table></div></center></div>';}
 }
 echo $pagination;
 

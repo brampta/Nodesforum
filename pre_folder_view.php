@@ -189,7 +189,7 @@ else
                 //users home folder parent post
                 if(!$_nodesforum_remember_titles[$key]){
                     $countuseradd++;
-                    if($countadd>1)
+                    if($countuseradd>1)
                     {$usernames_getter_wherer=$usernames_getter_wherer.", ";}
                     $usernames_getter_wherer=$usernames_getter_wherer."'".substr($key,1)."'";
                 }

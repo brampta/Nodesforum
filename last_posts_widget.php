@@ -61,6 +61,7 @@ if ($_nodesforum_lpw_use_cache == 0)
 
     function bb_less_prev($bb_string, $maxlen)
     {
+        //var_dump('bb_less_prev', $bb_string, $maxlen);
         $rebbi = '';
         $inputting = 1;
         $readinghead = 0;
@@ -105,13 +106,14 @@ if ($_nodesforum_lpw_use_cache == 0)
                 $newlen++;
             }
         }
+        //var_dump('bb_less_prev result', $rebbi, $newlen, $maxlen, $counturns);
         return $rebbi;
     }
 
     $order = 'creation_time DESC';
     if ($_nodesforum_lpw_include_replies == 1)
     { $order = 'last_post_time DESC'; }
-    $_nodesforum_elqueriosss = "SELECT fapID, title, post, last_post_postID FROM " . $_nodesforum_db_table_name_modifier . "_nodesforum_folders_and_posts WHERE folder_or_post = 2 && containing_folder_or_post LIKE 'f%' && deletion_time = 0 ORDER BY $order LIMIT 0, $_nodesforum_lpw_howmany";
+    $_nodesforum_elqueriosss = "SELECT fapID, title, post, last_post_postID FROM " . $_nodesforum_db_table_name_modifier . "_nodesforum_folders_and_posts WHERE folder_or_post = 2 && containing_folder_or_post LIKE 'f%' && deletion_time = 0 && audited = 1 ORDER BY $order LIMIT 0, $_nodesforum_lpw_howmany";
 //echo htmlspecialchars($_nodesforum_elqueriosss) . '<br />';
     $_nodesforum_result = mysql_query($_nodesforum_elqueriosss);
     $countrezu = 0;
@@ -164,7 +166,7 @@ if ($_nodesforum_lpw_use_cache == 0)
         //overview title
         $_nodesforum_lpw_elrezulto = $_nodesforum_lpw_elrezulto . '<div ' . $_nodesforum_lpw_title_css . '><a href="' . $_nodesforum_lastposts_ellink . '" target="' . $_nodesforum_lpw_link_target . '">' . htmlspecialchars($showtitle) . '</a></div>';
         //overview post
-        $_nodesforum_lpw_elrezulto = $_nodesforum_lpw_elrezulto . '<div ' . $_nodesforum_lpw_post_css . '>' . bb_less_prev(strip_tags($_nodesforum_lastposts_elpost), $_nodesforum_lpw_max_post) . '</div>';
+        $_nodesforum_lpw_elrezulto = $_nodesforum_lpw_elrezulto . '<div ' . $_nodesforum_lpw_post_css . '>' . bb_less_prev(htmlspecialchars($_nodesforum_lastposts_elpost), $_nodesforum_lpw_max_post) . '</div>';
     }
 
 
@@ -189,4 +191,3 @@ if ($_nodesforum_disconn_from_db_after_script != 'no' && ($_nodesforum_lpw_use_c
 {
     mysql_close($conn);
 }
-?>

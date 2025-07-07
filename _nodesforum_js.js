@@ -245,6 +245,7 @@ function selectNode (node) {
 
 var waiting_for_requests={};
 function purgeSpammer(user_id,user_ip){
+    console.log('purgeSpammer called with user_id: ' + user_id + ' and user_ip: ' + user_ip);
 	if(user_id=="0"){
 		var areyousure = confirm("Spammer Purge: are you sure that you want to delete all the posts from ip "+user_ip+" and ban it for as far as your moderator go across the entire forum?");
 	}else{
@@ -373,4 +374,167 @@ function toggleAuditCheckbox(event, cell, type) {
             approveCell.classList.remove('checked');
         }
     }
+}
+
+function nodesforum_init_audit_mass_actions() {
+    document.getElementById('auditDeleteAllBtn').addEventListener('click', function() {
+        var approve = [];
+        var del = [];
+        // Store both the ID and the cell HTML for recap
+        document.querySelectorAll('.audit-approve-cell input[type="checkbox"]:checked').forEach(function(cb) {
+            var m = cb.name.match(/\[(\d+)\]/);
+            if (m && m[1]) {
+                var row = cb.closest('tr');
+                var titleCell = row.querySelector('td[class*="bgcolor"]'); // adjust selector if needed
+                approve.push({
+                    id: m[1],
+                    html: titleCell ? titleCell.innerHTML : ''
+                });
+            }
+        });
+        document.querySelectorAll('.audit-delete-cell input[type="checkbox"]:checked').forEach(function(cb) {
+            var m = cb.name.match(/\[(\d+)\]/);
+            if (m && m[1]) {
+                var row = cb.closest('tr');
+                var titleCell = row.querySelector('td[class*="bgcolor"]'); // adjust selector if needed
+                del.push({
+                    id: m[1],
+                    html: titleCell ? titleCell.innerHTML : ''
+                });
+            }
+        });
+
+        var logDiv = document.getElementById('auditDeleteLogs');
+        var spinner = document.getElementById('auditDeleteSpinner');
+        var btn = document.getElementById('auditDeleteAllBtn');
+        var totalApprove = approve.length;
+        var totalDelete = del.length;
+        var viewNode = (new URLSearchParams(window.location.search)).get('_nodesforum_node');
+        var viewPage = (new URLSearchParams(window.location.search)).get('_nodesforum_page') || 1;
+
+        if (totalApprove === 0 && totalDelete === 0) {
+            logDiv.innerHTML = '<span style="color:#b00;">No items checked for approval or deletion.</span>';
+            return;
+        }
+
+        btn.disabled = true;
+        spinner.style.display = '';
+        logDiv.innerHTML = '<b>' + totalApprove + ' to approve, ' + totalDelete + ' to delete.</b><br>';
+
+        var i = 0, j = 0;
+        var auditResults = [];
+        var deleteResults = [];
+
+        function processNextApprove() {
+            if (i < approve.length) {
+                var url = '?_nodesforum_node=' + encodeURIComponent(viewNode) + '&_nodesforum_page=' + encodeURIComponent(viewPage) + '&_nodesforum_audit=' + encodeURIComponent(approve[i].id) + '&format=json&request_number=' + (i+1);
+                fetch(url, { credentials: 'same-origin' })
+                    .then(response => response.json())
+                    .then(json => {
+                        auditResults.push({
+                            url: url,
+                            json: json,
+                            html: approve[i].html
+                        });
+                        i++;
+                        processNextApprove();
+                    })
+                    .catch(err => {
+                        auditResults.push({
+                            url: url,
+                            json: {error: err.toString()},
+                            html: approve[i].html
+                        });
+                        i++;
+                        processNextApprove();
+                    });
+            } else {
+                processNextDelete();
+            }
+        }
+
+        function processNextDelete() {
+            if (j < del.length) {
+                var url = '?_nodesforum_node=' + encodeURIComponent(viewNode) + '&_nodesforum_page=' + encodeURIComponent(viewPage) + '&_nodesforum_delete=' + encodeURIComponent(del[j].id) + '&format=json&request_number=' + (j+1);
+                fetch(url, { credentials: 'same-origin' })
+                    .then(response => response.json())
+                    .then(json => {
+                        deleteResults.push({
+                            url: url,
+                            json: json,
+                            html: del[j].html
+                        });
+                        j++;
+                        processNextDelete();
+                    })
+                    .catch(err => {
+                        deleteResults.push({
+                            url: url,
+                            json: {error: err.toString()},
+                            html: del[j].html
+                        });
+                        j++;
+                        processNextDelete();
+                    });
+            } else {
+                showRecap();
+            }
+        }
+
+        function extractCleanInner(cellHtml) {
+            // Create a temporary container
+            var temp = document.createElement('div');
+            temp.innerHTML = cellHtml;
+
+            // Find the .class_nodesforum_inner element
+            var inner = temp.querySelector('.class_nodesforum_inner');
+            if (!inner) return cellHtml; // fallback
+
+            // Remove .class_nodesforum_unnaproved and .modstring elements
+            inner.querySelectorAll('.class_nodesforum_unnaproved, .modstring').forEach(function(el) {
+                el.remove();
+            });
+
+            // Return only the innerHTML of .class_nodesforum_inner
+            return inner.innerHTML.trim();
+        }
+
+        function showRecap() {
+            spinner.style.display = 'none';
+            var recap = '';
+            recap += '<div style="margin-bottom:12px;"><b>' + auditResults.length + ' approved, ' + deleteResults.length + ' deleted.</b></div>';
+            if(auditResults.length){
+                recap += '<div style="text-align:left;"><b>Approvals:</b><ul>';
+                auditResults.forEach(function(r){
+                    var ok = (r.json && r.json.result === 'ok');
+                    recap += '<li style="margin-bottom:10px;">' +
+                        '<div style="display:inline-block;vertical-align:middle;">' + extractCleanInner(r.html) + '</div> ' +
+                        (ok
+                            ? '<span style="color:green;font-size:1.2em;">&#x2705; OK</span>'
+                            : '<span style="color:red;font-size:1.2em;">&#x274C; Error</span>'
+                        ) +
+                        '</li>';
+                });
+                recap += '</ul></div>';
+            }
+            if(deleteResults.length){
+                recap += '<div style="text-align:left;"><b>Deletions:</b><ul>';
+                deleteResults.forEach(function(r){
+                    var ok = (r.json && r.json.result === 'ok');
+                    recap += '<li style="margin-bottom:10px;">' +
+                        '<div style="display:inline-block;vertical-align:middle;">' + extractCleanInner(r.html) + '</div> ' +
+                        (ok
+                            ? '<span style="color:green;font-size:1.2em;">&#x2705; OK</span>'
+                            : '<span style="color:red;font-size:1.2em;">&#x274C; Error</span>'
+                        ) +
+                        '</li>';
+                });
+                recap += '</ul></div>';
+            }
+            document.getElementById('auditResultContent').innerHTML = recap;
+            document.getElementById('auditResultPopup').style.display = '';
+        }
+
+        processNextApprove();
+    });
 }
