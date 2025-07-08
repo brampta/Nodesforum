@@ -82,7 +82,7 @@ echo '<style type="text/css">
 .audit-delete-cell { width: 90px; }
 .audit-approve-cell.checked { background: green !important; }
 .audit-delete-cell.checked { background: red !important; }
-#auditDeleteLogs, #auditResultPopup {
+#auditDeleteLogs, #auditResultPopup, #auditDeleteCount {
     background: ' . $_nodesforum_background_color2 . ';
     color: ' . $_nodesforum_text_color . ';
     border: 1px solid ' . $_nodesforum_frames_color . ';

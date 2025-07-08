@@ -82,7 +82,7 @@ if($_nodesforum_folder_or_post==1)
 
     //audit posts and folders view
     $wherer="ancestry LIKE '%|".$remember_actual_node."|%' && audited = 0 ".$hideghosts;
-    $orderer="creation_time DESC";
+    $orderer="creation_time ASC";
 }
 
 $count_query="SELECT COUNT(fapID) FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE $wherer";

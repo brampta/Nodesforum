@@ -429,21 +429,32 @@ function nodesforum_init_audit_mass_actions() {
                 var url = '?_nodesforum_node=' + encodeURIComponent(viewNode) + '&_nodesforum_page=' + encodeURIComponent(viewPage) + '&_nodesforum_audit=' + encodeURIComponent(approve[i].id) + '&format=json&request_number=' + (i+1);
                 logDiv.innerHTML += '<div>Calling: <a href="' + url + '" target="_blank">' + url + '</a></div>';
                 fetch(url, { credentials: 'same-origin' })
-                    .then(response => response.json())
-                    .then(json => {
-                        auditResults.push({
-                            url: url,
-                            json: json,
-                            html: approve[i].html
-                        });
-                        logDiv.innerHTML += '<div style="color:#FFD328;">Response: ' + JSON.stringify(json) + '</div>';
+                    .then(response => response.text())
+                    .then(text => {
+                        let json;
+                        try {
+                            json = JSON.parse(text);
+                            auditResults.push({
+                                url: url,
+                                json: json,
+                                html: approve[i].html
+                            });
+                            logDiv.innerHTML += '<div style="color:#FFD328;">Response: ' + JSON.stringify(json) + '</div>';
+                        } catch (e) {
+                            auditResults.push({
+                                url: url,
+                                json: { error: text },
+                                html: approve[i].html
+                            });
+                            logDiv.innerHTML += '<div style="color:#b00;">Error: ' + text + '</div>';
+                        }
                         i++;
                         processNextApprove();
                     })
                     .catch(err => {
                         auditResults.push({
                             url: url,
-                            json: {error: err.toString()},
+                            json: { error: err.toString() },
                             html: approve[i].html
                         });
                         logDiv.innerHTML += '<div style="color:#b00;">Error: ' + err + '</div>';
@@ -460,21 +471,32 @@ function nodesforum_init_audit_mass_actions() {
                 var url = '?_nodesforum_node=' + encodeURIComponent(viewNode) + '&_nodesforum_page=' + encodeURIComponent(viewPage) + '&_nodesforum_delete=' + encodeURIComponent(del[j].id) + '&format=json&request_number=' + (j+1);
                 logDiv.innerHTML += '<div>Calling: <a href="' + url + '" target="_blank">' + url + '</a></div>';
                 fetch(url, { credentials: 'same-origin' })
-                    .then(response => response.json())
-                    .then(json => {
-                        deleteResults.push({
-                            url: url,
-                            json: json,
-                            html: del[j].html
-                        });
-                        logDiv.innerHTML += '<div style="color:#FFD328;">Response: ' + JSON.stringify(json) + '</div>';
+                    .then(response => response.text())
+                    .then(text => {
+                        let json;
+                        try {
+                            json = JSON.parse(text);
+                            deleteResults.push({
+                                url: url,
+                                json: json,
+                                html: del[j].html
+                            });
+                            logDiv.innerHTML += '<div style="color:#FFD328;">Response: ' + JSON.stringify(json) + '</div>';
+                        } catch (e) {
+                            deleteResults.push({
+                                url: url,
+                                json: { error: text },
+                                html: del[j].html
+                            });
+                            logDiv.innerHTML += '<div style="color:#b00;">Error: ' + text + '</div>';
+                        }
                         j++;
                         processNextDelete();
                     })
                     .catch(err => {
                         deleteResults.push({
                             url: url,
-                            json: {error: err.toString()},
+                            json: { error: err.toString() },
                             html: del[j].html
                         });
                         logDiv.innerHTML += '<div style="color:#b00;">Error: ' + err + '</div>';
@@ -541,5 +563,19 @@ function nodesforum_init_audit_mass_actions() {
         }
 
         processNextApprove();
+    });
+
+
+    document.getElementById('auditApproveAll').addEventListener('change', function() {
+        var checked = this.checked;
+        document.querySelectorAll('.audit-approve-cell input[type="checkbox"]').forEach(function(cb) {
+            if (cb.checked !== checked) cb.click();
+        });
+    });
+    document.getElementById('auditDeleteAll').addEventListener('change', function() {
+        var checked = this.checked;
+        document.querySelectorAll('.audit-delete-cell input[type="checkbox"]').forEach(function(cb) {
+            if (cb.checked !== checked) cb.click();
+        });
     });
 }
