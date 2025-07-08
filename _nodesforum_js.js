@@ -406,25 +406,37 @@ function nodesforum_init_audit_mass_actions() {
         var logDiv = document.getElementById('auditDeleteLogs');
         var spinner = document.getElementById('auditDeleteSpinner');
         var btn = document.getElementById('auditDeleteAllBtn');
+        var countDiv = document.getElementById('auditDeleteCount');
         var totalApprove = approve.length;
         var totalDelete = del.length;
         var viewNode = (new URLSearchParams(window.location.search)).get('_nodesforum_node');
         var viewPage = (new URLSearchParams(window.location.search)).get('_nodesforum_page') || 1;
 
+        // --- DYNAMIC COUNTDOWN FUNCTION ---
+        function updateCount(currentApprove, currentDelete) {
+            countDiv.innerHTML =
+                (totalApprove > 0 ? (currentApprove + '/' + totalApprove + ' to approve') : '') +
+                (totalApprove > 0 && totalDelete > 0 ? ', ' : '') +
+                (totalDelete > 0 ? (currentDelete + '/' + totalDelete + ' to delete') : '');
+        }
+
         if (totalApprove === 0 && totalDelete === 0) {
             logDiv.innerHTML = '<span style="color:#b00;">No items checked for approval or deletion.</span>';
+            countDiv.innerHTML = '';
             return;
         }
 
         btn.disabled = true;
         spinner.style.display = '';
-        logDiv.innerHTML = '<b>' + totalApprove + ' to approve, ' + totalDelete + ' to delete.</b><br>';
+        logDiv.innerHTML = '';
+        updateCount(0, 0);
 
         var i = 0, j = 0;
         var auditResults = [];
         var deleteResults = [];
 
         function processNextApprove() {
+            updateCount(i, 0);
             if (i < approve.length) {
                 var url = '?_nodesforum_node=' + encodeURIComponent(viewNode) + '&_nodesforum_page=' + encodeURIComponent(viewPage) + '&_nodesforum_audit=' + encodeURIComponent(approve[i].id) + '&format=json&request_number=' + (i+1);
                 logDiv.innerHTML += '<div>Calling: <a href="' + url + '" target="_blank">' + url + '</a></div>';
@@ -449,6 +461,7 @@ function nodesforum_init_audit_mass_actions() {
                             logDiv.innerHTML += '<div style="color:#b00;">Error: ' + text + '</div>';
                         }
                         i++;
+                        updateCount(i, 0);
                         processNextApprove();
                     })
                     .catch(err => {
@@ -459,6 +472,7 @@ function nodesforum_init_audit_mass_actions() {
                         });
                         logDiv.innerHTML += '<div style="color:#b00;">Error: ' + err + '</div>';
                         i++;
+                        updateCount(i, 0);
                         processNextApprove();
                     });
             } else {
@@ -467,6 +481,7 @@ function nodesforum_init_audit_mass_actions() {
         }
 
         function processNextDelete() {
+            updateCount(i, j);
             if (j < del.length) {
                 var url = '?_nodesforum_node=' + encodeURIComponent(viewNode) + '&_nodesforum_page=' + encodeURIComponent(viewPage) + '&_nodesforum_delete=' + encodeURIComponent(del[j].id) + '&format=json&request_number=' + (j+1);
                 logDiv.innerHTML += '<div>Calling: <a href="' + url + '" target="_blank">' + url + '</a></div>';
@@ -491,6 +506,7 @@ function nodesforum_init_audit_mass_actions() {
                             logDiv.innerHTML += '<div style="color:#b00;">Error: ' + text + '</div>';
                         }
                         j++;
+                        updateCount(i, j);
                         processNextDelete();
                     })
                     .catch(err => {
@@ -501,9 +517,11 @@ function nodesforum_init_audit_mass_actions() {
                         });
                         logDiv.innerHTML += '<div style="color:#b00;">Error: ' + err + '</div>';
                         j++;
+                        updateCount(i, j);
                         processNextDelete();
                     });
             } else {
+                updateCount(i, j);
                 showRecap();
             }
         }
