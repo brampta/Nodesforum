@@ -1,0 +1,5 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^/]+)/avatars/[^/]+\.jpg$ ../images_repo/usershade.jpg [L]
+# Or for more extensions:
+# RewriteRule ^([^/]+)/avatars/[^/]+\.(jpg|jpeg|png|gif)$ ../images_repo/usershade.jpg [L]
