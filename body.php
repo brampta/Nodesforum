@@ -116,7 +116,7 @@ echo '<style type="text/css">
     padding:14px 36px;
     font-size:1.2em;
     background:' . $_nodesforum_link_color . ';
-    color:#000;
+    color:' . $_nodesforum_text_color . ';
     border:none;
     border-radius:6px;
     cursor:pointer;
