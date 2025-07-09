@@ -82,7 +82,7 @@ echo '<style type="text/css">
 .audit-delete-cell { width: 90px; }
 .audit-approve-cell.checked { background: green !important; }
 .audit-delete-cell.checked { background: red !important; }
-#auditDeleteLogs, #auditResultPopup {
+#auditDeleteLogs, #auditResultPopup, #auditDeleteCount {
     background: ' . $_nodesforum_background_color2 . ';
     color: ' . $_nodesforum_text_color . ';
     border: 1px solid ' . $_nodesforum_frames_color . ';
@@ -106,6 +106,8 @@ echo '<style type="text/css">
     box-shadow:0 0 20px #000;
     padding:32px 24px 24px 24px;
     text-align:center;
+	max-height: 90vh;
+    overflow-y: auto;
 }
 #auditResultPopup h2 { margin-top:0; color:' . $_nodesforum_link_color . '; }
 #auditResultPopup .btn {
@@ -114,7 +116,7 @@ echo '<style type="text/css">
     padding:14px 36px;
     font-size:1.2em;
     background:' . $_nodesforum_link_color . ';
-    color:#000;
+    color:' . $_nodesforum_text_color . ';
     border:none;
     border-radius:6px;
     cursor:pointer;

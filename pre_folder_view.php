@@ -88,7 +88,7 @@ if($_nodesforum_folder_or_post==1)
         $ancestry_clause = "";
     }
     $wherer="$ancestry_clause audited = 0 ".$hideghosts;
-    $orderer="creation_time DESC";
+    $orderer="creation_time ASC";
 }
 
 $count_query="SELECT COUNT(fapID) FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE $wherer";

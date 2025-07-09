@@ -75,6 +75,29 @@ if($_nodesforum_folder_description!='')
 
 
 echo '<div style="height:4px;"><!-- --></div><div style="width:100%;"><table style="width:100%;table-layout: fixed;" class="class_nodesforum_bgcolor3 respo">';
+
+// Add table headers in audit view
+if ($_nodesforum_folder_or_post == 7) {
+    echo '<thead><tr>';
+    // Approve all checkbox
+    echo '<th style="width:60px;text-align:center;" class="class_nodesforum_bgcolor2">
+        <input type="checkbox" id="auditApproveAll" style="cursor:pointer;" />
+        <div style="font-size:0.8em;">Approve</div>
+    </th>';
+    // Delete all checkbox
+    echo '<th style="width:60px;text-align:center;" class="class_nodesforum_bgcolor2">
+        <input type="checkbox" id="auditDeleteAll" style="cursor:pointer;" />
+        <div style="font-size:0.8em;">Delete</div>
+    </th>';
+    // Other headers (adjust as needed)
+    echo '<th class="class_nodesforum_bgcolor2">Title</th>';
+    echo '<th class="class_nodesforum_bgcolor2">Created</th>';
+    echo '<th class="class_nodesforum_bgcolor2">Contains</th>';
+    echo '<th class="class_nodesforum_bgcolor2">Last Post</th>';
+    echo '</tr></thead>';
+}
+echo '<tbody>';
+
 if($_nodesforum_display_fapID)
 {
     foreach($_nodesforum_display_fapID as $key => $value)
@@ -231,7 +254,7 @@ if($_nodesforum_display_fapID)
             //if is post or reply, and in audit view, show the post contents overview
             if($_nodesforum_folder_or_post==7){
                 //show post contents overview
-                $this_link.= '<div style="width:100%;padding:0px;"><div style="width:100%;padding:0px;margin:0px;'.$link_liner.'color:'.$_nodesforum_text_color.';max-height:200px;overflow-y:auto;" class="class_nodesforum_bgcolorinherit">'.display_bb($_nodesforum_display_post[$key],$_nodesforum_display_p_inf_str[$this_creator_uniqueID],$user_or_guest,$_nodesforum_display_disable_auto_smileys[$key],$_nodesforum_display_disable_auto_links[$key],0).'</div></div>';
+                $this_link.= '<div style="width:100%;padding:0px;" class="_nodesforum_folder_post_preview"><div style="width:100%;padding:0px;margin:0px;'.$link_liner.'color:'.$_nodesforum_text_color.';max-height:200px;overflow-y:auto;" class="class_nodesforum_bgcolorinherit">'.display_bb($_nodesforum_display_post[$key],$_nodesforum_display_p_inf_str[$this_creator_uniqueID],$user_or_guest,$_nodesforum_display_disable_auto_smileys[$key],$_nodesforum_display_disable_auto_links[$key],0).'</div></div>';
 
             }
 
@@ -351,7 +374,7 @@ if($_nodesforum_display_fapID)
             </td>';
         }
 
-		echo '<td style="text-align:left;vertical-align:top;width:33%" class="'.$title_cell_class.' respo main-content-td">
+		echo '<td style="text-align:left;vertical-align:top;width:33%" class="title_cell '.$title_cell_class.' respo main-content-td">
             <div class="class_nodesforum_inner" style="padding:'.$mycellpadding.'px;">
             '.$sticky_icon.$skeleton_icon.$this_icon.' '.$this_link.'<div class="modstring">'.$modstring.'</div>
             </div>
@@ -371,7 +394,7 @@ if($_nodesforum_display_fapID)
 }
 else
 {echo '<tr><td style="text-align:center;vertical-align:top;" class="class_nodesforum_bgcolor1 respo"><div class="class_nodesforum_inner">empty</div></td></tr>';}
-echo '</table></div>';
+echo '</tbody></table></div>';
 
 
 if ($_nodesforum_folder_or_post == 7) {
@@ -381,6 +404,7 @@ if ($_nodesforum_folder_or_post == 7) {
     <button id="auditDeleteAllBtn" style="padding:8px 18px;font-size:1em;">Process All Checked Approvals/Deletions</button>
     <span id="auditDeleteSpinner" style="display:none;margin-left:12px;"><img src="https://i.imgur.com/llF5iyg.gif" style="vertical-align:middle;width:22px;height:22px;" alt="Loading..." /></span>
 </div>
+<div id="auditDeleteCount"></div>
 <div id="auditDeleteLogs"></div>
 <div id="auditResultPopup" style="display:none">
     <h2>Audit/Delete Recap</h2>
@@ -393,3 +417,5 @@ EOT;
 }
 
 echo $pagination;
+
+
