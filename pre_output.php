@@ -6,7 +6,11 @@ $json_data=array(); //for json output format $_GET['format']='json'
 
 
 if ($_nodesforum_use_external_user_system == 'no')
-{ session_start(); }
+{
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+}
 
 //------------------------------Emulate register_globals off
 function unregister_GLOBALS()

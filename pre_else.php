@@ -701,6 +701,22 @@ if($_SESSION[$_nodesforum_external_user_system_uniqueID_session_name]==$_nodesfo
     $_nodesforum_remember_righttoaudit_folders[0]='rememeber';
     $_nodesforum_remember_righttoaudit_folders_audited[0]=1;
 }
+else if($_SESSION['_nodesforum_admin_override']==1)
+{
+    $_nodesforum_ismod=1;
+    $_nodesforum_mod_level=-2;
+    $_nodesforum_explain_modship=' (admin_override)';
+    $_nodesforum_modship_authoritative_folder=0;
+    $_nodesforum_remember_modership_folders[0]='rememeber';
+    foreach($_nodesforum_risky_bbcode_title as $key => $value)
+    {$_nodesforum_remember_modership_folders[$key]='rememeber';}
+
+    $_nodesforum_righttoaudit=1;
+    $_nodesforum_explain_righttoaudit=' (admin_override)';
+    $_nodesforum_righttoaudit_authoritative_folder=0;
+    $_nodesforum_remember_righttoaudit_folders[0]='rememeber';
+    $_nodesforum_remember_righttoaudit_folders_audited[0]=1;
+}
 else
 {
     if($_nodesforum_folder_or_post==1)
