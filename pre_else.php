@@ -236,6 +236,8 @@ if(substr($_GET['_nodesforum_node'],0,1)=='s' && substr($_GET['_nodesforum_node'
     $_nodesforum_title='edit signature - forum options - '.$_nodesforum_forum_name;
     $_nodesforum_youarehere='<img src="'.$_nodesforum_home_icon.'" style="vertical-align:text-bottom;border:none;" /> <a href="?">root</a> => <img src="'.$_nodesforum_tool_icon.'" style="vertical-align:text-bottom;border:none;" /> <a href="?_nodesforum_forum_options">forum options</a> => <img src="'.$_nodesforum_tool_icon.'" style="vertical-align:text-bottom;border:none;" /> edit signature';
     $_nodesforum_postorreply='signature';
+
+    $_nodesforum_ancestry=$_nodesforum_ancestry_separator.'0'.$_nodesforum_ancestry_separator;
 }
 else if(substr($_GET['_nodesforum_node'],0,1)=='h')
 {
@@ -272,6 +274,8 @@ else if(substr($_GET['_nodesforum_node'],0,1)=='h')
 
     $_nodesforum_title=$_nodesforum_this_user_publicname."'".$user_s_proprietary_s.' posting history';
     $_nodesforum_youarehere='<img src="'.$_nodesforum_home_icon.'" style="vertical-align:text-bottom;border:none;" /> <a href="?">root</a> => <img src="'.$this_iconz.'" style="vertical-align:text-bottom;border:none;" /> <a href="?_nodesforum_node=u'.$this_user_uniqueID.'">'._nodesforum_display_title($_nodesforum_this_user_publicname,$_nodesforum_max_word_length_in_titles)."'".$user_s_proprietary_s.' forum page</a> => <img src="'.$_nodesforum_history_icon.'" style="vertical-align:text-bottom;border:none;" /> '._nodesforum_display_title($_nodesforum_this_user_publicname,$_nodesforum_max_word_length_in_titles)."'".$user_s_proprietary_s.' posting history';
+
+    $_nodesforum_ancestry=$_nodesforum_ancestry_separator.'0'.$_nodesforum_ancestry_separator;
 }
 else if(substr($_GET['_nodesforum_node'],0,1)=='p')
 {
@@ -990,7 +994,12 @@ if($_nodesforum_folder_or_post==1 || $_nodesforum_folder_or_post==2)
         
         //find all folders or posts where audited == 0 and that are inside of the current folder or post
         //ancestry like '%|'.$_GET['_nodesforum_node'].'|%'
-        $check_need_audit_query="SELECT fapID FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE ancestry LIKE '%|".$_GET['_nodesforum_node']."|%' && audited = 0 && deletion_time = 0";
+        $ancestry_clause = "ancestry LIKE '%|".mysql_real_escape_string($_GET['_nodesforum_node'])."|%' &&";
+        if($_GET['_nodesforum_node']=='0'){
+            //if root folder, ancestry is empty
+            $ancestry_clause = "";
+        }
+        $check_need_audit_query="SELECT fapID FROM ".$_nodesforum_db_table_name_modifier."_nodesforum_folders_and_posts WHERE $ancestry_clause audited = 0 && deletion_time = 0";
         $result = mysql_query($check_need_audit_query);
         while($row = mysql_fetch_array($result)){
             $this_fapID=$row['fapID'];

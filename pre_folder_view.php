@@ -81,7 +81,13 @@ if($_nodesforum_folder_or_post==1)
 }else if($_nodesforum_folder_or_post==7){
 
     //audit posts and folders view
-    $wherer="ancestry LIKE '%|".$remember_actual_node."|%' && audited = 0 ".$hideghosts;
+
+    $ancestry_clause = "ancestry LIKE '%|".mysql_real_escape_string($remember_actual_node)."|%' &&";
+    if($remember_actual_node=='0'){
+        //if root folder, ancestry is empty
+        $ancestry_clause = "";
+    }
+    $wherer="$ancestry_clause audited = 0 ".$hideghosts;
     $orderer="creation_time DESC";
 }
 

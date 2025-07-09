@@ -70,9 +70,9 @@
 	}
 	if($error==0)
 	{
-		if(substr($_GET['_nodesforum_node'],0,1)=='s' && substr($_GET['_nodesforum_node'],1)==$_SESSION[$_nodesforum_external_user_system_uniqueID_session_name])
-		{$new_ancestry='';}
-		else
+		// if(substr($_GET['_nodesforum_node'],0,1)=='s' && substr($_GET['_nodesforum_node'],1)==$_SESSION[$_nodesforum_external_user_system_uniqueID_session_name])
+		// {$new_ancestry='';}
+		// else
 		{$new_ancestry=$_nodesforum_ancestry.$addslashed_node.$_nodesforum_ancestry_separator;}
 		
 		$audited=0;
