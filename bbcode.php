@@ -1568,7 +1568,8 @@ function display_bb($string,$p_inf_str='1!1!1!1!1!1!1!1!1!1',$user_or_guest=0,$d
         if($count_HTML>=$max_HTML)
         {
             echo 'max loops busted on loop looking for HMTL to remove before utf8 wordwrap<br />';
-            break;
+            return 'max loops busted on loop looking for HMTL to remove before utf8 wordwrap';
+            //break;
         }
         $find_first_HTML=stripos($string,'<',$HTML_reading_head);
         if($find_first_HTML!==false)
