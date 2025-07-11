@@ -57,6 +57,10 @@ function delete_node(node, folder_or_post, creator_public_name, subfolders_or_re
     {
         var confirm_question = "are you sure that you want to delete this reply from " + decoded_public_name + "?";
     }
+    else
+    {
+        var confirm_question = "are you sure that you want to delete this post from " + decoded_public_name + "?";
+    }
     var confirmeos = confirm(confirm_question);
     if(confirmeos==true)
     {

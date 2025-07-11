@@ -249,6 +249,19 @@ if($_nodesforum_display_fapID)
                 {$parent_link_liner='style="text-decoration:line-through;"';}
                 $this_link.=' (in: <a href="?_nodesforum_node='.$container_fapID.'" '.$parent_link_liner.'>'.$show_title.'</a>)';
                 $_nodesforum_type_for_delete_node = 2; //post in folder
+            }else if($_nodesforum_folder_or_post==7 && substr($_nodesforum_display_containing_folder_or_post[$key],0,1)=='s'){
+                //its a signature post
+                $container_fapID=substr($_nodesforum_display_containing_folder_or_post[$key],1);
+                $show_title='Signature of '.htmlspecialchars($_nodesforum_display_creator_publicname[$this_creator_uniqueID]);
+                $parent_link_liner='';
+                if($_nodesforum_display_deletion_time[$container_fapID]!=0)
+                {$parent_link_liner='style="text-decoration:line-through;"';}
+                $this_link.=' <i>('.$show_title.')</i>';
+                $_nodesforum_type_for_delete_node = 4; //signature post
+            }else{
+                //unknown type, just show the post
+                $this_link='<a href="?_nodesforum_permalink='.$value.'#_nodesforum_anchor_'.$value.'" '.$link_liner.'>'.$show_title.'</a> (type: unknown)';
+                $_nodesforum_type_for_delete_node = 5; //post
             }
 
             //if is post or reply, and in audit view, show the post contents overview
